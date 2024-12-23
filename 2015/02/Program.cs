@@ -26,7 +26,7 @@ void Part1(int[][] pDimensionsArray)
         totalWrappingPaper += dimensions[0] * dimensions[1];
     }
 
-    Console.WriteLine("Wrapping paper needed:" + totalWrappingPaper);
+    Console.WriteLine("Part 1:" + totalWrappingPaper);
 }
 
 void Part2(int[][] pDimensionsArray)
@@ -41,7 +41,7 @@ void Part2(int[][] pDimensionsArray)
         totalRibbon += dimensions[0] * dimensions[1] * dimensions[2];
     }
 
-    Console.WriteLine("Wrapping ribbon needed:" + totalRibbon);
+    Console.WriteLine("Part 2:" + totalRibbon);
 }
 
 

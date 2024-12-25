@@ -43,8 +43,8 @@ void Part2(string pInput)
     
     foreach (char c in pInput)
     {
-        if (step++ % 2 == 0) presentLocations.Add(santaLocation += directions[c]);
-        else                 presentLocations.Add(roboLocation += directions[c]);
+        if (step++ % 2 == 0)  presentLocations.Add(santaLocation += directions[c]);
+        else                  presentLocations.Add(roboLocation  += directions[c]);
     }
 
     Console.WriteLine("Part 2:" + presentLocations.Count);

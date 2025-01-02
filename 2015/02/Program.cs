@@ -6,11 +6,11 @@ string myInput = "4x23x21\r\n22x29x19\r\n11x4x11\r\n8x10x5\r\n24x18x16\r\n11x25x
 //Your task: to calculate the required wrapping paper and ribbon length according to the challenge specs
 
 //Convert the input to an array of int arrays representing the sorted dimensions of each box 
-int[][] dimensions = ConvertInput(myInput);
+int[][] dimensionArrays = ConvertInput(myInput);
 
 //And calculate the requested data
-Console.WriteLine("Part 1 (Required amount of wrapping paper):" + CalculateTheRequiredAmountOfWrappingPaper(dimensions));
-Console.WriteLine("Part 2 (Required amount of ribbon):"         + CalculateTheRequiredAmountOfRibbon(dimensions));
+Console.WriteLine("Part 1 (Required amount of wrapping paper):" + CalculateTheRequiredAmountOfWrappingPaper(dimensionArrays));
+Console.WriteLine("Part 2 (Required amount of ribbon):"         + CalculateTheRequiredAmountOfRibbon(dimensionArrays));
 Console.ReadKey();
 
 int[][] ConvertInput (string pInput)
@@ -24,11 +24,11 @@ int[][] ConvertInput (string pInput)
 		.ToArray();                                                                 
 }
 
-int CalculateTheRequiredAmountOfWrappingPaper(int[][] pDimensionsArray)
+int CalculateTheRequiredAmountOfWrappingPaper(int[][] pDimensionArrays)
 {
     int totalWrappingPaper = 0;
     
-    foreach (int[] dimensions in pDimensionsArray)
+    foreach (int[] dimensions in pDimensionArrays)
     {
         //Required wrapping paper is 2*l*w + 2*w*h + 2*h*l ...
         totalWrappingPaper += 2 * (dimensions[0] * dimensions[1] + dimensions[1] * dimensions[2] + dimensions[0] * dimensions[2]);
@@ -39,11 +39,11 @@ int CalculateTheRequiredAmountOfWrappingPaper(int[][] pDimensionsArray)
     return totalWrappingPaper;
 }
 
-int CalculateTheRequiredAmountOfRibbon(int[][] pDimensionsArray)
+int CalculateTheRequiredAmountOfRibbon(int[][] pDimensionArrays)
 {
     int totalRibbon = 0;
 
-    foreach (int[] dimensions in pDimensionsArray)
+    foreach (int[] dimensions in pDimensionArrays)
     {
         //Required ribbon is 2 times the smallest side...
         totalRibbon += 2 * (dimensions[0] + dimensions[1]);

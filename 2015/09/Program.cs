@@ -20,7 +20,7 @@ string myInput = "Tristram to AlphaCentauri = 34\r\nTristram to Snowdin = 100\r\
 
 DistanceMap distanceMap =			FillDistanceMap(myInput);
 List<string> uniqueLocations =		GetUniqueLocations(distanceMap);
-List<List<string>> possibleRoutes = GetPermutations(uniqueLocations);
+List<List<string>> possibleRoutes = uniqueLocations.GetPermutations();
 
 FindShortestAndLongestRoutes (distanceMap, possibleRoutes, out int shortestRoute, out int longestRoute);
 

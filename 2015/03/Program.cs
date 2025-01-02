@@ -1,5 +1,6 @@
 ﻿//Solution for https://adventofcode.com/2015/day/3 (Ctrl+Click in VS to follow link)
 
+//Setup some easy typedefs
 using Vec2Int = Vec2<int>;
 
 //Your input: a list of directions for Santa or Robots to follow
@@ -16,12 +17,12 @@ Dictionary<char, Vec2Int> directions = new Dictionary<char, Vec2Int>()
 	{ 'v' , new Vec2Int(0,-1) },
 };
 
-Part1(myInput);
-Part2(myInput);
+Console.WriteLine("Part 1 (Distinct house count for Santa):"+ GetDistinctHouseDeliveriesPart1(myInput));
+Console.WriteLine("Part 2 (Distinct house count for Santa+Robot):"+ GetDistinctHouseDeliveriesPart2(myInput));
 Console.ReadKey();
 
 //Find different locations visited by Santa
-void Part1(string pInput)
+int GetDistinctHouseDeliveriesPart1(string pInput)
 {
 	HashSet<Vec2Int> presentLocations = new HashSet<Vec2Int>();
 
@@ -32,11 +33,11 @@ void Part1(string pInput)
     //add it to santa and add the result to the hashset
 	foreach (char c in pInput) presentLocations.Add(santaLocation += directions[c]);
 
-    Console.WriteLine("Part 1:"+presentLocations.Count);
+    return presentLocations.Count;
 }
 
 //Find different locations visited by Santa and the helper robot if they alternate following instructions from the list
-void Part2(string pInput)
+int GetDistinctHouseDeliveriesPart2(string pInput)
 {
     HashSet<Vec2Int> presentLocations = new HashSet<Vec2Int>();
 
@@ -53,5 +54,5 @@ void Part2(string pInput)
         else                  presentLocations.Add(roboLocation  += directions[c]);
     }
 
-    Console.WriteLine("Part 2:" + presentLocations.Count);
+    return presentLocations.Count;
 }

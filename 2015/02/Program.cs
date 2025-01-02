@@ -5,20 +5,26 @@ string myInput = "4x23x21\r\n22x29x19\r\n11x4x11\r\n8x10x5\r\n24x18x16\r\n11x25x
 
 //Your task: to calculate the required wrapping paper and ribbon length according to the challenge specs
 
-//Processed input: an array of int arrays representing the sorted dimensions of each box 
-int[][] dimensions = myInput
-    .Split("\r\n", StringSplitOptions.RemoveEmptyEntries)                       //Get each separate box dimension specification
-    .Select(
-        line => line.Split('x').Select(int.Parse).OrderBy(n => n).ToArray()     //Take each separate line and convert it into a sorted int[]
-     )
-    .ToArray();														            // Convert the whole list of int[] to int[][]
+//Convert the input to an array of int arrays representing the sorted dimensions of each box 
+int[][] dimensions = ConvertInput(myInput);
 
-//Execute both parts
-Part1_CalculateTheRequiredAmountOfWrappingPaper(dimensions);  
-Part2_CalculateTheRequiredAmountOfRibbon(dimensions);
+//And calculate the requested data
+Console.WriteLine("Part 1 (Required amount of wrapping paper):" + CalculateTheRequiredAmountOfWrappingPaper(dimensions));
+Console.WriteLine("Part 2 (Required amount of ribbon):"         + CalculateTheRequiredAmountOfRibbon(dimensions));
 Console.ReadKey();
 
-void Part1_CalculateTheRequiredAmountOfWrappingPaper(int[][] pDimensionsArray)
+int[][] ConvertInput (string pInput)
+{
+	return pInput
+		//Get each separate box dimension specification
+		.Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
+		//Take each separate line and convert it into a sorted int[]
+		.Select( line => line.Split('x').Select(int.Parse).OrderBy(n => n).ToArray() )
+		// Convert the whole list of int[] to int[][]
+		.ToArray();                                                                 
+}
+
+int CalculateTheRequiredAmountOfWrappingPaper(int[][] pDimensionsArray)
 {
     int totalWrappingPaper = 0;
     
@@ -30,10 +36,10 @@ void Part1_CalculateTheRequiredAmountOfWrappingPaper(int[][] pDimensionsArray)
         totalWrappingPaper += dimensions[0] * dimensions[1];
     }
 
-    Console.WriteLine("Part 1 (Required amount of wrapping paper):" + totalWrappingPaper);
+    return totalWrappingPaper;
 }
 
-void Part2_CalculateTheRequiredAmountOfRibbon(int[][] pDimensionsArray)
+int CalculateTheRequiredAmountOfRibbon(int[][] pDimensionsArray)
 {
     int totalRibbon = 0;
 
@@ -45,7 +51,7 @@ void Part2_CalculateTheRequiredAmountOfRibbon(int[][] pDimensionsArray)
         totalRibbon += dimensions[0] * dimensions[1] * dimensions[2];
     }
 
-    Console.WriteLine("Part 2 (Required amount of ribbon):" + totalRibbon);
+    return totalRibbon;
 }
 
 

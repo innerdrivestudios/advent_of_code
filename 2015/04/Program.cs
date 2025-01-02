@@ -7,12 +7,19 @@ using System.Text;
 string myInput = "bgvyzdsv";
 
 //Your task: generate some MD5 hash based on your char sequence that matches specific requirement
+Console.WriteLine(
+    "Part 1 (Find lowest number to generate a hash starting with 00000) = " +
+    FindLowestNumberToGenerateAHashStartingWith(myInput, "00000")
+);
 
-Part1_FindAHashStartingWith00000 (myInput);
-Part2_FindAHashStartingWith000000(myInput);
+Console.WriteLine(
+	"Part 2 (Find lowest number to generate a hash starting with 000000) = " +
+	FindLowestNumberToGenerateAHashStartingWith(myInput, "000000")
+);
+
 Console.ReadKey();
 
-void Part1_FindAHashStartingWith00000(string pInput)
+int FindLowestNumberToGenerateAHashStartingWith (string pInput, string pStartsWith)
 {
     MD5 md5 = MD5.Create();
 
@@ -25,36 +32,8 @@ void Part1_FindAHashStartingWith00000(string pInput)
         byte[] hash = md5.ComputeHash(buffer);
         string result = Convert.ToHexString(hash);
 
-        if (result.StartsWith("00000"))
-        {
-            Console.WriteLine("Part 1:"+i);
-            break;
-        }
+        if (result.StartsWith(pStartsWith)) return i;
   
-        i++;
-    }
-    while (true);
-}
-
-void Part2_FindAHashStartingWith000000(string pInput)
-{
-    MD5 md5 = MD5.Create();
-
-    byte[] buffer;
-    int i = 0;
-
-    do
-    {
-        buffer = Encoding.ASCII.GetBytes(pInput + i);
-        byte[] hash = md5.ComputeHash(buffer);
-        string result = Convert.ToHexString(hash);
-
-        if (result.StartsWith("000000"))
-        {
-            Console.WriteLine("Part 2:" + i);
-            break;
-        }
-
         i++;
     }
     while (true);

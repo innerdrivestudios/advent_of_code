@@ -11,19 +11,9 @@ string myInput = "1113122113";
 //since it dramatically improves performance over concatenating regular strings
 StringBuilder temp = new StringBuilder();
 
-Part1(myInput);
-Part2(myInput);
+Console.WriteLine("Part 1:" + ApplyLookAndSay(myInput, 40).Length);
+Console.WriteLine("Part 2:" + ApplyLookAndSay(myInput, 50).Length);
 Console.ReadKey();
-
-void Part1(string pInput)
-{
-    Console.WriteLine("Part 1:"+ApplyLookAndSay(pInput, 40).Length);
-}
-
-void Part2(string pInput)
-{
-    Console.WriteLine("Part 2:" + ApplyLookAndSay(pInput, 50).Length);
-}
 
 string ApplyLookAndSay (string pInput, int pTimes)
 {

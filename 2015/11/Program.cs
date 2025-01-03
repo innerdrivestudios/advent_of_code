@@ -9,23 +9,21 @@ string myInput = "vzbxkghb";
 //2. Passwords may not contain the letters i, o, or l, as these letters can be mistaken for other characters and are therefore confusing.
 //3. Passwords must contain at least two different, non-overlapping pairs of letters, like aa, bb, or zz.
 
-Part1();
-Part1();    //Part 2 is running Part 1 again
+string nextPassword = FindNextValidPassword(myInput);
+Console.WriteLine("Part 1 - Next valid password:"+ nextPassword);
+
+nextPassword = FindNextValidPassword(nextPassword);
+Console.WriteLine("Part 2 - Next valid password:"+ nextPassword);
 
 Console.ReadKey();
 
-void Part1()
+string FindNextValidPassword (string pInput)
 {
-    char[] myPassword = myInput.ToCharArray();        
+    char[] myPassword = pInput.ToCharArray();
 
-    do
-    {
-        NextPassword(myPassword);
-    } while (!IsCorrectPassword(myPassword));
+    do NextPassword(myPassword); while (!IsCorrectPassword(myPassword));
 
-    myInput = new string(myPassword);
-
-    Console.WriteLine("Next valid password:"+ myInput);
+    return new string(myPassword);
 }
 
 void NextPassword(char[] pInputChars)

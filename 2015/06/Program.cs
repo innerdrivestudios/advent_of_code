@@ -2,6 +2,7 @@
 
 using System.Drawing;
 using System.Text.RegularExpressions;
+//define Instruction typedef => instruction = "toggle|turn on|turn off" + bounds (and yes, enums would be better)
 using Instruction = (string instruction, System.Drawing.Rectangle bounds);
 
 //Your input: a bunch of instructions to change the state of certain lights in a 2D grid of lights
@@ -18,7 +19,7 @@ List<Instruction> instructions = new List<Instruction>();
 foreach (Match match in matches)
 {
     Instruction instruction = new Instruction(
-        match.Groups[1].Value, 								//toggle|turn on|turn off
+        match.Groups[1].Value, 						//toggle|turn on|turn off
         new Rectangle (
             int.Parse(match.Groups[2].Value),		//first number (\+d)
             int.Parse(match.Groups[3].Value),		//second number (\+d)

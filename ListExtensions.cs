@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 public static class ListExtensions
 {
     public static List<List<T>> GetPermutations<T>(this List<T> pList)

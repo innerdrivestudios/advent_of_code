@@ -10,7 +10,7 @@ string myInput = "Vixen can fly 8 km/s for 8 seconds, but then must rest for 53 
 
 //Step 1. Convert all input into a list of reindeer
 
-List<Reindeer> allReindeer = ProcessInput();
+List<Reindeer> allReindeer = ConvertInput();
 
 //Step2. Run the different challenges
 
@@ -19,7 +19,7 @@ Console.WriteLine("Part 2: Winning points = " + GetWinningPoints(allReindeer, 25
 
 Console.ReadKey();
 
-List<Reindeer> ProcessInput()
+List<Reindeer> ConvertInput()
 {
     List<Reindeer> reindeers = new List<Reindeer>();
 
@@ -49,6 +49,7 @@ int GetWinningDistance(List<Reindeer> pDeer, int pSeconds)
     foreach (Reindeer reindeer in pDeer)
     {
         int travelDistance = reindeer.GetDistanceTravelled(pSeconds);
+        
         if (travelDistance > winningDistance)
         {
             winningDistance = travelDistance;

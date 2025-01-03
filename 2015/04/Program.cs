@@ -6,7 +6,8 @@ using System.Text;
 //Your input: some kind of weird char sequence
 string myInput = "bgvyzdsv";
 
-//Your task: generate some MD5 hash based on your char sequence that matches specific requirement
+//Your task: generate some MD5 hash based on your char sequence that matches specific requirements
+
 Console.WriteLine(
     "Part 1 (Find lowest number to generate a hash starting with 00000) = " +
     FindLowestNumberToGenerateAHashStartingWith(myInput, "00000")

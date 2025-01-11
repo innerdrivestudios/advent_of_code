@@ -1,6 +1,5 @@
 ﻿//Solution for https://adventofcode.com/2015/day/19 (Ctrl+Click in VS to follow link)
 
-using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 
 //Your input: a bunch of grammar rules and a sentence to create with this grammar (all the way at the end)
@@ -31,6 +30,7 @@ Console.WriteLine(
 
 //Part 2 still in progress :)
 
+
 Console.ReadKey();
 
 int DistinctMoleculeCountAfterOneReplacement(string pInput, List<(string, string)> pRules)
@@ -57,6 +57,8 @@ void ApplyRule((string key, string value) pRule, string pInput, HashSet<string> 
 		pResults.Add(resultString);
 	}
 }
+
+
 
 /*
 void Part2(string pInput)

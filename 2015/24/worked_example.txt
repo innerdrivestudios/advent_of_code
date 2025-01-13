@@ -1,0 +1,77 @@
+Input: 11 10 9 8 7 5 4 3 2 1
+
+Task: find the shortest combination of numbers that sum up to X where X is the sum of the list / 3
+
+Approach:
+	Iterate over each number in the list in the original list
+		Gather an additional number after yourself in the list
+			Result > x bust and stop
+			Result = x return the current list so far (and stop)
+			Result < x recurse with the list you have so far vs everything after that
+
+Worked example for input: 11 10 9 8 7 5 4 3 2 1
+Total = 60 so the group size we are looking for is 60 / 3 -> x = 20
+
+Index = 0 ->
+Start A:{} vs B:{11, 10, 9, 8, 7, 5, 4, 3, 2, 1}
+
+Can we combine these groups to get x? 
+Sum A + Sum B >= x? YES so continue.
+
+Gather more numbers for A:{} vs B:{11, 10, 9, 8, 7, 5, 4, 3, 2, 1}
+
+{} vs {11, 10, 9, 8, 7, 5, 4, 3, 2, 1} -> 
+{} < x so gather more: {11} vs {10, 9, 8, 7, 5, 4, 3, 2, 1}
+	11 < x -> gather more:
+		{11, 10} > x bust
+		{11, 9}  = x done
+		{11, 8}  < x valid -> Gather more {11, 8} vs {7, 5 4, 3, 2, 1}
+			11 8 7 > x bust
+			11 8 5 > x bust
+			11 8 4 > x bust
+			11 8 3 > x bust
+			11 8 2 > x bust
+			11 8 1 = x done stop
+		{11, 7} < x valid -> Gather more {11, 7} vs {5, 4, 3, 2, 1}
+			11 7 5 > x bust
+			11 7 4 > bust
+			11 7 3 > bust
+			11 7 2 = done 
+			11 7 = 18 remainder < 2 stop
+		11, 5 < x valid -> Gather more {11, 5} vs {4, 3, 2, 1}
+			11, 5, 4 = done
+			11 5 = 16 vs 3 + 2 + 1 > 20 don't stop
+			11, 5, 3 < x valid -> Gather more {11, 5, 3} vs {2, 1}
+				11 5 3 = 19 vs 2 1 = 3 > 20 don't stop
+				11, 5, 3, 2 -> bust
+				11, 5, 3, 1 -> done
+		11, 4 < valid -> Gather more {11, 4} vs {3,2,1}
+			11 4 = 15 vs 3 2 1 = 6 don't stop
+				11, 4, 3 < x -> Gather more {11, 4, 3} vs {2,1}
+					18 vs 3 don't stop
+					11, 4, 3, 2 = 20
+					11, 4, 3, 1 -> gather more 
+						11,4,3,1=19 plus 0 < 20 stop...
+		11, 3 < valid -> gather more {11,3} vs {2,1}
+			14 vs 3 < 20 stop
+
+{} < x so gather more: {10} vs {9, 8, 7, 5, 4, 3, 2, 1}			
+	Next item in the list
+	{10} vs {9, 8, 7, 5, 4, 3, 2, 1}
+		10 + 50 > 20 continue
+		(10, 9) < 20 valid -> gather more: {10, 9} vs {8, 7, 5, 4, 3, 2, 1}
+			10, 9, 8 bust
+			10, 9, 7 bust
+			10, 9, 6 bust
+			10, 9, 5 bust
+			10, 9, 4 bust
+			10, 9, 3 bust
+			10, 9, 2 bust
+			10, 9, 1 done
+		(10, 8) < 20 valid -> gather more: {10, 8} {7, 5, 4, 3, 2, 1}
+			10, 8, 7 etc etc
+
+Note that you only need to find 1 good solution, and that it will automatically be the best solution.
+ASSUMING the left over packages can still be divided in some way (also at least one solution)
+
+

@@ -50,5 +50,10 @@ public struct Vec2<T> where T: INumber<T>
     {
         return $"({X},{Y})";
     }
+
+	public T ManhattanDistance ()
+	{
+		return T.Abs(X) + T.Abs(Y);
+	}
 }
 

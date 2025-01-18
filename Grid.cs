@@ -26,7 +26,7 @@ public class Grid<T>
     /// <summary>
     /// Delegate for customizing the print output of grid elements.
     /// </summary>
-    public delegate T PrintCallBack(Vec2i position, T content);
+    public delegate string PrintCallBack(Vec2i position, T content);
 
     /// <summary>
     /// Delegate for converting string input into elements of type T.
@@ -147,10 +147,27 @@ public class Grid<T>
         }
     }
 
-    /// <summary>
-    /// Gets or sets the element at the specified (x, y) coordinates.
-    /// </summary>
-    public T this[int x, int y]
+	/// <summary>
+	/// Iterates over all elements in the given region and executes a callback.
+	/// </summary>
+    /// <param name="pTopLeft">The top left point in the region to copy</param>
+    /// <param name="pWidthHeight">The width and height of the region to copy</param>
+	/// <param name="pContentCallBack">Action to execute for each element and its position.</param>
+	public void ForeachRegion(Vec2i pTopLeft, Vec2i pWidthHeight, Action<Vec2i, T> pContentCallBack)
+	{
+		for (int y = pTopLeft.Y; y < pTopLeft.Y + pWidthHeight.Y; y++)
+		{
+			for (int x = pTopLeft.X; x < pTopLeft.X + pWidthHeight.X; x++)
+			{
+				pContentCallBack(new Vec2i(x, y), data[x, y]);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Gets or sets the element at the specified (x, y) coordinates.
+	/// </summary>
+	public T this[int x, int y]
     {
         get
         {
@@ -201,18 +218,6 @@ public class Grid<T>
     }
 
     /// <summary>
-    /// Creates a deep copy of the grid's internal data.
-    /// </summary>
-    /// <returns>A new 2D array with the same contents.</returns>
-    public Grid<T> Clone()
-    {
-        Grid<T> clone = new Grid<T>(width, height);
-        clone.data = (T[,])data.Clone();
-
-        return clone;
-    }
-
-    /// <summary>
     /// Checks if the specified Vec2i position is within the grid boundaries.
     /// </summary>
     /// <param name="index">The position to check.</param>
@@ -229,4 +234,36 @@ public class Grid<T>
     {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
+
+	/// <summary>
+	/// Creates a deep copy of the grid's internal data.
+	/// </summary>
+	/// <returns>A new 2D array with the same contents.</returns>
+	public Grid<T> Clone()
+	{
+		Grid<T> clone = new Grid<T>(width, height);
+		clone.data = (T[,])data.Clone();
+
+		return clone;
+	}
+
+	/// <summary>
+	/// Return a copy of the given region of the current grid.
+	/// <param name="pTopLeft">The top left point in the region to copy</param>
+	/// <param name="pWidthHeight">The width and height of the region to copy</param>
+	/// </summary>
+	public Grid<T> Clone(Vec2i pTopLeft, Vec2i pWidthHeight)
+	{
+        Grid<T> clone = new Grid<T> (pWidthHeight.X, pWidthHeight.Y);
+
+		for (int y = 0; y < pWidthHeight.Y; y++)
+		{
+			for (int x = 0; x < pWidthHeight.X; x++)
+			{
+				clone[x, y] = data[pTopLeft.X + x, pTopLeft.Y + y];
+			}
+		}
+
+        return clone;
+	}
 }

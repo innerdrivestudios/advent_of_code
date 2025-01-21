@@ -2,7 +2,7 @@
 
 class RTGFacility {
 
-    //List [0] is floor 0, List[1] is floor 1 etc the HashSet describes the things on there
+    //List [0] is floor 0, List[1] is floor 1 etc the HashSet describes the things on that floor
     //Experimented with both Lists and HashSets, in practice in this setup didn't make a shitton of difference...
     private List<HashSet<string>> floorsWithItems = new();
 
@@ -68,6 +68,7 @@ class RTGFacility {
         return true;
     }
 
+    //returns all possible valid changes from this state to a next state
     public List<Move> GetPossibleMoves ()
     {
         List<Move> possibleMoves = new List<Move>();
@@ -85,7 +86,6 @@ class RTGFacility {
                 //Or 2 items at a time...
                 AddValidMovesFor(possibleMoves, new Move(0, [currentFloorItems[i], currentFloorItems[j]]));
             }
-
         }
 
         return possibleMoves;
@@ -95,7 +95,7 @@ class RTGFacility {
     {
         if (elevatorFloor > 0)
         {
-            Move downMove = pMove;      //Clone the input (Move is a struct)
+            Move downMove = pMove;                  //Clone the input (Move is a struct)
             downMove.floorDelta = -1;
             
             if (
@@ -110,7 +110,7 @@ class RTGFacility {
 
         if (elevatorFloor < floorsWithItems.Count - 1)
         {
-            Move upMove = pMove;       //Clone the input (Move is a struct)
+            Move upMove = pMove;                    //Clone the input (Move is a struct)
             upMove.floorDelta = 1;
 
             if (IsValid(upMove))

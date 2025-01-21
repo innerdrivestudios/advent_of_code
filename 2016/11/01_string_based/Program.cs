@@ -12,17 +12,18 @@ using System.Diagnostics;
 
 ////////////////////////////////////////// YOUR TASKS ////////////////////////////////////
 
-//  I - Calculate the minimum number of steps required to bring all of the objects to the fourth floor.
+//  I - Calculate the minimum number of steps required to bring all of the objects to the fourth floor,
+//      whle obeying the item "rules" set out before you.
 //  II - Do the same for some additional objects :)
 
 ///////////////////////////////////////// APPROACH //////////////////////////////////////
 
-// So I thought about whether I should write a parser for this, but it seems overkill. 
 // Read the puzzle description on the website first and then continue with everything below.
 
-// The puzzle in question is kind of like a "Goat, Cabbage and the Wolf" puzzle.
-// (A farmer is on the left side of the river with a Goat, Cabbage and Wolf and needs to bring all of them across.
-// However you can't leave the Goat with the Cabbage, nor the Wolf with the Goat, etc, etc.
+// The puzzle in question is kind of like a "Goat, Cabbage and the Wolf" puzzle:
+//  - A farmer is on the left side of the river with a Goat, Cabbage and Wolf and needs to bring all of them across.
+//    However you can't leave the Goat with the Cabbage, nor the Wolf with the Goat, etc, etc.
+//
 // Instead of Goats etc we're dealing with an elevator, generators and chips that do or don't combine :))
 
 // The elevator in the problem description is key here because it defines the possible state transitions.
@@ -68,7 +69,7 @@ using System.Diagnostics;
 // Note that the order of elements don't matter, so we can just represent them with a HashSet<string>
 
 // So what is a invalid state?
-// Any state that has AT LEAST 1 generator, where there is AT LEAST 1 chip without (unpowered) by its own generator is invalid.
+// Any state that has AT LEAST 1 generator, where there is AT LEAST 1 chip without its own generator.
 // (Rationale: is that generator A will fry chip B if chip B is not powered by generator B)
 
 ///////////////////////////////////////// REPRESENTING THE PUZZLE STATE /////////////////////////////
@@ -83,12 +84,14 @@ using System.Diagnostics;
 //
 // In theory I think we could so something smart with representing (HG, HM) (LG, LM) etc per floor as sets of 2 bits...
 // but I chose to go with something more readable instead (might do the other version afterwards).
+//
+// Update: bit based version can be found in the same parent folder as this solution.
 
 // First let's mimick the test data:
 
 // F4   .  .  .  .  
 // F3   .  .  LG . 
-// F2 ^ HG .  .  .
+// F2   HG .  .  .
 // F1 E .  HM .  LM
 
 RTGFacility testFacility = new RTGFacility();

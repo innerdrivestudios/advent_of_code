@@ -1,0 +1,38 @@
+﻿//Solution for https://adventofcode.com/2018/day/1 (Ctrl+Click in VS to follow link)
+
+//Your input: a sequence of + and - offsets
+string myInput = "+13\r\n+19\r\n+11\r\n+15\r\n+1\r\n+7\r\n+17\r\n+14\r\n-16\r\n+15\r\n+4\r\n-2\r\n-10\r\n+2\r\n+17\r\n+18\r\n-5\r\n-18\r\n-18\r\n-16\r\n-11\r\n-9\r\n-9\r\n-1\r\n+6\r\n+12\r\n+14\r\n+3\r\n+7\r\n+11\r\n+13\r\n+10\r\n-9\r\n+16\r\n+15\r\n+18\r\n-19\r\n-17\r\n+1\r\n-7\r\n+11\r\n+19\r\n-2\r\n-3\r\n+19\r\n+12\r\n+9\r\n+7\r\n+16\r\n+1\r\n+5\r\n-11\r\n-7\r\n+16\r\n+3\r\n+12\r\n+8\r\n-17\r\n-8\r\n-11\r\n+5\r\n-9\r\n-18\r\n+10\r\n-7\r\n+2\r\n+4\r\n+4\r\n+10\r\n+13\r\n+6\r\n+1\r\n-19\r\n+16\r\n+14\r\n-9\r\n+15\r\n+19\r\n-18\r\n+15\r\n-10\r\n-7\r\n+16\r\n+3\r\n+19\r\n-17\r\n+8\r\n+19\r\n+14\r\n-17\r\n-15\r\n-18\r\n-16\r\n+13\r\n-16\r\n+13\r\n+17\r\n+17\r\n+6\r\n+7\r\n+8\r\n-11\r\n-17\r\n+4\r\n-12\r\n-17\r\n+20\r\n+19\r\n+8\r\n+10\r\n+9\r\n+21\r\n+17\r\n+12\r\n+18\r\n-7\r\n+19\r\n-8\r\n-19\r\n+3\r\n-7\r\n-2\r\n-3\r\n+16\r\n+13\r\n-16\r\n-16\r\n-19\r\n+10\r\n-19\r\n+14\r\n-9\r\n-17\r\n+7\r\n+1\r\n+2\r\n+19\r\n+7\r\n-14\r\n+1\r\n-8\r\n+3\r\n-14\r\n-11\r\n+2\r\n+19\r\n+19\r\n-20\r\n-8\r\n-14\r\n+10\r\n+2\r\n+16\r\n+15\r\n+8\r\n+19\r\n-14\r\n+16\r\n-10\r\n+1\r\n+14\r\n+18\r\n-13\r\n-4\r\n+12\r\n+8\r\n-1\r\n-18\r\n+5\r\n+1\r\n+14\r\n+7\r\n+6\r\n+19\r\n-16\r\n+19\r\n+13\r\n+5\r\n+10\r\n-12\r\n+7\r\n+7\r\n+20\r\n+12\r\n-17\r\n+13\r\n+18\r\n-13\r\n-9\r\n+12\r\n+5\r\n-10\r\n+3\r\n+5\r\n+16\r\n-7\r\n-1\r\n+11\r\n+12\r\n-16\r\n+7\r\n+13\r\n+9\r\n-18\r\n-9\r\n+4\r\n-20\r\n+9\r\n+8\r\n+6\r\n+4\r\n+11\r\n+7\r\n-8\r\n-13\r\n-2\r\n+17\r\n-7\r\n-3\r\n+11\r\n+12\r\n+3\r\n-7\r\n+5\r\n+5\r\n+3\r\n+5\r\n+3\r\n-10\r\n+11\r\n-8\r\n-5\r\n+3\r\n+19\r\n-5\r\n+4\r\n+10\r\n-6\r\n+12\r\n-11\r\n+3\r\n+9\r\n+10\r\n-18\r\n-19\r\n+7\r\n-11\r\n-8\r\n-12\r\n-9\r\n-7\r\n-17\r\n+15\r\n-16\r\n-13\r\n-10\r\n-8\r\n+16\r\n+18\r\n-10\r\n+1\r\n-14\r\n-9\r\n-14\r\n+11\r\n-19\r\n-2\r\n-18\r\n-5\r\n-19\r\n+17\r\n+8\r\n+12\r\n+12\r\n+6\r\n-15\r\n-1\r\n+2\r\n+20\r\n-8\r\n+6\r\n-13\r\n+1\r\n+9\r\n+18\r\n+16\r\n-19\r\n-17\r\n-24\r\n-1\r\n-8\r\n-12\r\n-17\r\n-6\r\n-16\r\n+13\r\n-10\r\n+17\r\n+13\r\n+8\r\n-17\r\n+5\r\n-11\r\n+9\r\n+19\r\n+18\r\n+17\r\n-15\r\n+14\r\n-15\r\n-17\r\n-17\r\n+19\r\n+6\r\n-13\r\n-9\r\n+1\r\n-20\r\n-1\r\n-7\r\n-3\r\n+1\r\n+14\r\n-17\r\n-16\r\n-16\r\n-18\r\n-7\r\n-19\r\n-14\r\n-18\r\n+8\r\n+14\r\n+1\r\n-12\r\n-9\r\n+13\r\n+9\r\n-10\r\n+6\r\n+15\r\n+19\r\n+11\r\n-9\r\n-3\r\n+8\r\n+3\r\n+6\r\n+1\r\n+6\r\n-27\r\n+17\r\n+24\r\n-7\r\n+20\r\n+23\r\n+16\r\n+3\r\n-8\r\n+20\r\n+10\r\n-5\r\n-4\r\n-9\r\n-8\r\n-11\r\n-31\r\n-10\r\n+13\r\n-15\r\n+29\r\n+1\r\n+16\r\n+10\r\n+40\r\n+9\r\n+10\r\n+3\r\n+13\r\n+4\r\n+10\r\n+29\r\n+6\r\n-11\r\n-5\r\n+32\r\n-14\r\n+5\r\n+13\r\n-17\r\n-8\r\n+9\r\n+29\r\n+17\r\n+3\r\n+2\r\n+13\r\n-19\r\n+14\r\n+10\r\n+2\r\n+5\r\n-15\r\n-19\r\n-20\r\n+12\r\n+19\r\n+24\r\n+6\r\n-23\r\n+14\r\n-18\r\n+1\r\n+10\r\n-20\r\n+34\r\n+9\r\n-2\r\n+18\r\n+15\r\n-7\r\n+19\r\n-13\r\n+7\r\n+16\r\n+12\r\n-11\r\n-15\r\n-6\r\n+19\r\n+16\r\n+9\r\n+5\r\n+13\r\n+17\r\n+13\r\n-1\r\n-1\r\n-16\r\n-18\r\n+16\r\n+5\r\n+21\r\n+2\r\n+2\r\n+9\r\n-14\r\n+22\r\n+12\r\n-2\r\n-6\r\n+22\r\n-2\r\n-17\r\n+2\r\n-14\r\n-9\r\n+16\r\n+25\r\n-7\r\n+34\r\n+5\r\n-14\r\n-34\r\n+11\r\n-28\r\n-12\r\n-16\r\n-18\r\n+17\r\n-9\r\n+6\r\n-5\r\n-19\r\n-17\r\n-16\r\n+2\r\n-8\r\n+11\r\n-13\r\n-4\r\n+10\r\n-14\r\n-19\r\n-14\r\n-7\r\n+2\r\n+2\r\n+4\r\n+5\r\n+30\r\n-19\r\n+10\r\n-17\r\n+2\r\n-25\r\n+28\r\n-2\r\n-2\r\n+7\r\n-19\r\n+29\r\n+4\r\n+2\r\n+14\r\n-6\r\n+22\r\n+14\r\n-11\r\n+16\r\n-13\r\n-15\r\n+4\r\n-9\r\n-20\r\n-36\r\n-17\r\n-7\r\n-10\r\n+183\r\n-9\r\n+13\r\n-108\r\n+34\r\n-138\r\n-65\r\n-42\r\n-4\r\n+10\r\n+410\r\n+75921\r\n-9\r\n+18\r\n-17\r\n-6\r\n+15\r\n+6\r\n+12\r\n-13\r\n-4\r\n-8\r\n-16\r\n+15\r\n-6\r\n-18\r\n-6\r\n-11\r\n+4\r\n+3\r\n-1\r\n-9\r\n+16\r\n+5\r\n-6\r\n-4\r\n+1\r\n+14\r\n+20\r\n-16\r\n+3\r\n+6\r\n+15\r\n+18\r\n-11\r\n+15\r\n-14\r\n-14\r\n-8\r\n+9\r\n+1\r\n-15\r\n-17\r\n+18\r\n-9\r\n-14\r\n+19\r\n-1\r\n+10\r\n+14\r\n-8\r\n+20\r\n+17\r\n+17\r\n+12\r\n-10\r\n+11\r\n+13\r\n-9\r\n+6\r\n+14\r\n-16\r\n-10\r\n-4\r\n-2\r\n-4\r\n+8\r\n+13\r\n+13\r\n-17\r\n+9\r\n-2\r\n-6\r\n+9\r\n+15\r\n+17\r\n+18\r\n-6\r\n-16\r\n+6\r\n+8\r\n+1\r\n+9\r\n+20\r\n-19\r\n+3\r\n-7\r\n-1\r\n-19\r\n+4\r\n-6\r\n-11\r\n-12\r\n+10\r\n+9\r\n+3\r\n+10\r\n+10\r\n-1\r\n+18\r\n-8\r\n-14\r\n-22\r\n+12\r\n-10\r\n-10\r\n+2\r\n+12\r\n-13\r\n-7\r\n+15\r\n-3\r\n+7\r\n+15\r\n+20\r\n+14\r\n+6\r\n-2\r\n-20\r\n+13\r\n-4\r\n+18\r\n-2\r\n-8\r\n+11\r\n+16\r\n+8\r\n-9\r\n+19\r\n-16\r\n+9\r\n+19\r\n+7\r\n-13\r\n+7\r\n-10\r\n-14\r\n-18\r\n-12\r\n+18\r\n+11\r\n-15\r\n-3\r\n+16\r\n-8\r\n+18\r\n-9\r\n+20\r\n-16\r\n-6\r\n-16\r\n-2\r\n-10\r\n-8\r\n-8\r\n+9\r\n-15\r\n+13\r\n-20\r\n-7\r\n-5\r\n-13\r\n-19\r\n-2\r\n+7\r\n-6\r\n-10\r\n-14\r\n-17\r\n-11\r\n+6\r\n-14\r\n-15\r\n+24\r\n+11\r\n-10\r\n-16\r\n+10\r\n-1\r\n+14\r\n+7\r\n-18\r\n+17\r\n+11\r\n+11\r\n-1\r\n-19\r\n-10\r\n+11\r\n-15\r\n+11\r\n-4\r\n-16\r\n+10\r\n-15\r\n+24\r\n+6\r\n+6\r\n-26\r\n-19\r\n+7\r\n+21\r\n+22\r\n+26\r\n-18\r\n+8\r\n+34\r\n-12\r\n-8\r\n+28\r\n-1\r\n+34\r\n-10\r\n+3\r\n-6\r\n+25\r\n+11\r\n-3\r\n+20\r\n+9\r\n+8\r\n-14\r\n+16\r\n+17\r\n-11\r\n+10\r\n+4\r\n-10\r\n-6\r\n+8\r\n+11\r\n+1\r\n+2\r\n-5\r\n-10\r\n+2\r\n+15\r\n-13\r\n+10\r\n+17\r\n-1\r\n+3\r\n+19\r\n-14\r\n+12\r\n+7\r\n+5\r\n-1\r\n+11\r\n+19\r\n-12\r\n+16\r\n-7\r\n-18\r\n+12\r\n+18\r\n+10\r\n-2\r\n-16\r\n-16\r\n-16\r\n-13\r\n+9\r\n-8\r\n+1\r\n+17\r\n-2\r\n+5\r\n+9\r\n+12\r\n-17\r\n+13\r\n+1\r\n+14\r\n+18\r\n+1\r\n+3\r\n-6\r\n-5\r\n+1\r\n-17\r\n-13\r\n-9\r\n-15\r\n-23\r\n-10\r\n+1\r\n+13\r\n+4\r\n-5\r\n-2\r\n+9\r\n-1\r\n-10\r\n-15\r\n-4\r\n-9\r\n+17\r\n+1\r\n-6\r\n+15\r\n+8\r\n+1\r\n-21\r\n-4\r\n+3\r\n-18\r\n+20\r\n+5\r\n+26\r\n+4\r\n+19\r\n+8\r\n+19\r\n+20\r\n-9\r\n-10\r\n-12\r\n-12\r\n+16\r\n-8\r\n-5\r\n-16\r\n-17\r\n+20\r\n-16\r\n+8\r\n-10\r\n+14\r\n-2\r\n+15\r\n+22\r\n+4\r\n+3\r\n+20\r\n+2\r\n+3\r\n+16\r\n+14\r\n-3\r\n+5\r\n+12\r\n-7\r\n-18\r\n+2\r\n+14\r\n+4\r\n-11\r\n+1\r\n+5\r\n+6\r\n-4\r\n+16\r\n+11\r\n-14\r\n+18\r\n-7\r\n+14\r\n+1\r\n-19\r\n-3\r\n+18\r\n+6\r\n+16\r\n+7\r\n-9\r\n+16\r\n+7\r\n+10\r\n-4\r\n-4\r\n-12\r\n-15\r\n-16\r\n+7\r\n+19\r\n+11\r\n+18\r\n+7\r\n-12\r\n-12\r\n+20\r\n+13\r\n-19\r\n-6\r\n-10\r\n+13\r\n-7\r\n-14\r\n-15\r\n-17\r\n-5\r\n+14\r\n+6\r\n+8\r\n-7\r\n-15\r\n-11\r\n-18\r\n-16\r\n-16\r\n-18\r\n-18\r\n+7\r\n+22\r\n+13\r\n-1\r\n+10\r\n+18\r\n-9\r\n-16\r\n+3\r\n-12\r\n-10\r\n+6\r\n+8\r\n+14\r\n-19\r\n-2\r\n+13\r\n+5\r\n+8\r\n+7\r\n+5\r\n+5\r\n+7\r\n+17\r\n-4\r\n-7\r\n+5\r\n-16\r\n+15\r\n-18\r\n+4\r\n+6\r\n+5\r\n+14\r\n+27\r\n+5\r\n-11\r\n-7\r\n-7\r\n+15\r\n+7\r\n-17\r\n+8\r\n-14\r\n-3\r\n+2\r\n+25\r\n+12\r\n-6\r\n-17\r\n+7\r\n-8\r\n+23\r\n-4\r\n+20\r\n+18\r\n+4\r\n-9\r\n+3\r\n-20\r\n-8\r\n+40\r\n-35\r\n-39\r\n-42\r\n+13\r\n-48\r\n-14\r\n+7\r\n+19\r\n-21\r\n+10\r\n-19\r\n+1\r\n-11\r\n+12\r\n-25\r\n-9\r\n-19\r\n+23\r\n+1\r\n+22\r\n-3\r\n+22\r\n-7\r\n+14\r\n-25\r\n+66\r\n-8\r\n+104\r\n+41\r\n+35\r\n+1\r\n+11\r\n-48\r\n-38\r\n+44\r\n-64\r\n+259\r\n-17\r\n+19\r\n-16\r\n+12\r\n+16\r\n-77039\r\n";
+
+//Your task: 
+// 1 - Calculate the end result when adding all of these numbers, using 0 as a starting point
+
+List<int> ints = myInput
+    .Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
+    .Select(int.Parse)
+    .ToList();
+
+Console.WriteLine("Part 1 -> " + ints.Sum());
+
+// 2 - Keep on processing the numbers in the list until you encounter a duplicate
+
+Console.WriteLine("Part 2 -> " + FindFirstDuplicateFrequency(ints));
+
+int FindFirstDuplicateFrequency(List<int> ints)
+{
+    HashSet<int> frequencies = new HashSet<int>();
+
+    int sum = 0;
+    int index = 0;
+
+    while (true)
+    {
+        sum += ints[index];
+
+        if (!frequencies.Add(sum)) return sum;
+
+        index++;
+        index%=ints.Count; 
+    }
+}
+
+Console.ReadKey();

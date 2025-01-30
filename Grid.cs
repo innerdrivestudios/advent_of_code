@@ -63,7 +63,7 @@ public class Grid<T>
         if (columnTokenNotNull)
         {
             //width is determined by amount of split elements
-            string[] testLine = lines[0].Split(pColumnToken, StringSplitOptions.None);
+            string[] testLine = lines[0].Split(pColumnToken, StringSplitOptions.RemoveEmptyEntries);
             width = testLine.Length;
         }
         else
@@ -81,7 +81,7 @@ public class Grid<T>
             //if we have a column token, split each line on the column token, otherwise interpret the line as a char array
             if (columnTokenNotNull)
             {
-                columns = lines[y].Split(pColumnToken, StringSplitOptions.None);
+                columns = lines[y].Split(pColumnToken, StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {

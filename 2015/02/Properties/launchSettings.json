@@ -2,7 +2,7 @@
   "profiles": {
     "project": {
       "commandName": "Project",
-      "commandLineArgs": "$(SolutionDir)input"
+      "commandLineArgs": "\"$(SolutionDir)input\""
     }
   }
 }

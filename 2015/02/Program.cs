@@ -1,4 +1,4 @@
-﻿//Solution for https://adventofcode.com/2015/day/2 (Ctrl+Click in VS to follow link)
+﻿// Solution for https://adventofcode.com/2015/day/2 (Ctrl+Click in VS to follow link)
 
 // In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
@@ -11,7 +11,7 @@ myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 
 // ** Part 1: Calculate the required wrapping paper according to the challenge specs
 
-//Convert the input to an array of int arrays representing the sorted dimensions of each box 
+// Convert the input to an array of int arrays representing the sorted dimensions of each box 
 int[][] dimensionArrays =
     myInput
         //Get each separate box dimension specification
@@ -21,7 +21,7 @@ int[][] dimensionArrays =
         // Convert the whole list of int[] to int[][]
         .ToArray();
 
-//And calculate the requested data
+// And calculate the requested data
 int totalWrappingPaper = 0;
 
 foreach (int[] dimensions in dimensionArrays)

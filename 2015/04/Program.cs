@@ -3,10 +3,15 @@
 using System.Security.Cryptography;
 using System.Text;
 
-//Your input: some kind of weird char sequence
-string myInput = "bgvyzdsv";
+// ** Your input: Some kind of weird char sequence
 
-//Your task: generate some MD5 hash based on your char sequence that matches specific requirements
+// In visual studio you can modify the char sequence used by going to
+// Debug/Debug Properties and changing the command line arguments.
+// This value given will be passed to the built-in args[0] variable.
+
+string myInput = args[0]; 
+
+// ** Part 1 & 2: Generate some MD5 hash based on your char sequence that matches specific requirements
 
 Console.WriteLine(
     "Part 1 (Find lowest number to generate a hash starting with 00000) = " +

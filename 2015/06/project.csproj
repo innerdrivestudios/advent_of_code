@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\Grid.cs" Link="Grid.cs" />
+    <Compile Include="..\..\Vec2.cs" Link="Vec2.cs" />
+  </ItemGroup>
+
 </Project>

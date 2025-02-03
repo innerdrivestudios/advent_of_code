@@ -1,3 +1,4 @@
+using System.Drawing;
 using Vec2i = Vec2<int>;
 
 /// <summary>
@@ -147,27 +148,51 @@ public class Grid<T>
         }
     }
 
-	/// <summary>
-	/// Iterates over all elements in the given region and executes a callback.
-	/// </summary>
-    /// <param name="pTopLeft">The top left point in the region to copy</param>
-    /// <param name="pWidthHeight">The width and height of the region to copy</param>
-	/// <param name="pContentCallBack">Action to execute for each element and its position.</param>
-	public void ForeachRegion(Vec2i pTopLeft, Vec2i pWidthHeight, Action<Vec2i, T> pContentCallBack)
+    /// <summary>
+    /// Iterates over all elements in the given region and executes a callback.
+    /// </summary>
+    /// <param name="pTopLeft">The top left point of the region to iterate over</param>
+    /// <param name="pWidthHeight">The width and height of the region to iterate over</param>
+    /// <param name="pContentCallBack">Action to execute for each element and its position.</param>
+    public void ForeachRegion(Vec2i pTopLeft, Vec2i pWidthHeight, Action<Vec2i, T> pContentCallBack)
 	{
-		for (int y = pTopLeft.Y; y < pTopLeft.Y + pWidthHeight.Y; y++)
-		{
-			for (int x = pTopLeft.X; x < pTopLeft.X + pWidthHeight.X; x++)
-			{
-				pContentCallBack(new Vec2i(x, y), data[x, y]);
-			}
-		}
+        ForeachRegion (pTopLeft.X, pTopLeft.Y, pTopLeft.X + pWidthHeight.X, pTopLeft.Y + pWidthHeight.Y, pContentCallBack);
 	}
 
-	/// <summary>
-	/// Gets or sets the element at the specified (x, y) coordinates.
-	/// </summary>
-	public T this[int x, int y]
+    /// <summary>
+    /// Iterates over all elements in the given region and executes a callback.
+    /// </summary>
+    /// <param name="pBounds">The region to iterate over</param>
+    public void ForeachRegion(Rectangle pBounds, Action<Vec2i, T> pContentCallBack)
+    {
+        ForeachRegion(pBounds.Left, pBounds.Top, pBounds.Right, pBounds.Bottom, pContentCallBack);
+    }
+
+    /// <summary>
+    /// Iterates over all elements in the given region and executes a callback.
+    /// </summary>
+    /// <param name="pLeft">The left point in the region to copy</param>
+    /// <param name="pTop">The top point in the region to copy</param>
+    /// <param name="pRight">The right point in the region to copy</param>
+    /// <param name="pBottom">The bottom point in the region to copy</param>
+    /// 
+    /// <param name="pContentCallBack">Action to execute for each element and its position.</param>
+
+    public void ForeachRegion(int pLeft, int pTop, int pRight, int pBottom, Action<Vec2i, T> pContentCallBack)
+    {
+        for (int y = pTop; y < pBottom; y++)
+        {
+            for (int x = pLeft; x < pRight; x++)
+            {
+                pContentCallBack(new Vec2i(x, y), data[x, y]);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the element at the specified (x, y) coordinates.
+    /// </summary>
+    public T this[int x, int y]
     {
         get
         {

@@ -1,15 +1,23 @@
 ﻿//Solution for https://adventofcode.com/2016/day/1 (Ctrl+Click in VS to follow link)
+
 using Vec2i = Vec2<int>;
 
-//Your input: a list of turn and move instructions, L/R rotates -90/90 and the int moves in the current direction
-string myInput = "R2, L5, L4, L5, R4, R1, L4, R5, R3, R1, L1, L1, R4, L4, L1, R4, L4, R4, L3, R5, R4, R1, R3, L1, L1, R1, L2, R5, L4, L3, R1, L2, L2, R192, L3, R5, R48, R5, L2, R76, R4, R2, R1, L1, L5, L1, R185, L5, L1, R5, L4, R1, R3, L4, L3, R1, L5, R4, L4, R4, R5, L3, L1, L2, L4, L3, L4, R2, R2, L3, L5, R2, R5, L1, R1, L3, L5, L3, R4, L4, R3, L1, R5, L3, R2, R4, R2, L1, R3, L1, L3, L5, R4, R5, R2, R2, L5, L3, L1, L1, L5, L2, L3, R3, R3, L3, L4, L5, R2, L1, R1, R3, R4, L2, R1, L1, R3, R3, L4, L2, R5, R5, L1, R4, L5, L5, R1, L5, R4, R2, L1, L4, R1, L1, L1, L5, R3, R4, L2, R1, R2, R1, R1, R3, L5, R1, R4\r\n";
+// In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
+// and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
+// This value will be processed and passed to the built-in args[0] variable
 
-//Your task: figure out where you end up after following the instructions and checking the first space entered twice...
+string myInput = File.ReadAllText(args[0]);
+myInput = myInput.ReplaceLineEndings("");
 
-//Split all the instructions into separate strings first
-string[] instructions = myInput.Replace("\r\n", "").Split(", ", StringSplitOptions.RemoveEmptyEntries);
+// ** Your input: a list of turn and move instructions, L/R rotates -90/90 and the int moves in the current direction
 
-//Setup an array of directions, so we can easily turn left and right
+// ** Your tasks:
+// - figure out where you end up after following the instructions and checking the first space entered twice...
+
+// Split all the instructions into separate strings first
+string[] instructions = myInput.Split(", ", StringSplitOptions.RemoveEmptyEntries);
+
+// Setup an array of directions, so we can easily turn left and right
 Directions<Vec2i> directions = new Directions<Vec2i>([new Vec2i(1,0), new Vec2i(0,1), new Vec2i(-1, 0), new Vec2i(0, -1)]);
 
 Console.WriteLine("Part 1 - The Easter Bunny Headquarters distance: " + Part1(instructions));
@@ -17,7 +25,8 @@ Console.WriteLine("Part 2 - First duplicate position distance: " + Part2(instruc
 
 Console.ReadKey();
 
-//Part 1 = Calculating how many blocks away the easter bunny head quarters are...
+//** Part 1: Calculate how many blocks away the easter bunny head quarters are...
+
 int Part1(string[] pInstructions)
 {
     //Starting position and direction
@@ -38,7 +47,8 @@ int Part1(string[] pInstructions)
     return position.ManhattanDistance();
 }
 
-//Part 2 = Figuring out the location of the first position entered twice
+// ** Part 2: Figure out the location of the first position entered twice
+
 int Part2(string[] pInstructions)
 {
     //Starting position and direction

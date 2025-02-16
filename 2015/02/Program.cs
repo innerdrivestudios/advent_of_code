@@ -21,7 +21,8 @@ int[][] dimensionArrays =
         // Convert the whole list of int[] to int[][]
         .ToArray();
 
-// And calculate the requested data
+// And calculate the requested data:
+
 int totalWrappingPaper = 0;
 
 foreach (int[] dimensions in dimensionArrays)

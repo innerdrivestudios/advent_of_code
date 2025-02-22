@@ -1,0 +1,1 @@
+﻿enum Hands { NoMatch, HighCard, OnePair, TwoPair, ThreeOfAKind, FullHouse, FourOfAKind, FiveOfAKind };

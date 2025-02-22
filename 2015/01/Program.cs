@@ -15,6 +15,7 @@ Console.WriteLine("Part 1 (Final floor):" + myInput.Sum(r => r == '(' ? 1 : -1))
 // ** Part 2: Calculate the index of the char in the string where you hit the basement for the first time
 
 // Follow the floor change instructions and exit when we hit the basement
+
 int floor = 0;
 int basementIndex = 1;
 

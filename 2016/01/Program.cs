@@ -1,4 +1,4 @@
-﻿//Solution for https://adventofcode.com/2016/day/1 (Ctrl+Click in VS to follow link)
+﻿// Solution for https://adventofcode.com/2016/day/1 (Ctrl+Click in VS to follow link)
 
 using Vec2i = Vec2<int>;
 
@@ -6,26 +6,17 @@ using Vec2i = Vec2<int>;
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
 // This value will be processed and passed to the built-in args[0] variable
 
+// ** Your input: a list of turn and move instructions, L/R rotates -90/90 and the int moves in the current direction
+
 string myInput = File.ReadAllText(args[0]);
 myInput = myInput.ReplaceLineEndings("");
 
-// ** Your input: a list of turn and move instructions, L/R rotates -90/90 and the int moves in the current direction
-
-// ** Your tasks:
-// - figure out where you end up after following the instructions and checking the first space entered twice...
-
-// Split all the instructions into separate strings first
 string[] instructions = myInput.Split(", ", StringSplitOptions.RemoveEmptyEntries);
 
-// Setup an array of directions, so we can easily turn left and right
-Directions<Vec2i> directions = new Directions<Vec2i>([new Vec2i(1,0), new Vec2i(0,1), new Vec2i(-1, 0), new Vec2i(0, -1)]);
-
-Console.WriteLine("Part 1 - The Easter Bunny Headquarters distance: " + Part1(instructions));
-Console.WriteLine("Part 2 - First duplicate position distance: " + Part2(instructions));
-
-Console.ReadKey();
-
 //** Part 1: Calculate how many blocks away the easter bunny head quarters are...
+
+// Setup a global array of directions, so we can easily turn left and right
+Directions<Vec2i> directions = new Directions<Vec2i>([new Vec2i(1,0), new Vec2i(0,1), new Vec2i(-1, 0), new Vec2i(0, -1)]);
 
 int Part1(string[] pInstructions)
 {
@@ -47,6 +38,8 @@ int Part1(string[] pInstructions)
     return position.ManhattanDistance();
 }
 
+Console.WriteLine("Part 1 - The Easter Bunny Headquarters distance: " + Part1(instructions));
+
 // ** Part 2: Figure out the location of the first position entered twice
 
 int Part2(string[] pInstructions)
@@ -55,7 +48,7 @@ int Part2(string[] pInstructions)
     Vec2i position = new Vec2i(0, 0);
     directions.index = 1;
 
-    //Added a hashset to keep track of prior position
+    //Define a hashset to keep track of prior positions
     HashSet<Vec2i> visited = new HashSet<Vec2i>();
 
     foreach (string instruction in pInstructions)
@@ -77,4 +70,7 @@ int Part2(string[] pInstructions)
     return -1;
 }
 
+Console.WriteLine("Part 2 - First duplicate position distance: " + Part2(instructions));
+
+Console.ReadKey();
 

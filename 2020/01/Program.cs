@@ -1,4 +1,4 @@
-﻿//Solution for https://adventofcode.com/2020/day/1 (Ctrl+Click in VS to follow link)
+﻿// Solution for https://adventofcode.com/2020/day/1 (Ctrl+Click in VS to follow link)
 
 // In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
@@ -8,7 +8,7 @@
 
 long[] numbers = ParseUtils.FileToNumbers<long>(args[0], Environment.NewLine);
 
-// Part 1 - Find the two numbers that add up to 2020 and return their product
+// ** Part 1 - Find the two numbers that add up to 2020 and return their product
 
 long GetExpenseChecksumFor2(long[] pNumbers)
 {
@@ -35,7 +35,7 @@ long GetExpenseChecksumFor2(long[] pNumbers)
 
 Console.WriteLine("Part 1 - Expense report checksum for 2 numbers: " + GetExpenseChecksumFor2(numbers));
 
-// Part 2 - Find the three numbers that add up to 2020 and return their product
+// ** Part 2 - Find the three numbers that add up to 2020 and return their product
 
 long GetExpenseChecksumFor3(long[] pNumbers)
 {

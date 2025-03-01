@@ -20,4 +20,23 @@ static class ParseUtils
 			.Select (x => T.Parse (x, CultureInfo.InvariantCulture))
 			.ToArray();
 	}
+
+    public static T[] FileToArrayOf<T>(string pFilename, string pSeparator = ",") 
+    {
+        string fileContents = File.ReadAllText(pFilename);
+        fileContents = fileContents.ReplaceLineEndings(Environment.NewLine);
+        return StringToArrayOf<T>(fileContents, pSeparator);
+    }
+
+    public static T[] StringToArrayOf<T>(string pFileContents, string pSeparator = ",")
+    {
+        //If our separator isn't a newline, remove all line endings
+        if (pSeparator != Environment.NewLine) pFileContents = pFileContents.ReplaceLineEndings("");
+
+        return pFileContents
+            .Split(pSeparator, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(x => (T)Convert.ChangeType(x, typeof (T)))
+            .ToArray();
+    }
+
 }

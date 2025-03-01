@@ -9,9 +9,9 @@
 string myInput = File.ReadAllText(args[0]);
 myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 
-// Your task: calculate difference between certain number pairs
+// ** Your task: calculate difference between certain number pairs
 
-// Part 1 :
+// ** Part 1 :
 
 // Pair up the smallest number in the left list with the smallest number in the right list,
 // then the second-smallest left number with the second-smallest right number, and so on.
@@ -43,7 +43,7 @@ for(int i = 0; i < left.Count; i++)
 
 Console.WriteLine("Part 1 - Total difference over all ordered number pairs: " + result);
 
-// Part 2:
+// ** Part 2:
 
 // This time, you'll need to figure out exactly how often each number from the left list appears
 // in the right list. Calculate a total similarity score by adding up each number in the left list

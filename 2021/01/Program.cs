@@ -12,12 +12,14 @@ long[] depths = ParseUtils.FileToNumbers<long>(args[0], Environment.NewLine);
 
 long GetIncreaseCount(long[] pDepths)
 {
-	long increaseCount = 0;	
+	long increaseCount = 0;
+	
 	for (int i = 1;  i < pDepths.Length; i++)
 	{
 		if (pDepths[i] > pDepths[i - 1]) increaseCount++;
 
 	}
+
 	return increaseCount;
 }
 
@@ -36,6 +38,7 @@ long GetIncreaseCount3FrameWindow(long[] pDepths)
 
 		if (windowB > windowA) increaseCount++;
 	}
+
 	return increaseCount;
 }
 

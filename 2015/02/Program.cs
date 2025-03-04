@@ -12,6 +12,7 @@ myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 // ** Part 1: Calculate the required wrapping paper according to the challenge specs
 
 // Convert the input to an array of int arrays representing the sorted dimensions of each box 
+
 int[][] dimensionArrays =
     myInput
         //Get each separate box dimension specification

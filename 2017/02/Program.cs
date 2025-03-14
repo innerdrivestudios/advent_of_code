@@ -13,11 +13,12 @@
 // But then more :) :
 
 string myInput = File.ReadAllText(args[0]);
+myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 
 // Who said LINQ is unreadable??
 int[][] numbers = myInput
     //Get all the separate strings (with numbers separated by tabs) by splitting on \r\n
-    .Split ("\r\n", StringSplitOptions.RemoveEmptyEntries)	
+    .Split (Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)	
 	//Split each of those lines on a \t char and convert the results to an array of integers
 	.Select (x => x.Split ("\t", StringSplitOptions.RemoveEmptyEntries).Select (int.Parse).ToArray())
 	//Convert all those integers arrays to an array

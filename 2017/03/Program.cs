@@ -2,10 +2,10 @@
 
 using Vec2i = Vec2<int>;
 
-// Your input: a number from a spiral grid, for which you need to answer some questions
-int myInput = 265149;
+// ** Your input: a number from a spiral grid, for which you need to answer some questions
+int myInput = int.Parse(args[0]);
 
-// Your task:
+// ** Your task:
 // 1 - Calculate the Manhattan Distance of the given number from the center of a spiral grid (see below)
 // 2 - Calculate the first number which is bigger than the given number
 

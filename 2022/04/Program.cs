@@ -2,16 +2,17 @@
 
 using Range = (int min, int max);
 
-// Your input: pairs of ranges
-
 // In visual studio you can modify which file by going to Debug/Debug Properties
 // and setting $(SolutionDir)input.txt as the command line, this will be passed to args[0]
 
+// ** Your input: pairs of ranges, e.g. 11-73,29-73
+
 string myInput = File.ReadAllText(args[0]);
+myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 
 List<(Range, Range)> ranges = myInput
 	//Split into separate strings describing range pairs
-	.Split ("\r\n", StringSplitOptions.RemoveEmptyEntries)
+	.Split (Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
 	//Split into 4 strings describing the start and end of the ranges
 	.Select (line => line.Split (new char[] {'-', ','}, StringSplitOptions.RemoveEmptyEntries))
 	//Convert them into pairs of ranges
@@ -23,17 +24,20 @@ List<(Range, Range)> ranges = myInput
 	)
 	.ToList ();
 
-// Part 1 - Find all ranges that encompass/overlap
+// ** Part 1 - Find all ranges that encompass/overlap
 
+// We are doing two checks, but there are two other options:
+// - getting the min/max of both range a and b so you only have to do one check
+// - only do one of the checks but call it twice, once normally, once in reverse
 bool FullyOverlaps (Range pRangeA, Range pRangeB)
 {
 	return
-		// A [------------]
+		// A  [------------]
 		// B [---------------]
 		(pRangeA.min >= pRangeB.min && pRangeA.max <= pRangeB.max)
 		||
 		// A [---------------]
-		// B    [------------]
+		// B   [------------]
 		(pRangeB.min >= pRangeA.min && pRangeB.max <= pRangeA.max);
 }
 
@@ -42,8 +46,11 @@ Console.WriteLine(
 	ranges.Count(rangePair => FullyOverlaps(rangePair.Item1, rangePair.Item2))
 );
 
-// Part 2 - Find all ranges that partially overlap:
+// ** Part 2 - Find all ranges that partially overlap:
 
+// We are doing two checks, but there are two other options:
+// - getting the min/max of both range a and b so you only have to do one check
+// - only do one of the checks but call it twice, once normally, once in reverse
 bool PartiallyOverlaps(Range pRangeA, Range pRangeB)
 {
 	return

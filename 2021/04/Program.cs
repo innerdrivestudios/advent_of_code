@@ -6,9 +6,10 @@
 // and setting $(SolutionDir)input.txt as the command line, this will be passed to args[0]
 
 string myInput = File.ReadAllText(args[0]);
+myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 
 //Get all the separate blocks of text...
-List<string> splitInput = myInput.Split("\r\n\r\n", StringSplitOptions.RemoveEmptyEntries).ToList();
+List<string> splitInput = myInput.Split(Environment.NewLine + Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).ToList();
 
 //... the first element are all the "moves" made on each bingo card
 int[] moves = splitInput[0].Split(",", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();  
@@ -22,7 +23,7 @@ splitInput.RemoveAt(0);
 List<BingoCard> bingoCards = splitInput
     .Select( 
         bingoCardData => new BingoCard (
-                            new Grid<int>(bingoCardData, "\r\n", " ") 
+                            new Grid<int>(bingoCardData, Environment.NewLine, " ") 
                          ) 
      )
     .ToList();
@@ -50,8 +51,8 @@ BingoCard GetLastWinningBingoCard()
 {
     BingoCard lastWinningBingoCard = null;
 
-    //Slightly different approach, each time a bingo card wins, we store it and remove it from our list
-    //so we don't continue to make moves on it
+    //Slightly different approach, each time a bingo card wins,
+    //we store it and remove it from our list so we don't continue to make moves on it
     foreach (int move in moves)
     {
         //Go backwards so we can remove items easily

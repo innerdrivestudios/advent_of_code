@@ -17,7 +17,7 @@ using Instruction = (string instruction, System.Drawing.Rectangle bounds);
 string myInput = File.ReadAllText(args[0]);
 myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 
-//Step 1: parse the given instruction list of instructions into an easier to handle format
+// Step 1: parse the given instruction list of instructions into an easier to handle format
 
 Regex instructionParser = new Regex(@"(toggle|turn on|turn off) (\d+),(\d+) through (\d+),(\d+)\r\n");
 MatchCollection matches = instructionParser.Matches(myInput);

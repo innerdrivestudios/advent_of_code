@@ -1,10 +1,14 @@
 ﻿// Solution for https://adventofcode.com/2019/day/4 (Ctrl+Click in VS to follow link)
 
-// Your input: a range of numbers
+// In visual studio you can modify what input will be used by going to Debug/Debug Properties
+// and and changing the command line argument, e.g. 152085-670283
+// This value will be passed to the built-in args[0] variable
 
-int[] myInput = "152085-670283".Split("-").Select (int.Parse).ToArray();
+// ** Your input: a range of numbers, e.g. 152085-670283
 
-// Part 1 - Interpreting the giving range of numbers as passwords, deduct how many of them are valid
+int[] myInput = args[0].Split("-").Select (int.Parse).ToArray();
+
+// ** Part 1 - Interpreting the giving range of numbers as passwords, deduct how many of them are valid
 // according to the following rules:
 
 // - It is a six - digit number.
@@ -38,7 +42,7 @@ bool IsValidPart1 (int pPassword)
 
 Console.WriteLine("Part 1 - Valid password count: " + validPasswordCount);
 
-// Part 2 - Same for an additional rule, there have to be EXACTLY two matching digits
+// ** Part 2 - Same for an additional rule, there have to be EXACTLY two matching digits
 
 validPasswordCount = 0;
 

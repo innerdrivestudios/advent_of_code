@@ -1,17 +1,18 @@
 ﻿// Solution for https://adventofcode.com/2020/day/4 (Ctrl+Click in VS to follow link)
 
-// Your input: a batch of password data
-
-// In visual studio you can modify which file by going to Debug/Debug Properties
-// and setting $(SolutionDir)input.txt as the command line, this will be passed to args[0]
-
 using System.Text.RegularExpressions;
 
+// In visual studio you can modify which file by going to Debug/Debug Properties
+// and setting "$(SolutionDir)input.txt" as the command line, this will be passed to args[0]
+
+// ** Your input: a batch of password data
+
 string myInput = File.ReadAllText(args[0]);
+myInput = myInput.ReplaceLineEndings(Environment.NewLine);	
 
 // First process the password data to a collection of key value pairs:
 List<Dictionary<string, string>> passwordData =	myInput
-	.Split("\r\n\r\n")															//Get the batches of data
+	.Split(Environment.NewLine+ Environment.NewLine)							//Get the batches of data
 	.Select (x => x.ReplaceLineEndings(" "))									//Combine a batch of strings into one string
 	.Select (					
 		x => x.Split(" ", StringSplitOptions.RemoveEmptyEntries)				//Get the separate key:value from the string
@@ -21,7 +22,8 @@ List<Dictionary<string, string>> passwordData =	myInput
 	.ToList();
 
 // What we have at this point is a list of dictionaries, one per passport
-// Check if they are valid:
+
+// ** Part1: Check if they are valid:
 // - valid passports have 8 keys or 7 where the missing key is the CID
 
 int validPassportCount = 0;
@@ -64,6 +66,8 @@ foreach (var passport in passwordData)
 }
 
 Console.WriteLine("Part 2 - Valid passport count: " + validPassportCount);
+
+// All helper methods are down here:
 
 //	byr(Birth Year) - four digits; at least 1920 and at most 2002.
 //  iyr (Issue Year) - four digits; at least 2010 and at most 2020.

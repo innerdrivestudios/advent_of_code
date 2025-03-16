@@ -39,7 +39,7 @@ foreach (char directionChar in myInput) {
 
 Console.WriteLine("Part 1 (Distinct house count for Santa):"+ distinctHousesVisited.Count);
 
-// Part 2: Calculate how many different houses are visited by Santa and the helper robot
+// ** Part 2: Calculate how many different houses are visited by Santa and the helper robot
 // if they alternate following instructions from the list
 
 // Reset what we had

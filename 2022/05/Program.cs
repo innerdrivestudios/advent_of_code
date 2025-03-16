@@ -1,12 +1,12 @@
 ﻿//Solution for https://adventofcode.com/2022/day/5 (Ctrl+Click in VS to follow link)
 
+using System.Text.RegularExpressions;
+
 // In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
 // This value will be processed and passed to the built-in args[0] variable
 
 // ** Your input: a list of stacks of chars and move instructions to move a char from stack to stack
-
-using System.Text.RegularExpressions;
 
 string myInput = File.ReadAllText(args[0]);
 myInput = myInput.ReplaceLineEndings(Environment.NewLine);
@@ -110,7 +110,8 @@ Console.WriteLine("Part 1 - Stack tops:" + GetTopStackResult(stacks));
 // ** Part 2 - 1 change: when you move multiple crates, you move all of them at once, retaining their order.
 
 // Approach: since it is only such a small set of chars, we'll do this in the simplest way possible...
-// Every move instruction moves everything to stack 0 first (our dummy empty stack from part 1) and then to the final stack
+// Every move instruction moves everything to stack 0 first (our dummy empty stack from part 1)
+// and then to the final stack...
 
 // Reset our stacks
 

@@ -2,7 +2,7 @@
   "profiles": {
     "04": {
       "commandName": "Project",
-      "commandLineArgs": "$(SolutionDir)input.txt"
+      "commandLineArgs": "\"$(SolutionDir)input\""
     }
   }
 }

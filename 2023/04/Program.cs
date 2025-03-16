@@ -5,10 +5,10 @@ using ScratchCard = (System.Collections.Generic.HashSet<int> winning, System.Col
 // In visual studio you can modify which file by going to Debug/Debug Properties
 // and setting $(SolutionDir)input.txt as the command line, this will be passed to args[0]
 
-// Your input: a list of scratchcards describing the numbers on the scratchcard and the numbers you have
+// ** Your input: a list of scratchcards describing the numbers on the scratchcard and the numbers you have
 
 string myInput = File.ReadAllText(args[0]);
-
+myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 
 // Similar to the Bingo card approach from 2021 day 4, we'll convert the input to a list of winning
 // numbers and numbers you have...
@@ -20,12 +20,12 @@ string myInput = File.ReadAllText(args[0]);
 List<ScratchCard> scratchcards =
 	myInput
 		//Split into card lines
-		.Split("\r\n", StringSplitOptions.RemoveEmptyEntries)
+		.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
 		//Take everything from those lines AFTER the :
 		.Select(cardLine => cardLine.Split(":")[1])
 		//Split those lines into a winning-numbers/your-numbers string[]
 		.Select(cardLine => cardLine.Split("|", StringSplitOptions.RemoveEmptyEntries))
-		//Split the items from that string[] into two separate hashsets
+		//Split the items from that string[] into two separate hashsets: *winning* and *yours*
 		.Select(
 			numberStrings => ( ConvertToHashSet(numberStrings[0]) , ConvertToHashSet(numberStrings[1]) ) 
 		)
@@ -40,10 +40,11 @@ HashSet<int> ConvertToHashSet (string pNumberString)
 	);
 }
 
-// Part 1 - Calculate how much these scratch cards are worth in total
+// ** Part 1 - Calculate how much these scratch cards are worth in total
 
 long GetScratchCardValue (ScratchCard pScratchCard)
 {
+	//How many numbers did you win?
 	int overlapCount = pScratchCard.winning.Intersect(pScratchCard.yours).Count();
 
 	if (overlapCount > 0) return (long)Math.Pow(2, overlapCount - 1);
@@ -52,14 +53,19 @@ long GetScratchCardValue (ScratchCard pScratchCard)
 
 Console.WriteLine("Part 1 - Value of all scratchcards: " + scratchcards.Sum(x => GetScratchCardValue(x)));
 
-// Part 2 - Recursion baby yeah ! ;)
+// ** Part 2 - Recursion baby yeah ! ;)
 // Different kind of scoring mechanism!
 
 // "There's no such thing as "points".
 // Instead, scratchcards only cause you to win more scratchcards equal to the number of winning numbers you have.
 // Specifically, you win copies of the scratchcards below the winning card equal to the number of matches.
 // So, if card 10 were to have 5 matching numbers, you would win one copy each of cards 11, 12, 13, 14, and 15.
-// Copies of scratchcards are scored like normal scratchcards and have the same card number as the card they copied. So, if you win a copy of card 10 and it has 5 matching numbers, it would then win a copy of the same cards that the original card 10 won: cards 11, 12, 13, 14, and 15. This process repeats until none of the copies cause you to win any more cards. (Cards will never make you copy a card past the end of the table.)
+// Copies of scratchcards are scored like normal scratchcards and have the same card number as the card they copied.
+// So, if you win a copy of card 10 and it has 5 matching numbers, it would then win a copy of the same cards that
+// the original card 10 won: cards 11, 12, 13, 14, and 15.
+
+// This process repeats until none of the copies cause you to win any more cards.
+// (Cards will never make you copy a card past the end of the table.)
 
 long GetWonScratchCardCount(List<ScratchCard> pScratchCards, int pIndex)
 {

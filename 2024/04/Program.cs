@@ -17,16 +17,11 @@ Grid<char> grid = new Grid<char>(myInput, Environment.NewLine);
 // ** Part 1: Count the total amount of XMAS strings...
 
 int totalXmasCount = 0;
-Vec2i[] directions = { 
-	new (1,0), 
-	new (-1,0), 
-	new (0,1), 
-	new (0,-1), 
-	new (1,1), 
-	new (-1,-1),
-	new (-1,1), 
-	new (1,-1)
+
+Vec2i[] directions = { 	
+	new (1,0), new (-1,0), new (0,1), new (0,-1), new (1,1), new (-1,-1), new (-1,1), new (1,-1)
 };
+
 string xmas = "XMAS";
 
 grid.Foreach((position, character) =>
@@ -68,9 +63,11 @@ bool ContainsXmasInDirection (Vec2i pPosition, Vec2i pDirection)
 
 Console.WriteLine("Part 1 - XMAS Count: " +totalXmasCount);
 
-// ** Part 2: Actually find X-MAS
+// ** Part 2: Actually find MAS in an X distribution
 
 totalXmasCount = 0;
+
+// We go over every center position of the X layout, so we need to skip the borders
 
 grid.ForeachRegion(
 	1, 1, grid.width - 1, grid.height - 1,
@@ -82,15 +79,18 @@ grid.ForeachRegion(
 
 bool XmasFound (Vec2i pPosition)
 {
+	// A needs to be in the center
 	if (grid[pPosition] != 'A') return false;
 
-	string a = "" + grid[pPosition + new Vec2i(-1, -1)] + grid[pPosition + new Vec2i(1, 1)];
-	if (a != "MS" && a != "SM") return false;
+	char topLeft = grid[pPosition + new Vec2i(-1, -1)];
+	char topRight = grid[pPosition + new Vec2i(1, -1)];
+    char bottomLeft = grid[pPosition + new Vec2i(-1, 1)];
+    char bottomRight = grid[pPosition + new Vec2i(1, 1)];
 
-	string b = "" + grid[pPosition + new Vec2i(-1, 1)] + grid[pPosition + new Vec2i(1, -1)];
-	if (b != "MS" && b != "SM") return false;
-
-	return true;
+	return
+		((topLeft == 'M' && bottomRight == 'S') || (topLeft == 'S' && bottomRight == 'M'))
+		&&
+		((bottomLeft == 'M' && topRight == 'S') || (bottomLeft == 'S' && topRight == 'M'));
 }
 
 Console.WriteLine("Part 2 - XMAS Count: " +totalXmasCount);

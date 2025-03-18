@@ -3,19 +3,21 @@
 using System.Security.Cryptography;
 using System.Text;
 
-//Your input: some kind of weird char sequence
-string myInput = "wtnhxymk";
+// In visual studio you can modify the char sequence used by going to
+// Debug/Debug Properties and changing the command line arguments.
+// This value given will be passed to the built-in args[0] variable.
 
-//Your task: generate passwords using MD5 hashes created using your input and increasing integers
-//           that match certain requirements
+//** Your input: some kind of weird char sequence
+string myInput = args[0];
+
+// ** Part 1: generate passwords using MD5 hashes created using
+// your input and increasing integers that match certain requirements
+
 string password = GeneratePassword(myInput);
-string betterPassword = GenerateBetterPassword(myInput);
 
-Console.Clear();
-Console.WriteLine("Part 1 - Password: [" + password + "]");
-Console.WriteLine("Part 2 - Password: [" + betterPassword +"]");
-Console.ReadKey();
-
+// Use your input and an increasing integer to generate MD5 hashes
+// Everytime your hash starts with 5 zeroes, take character 6 (index 5) 
+// until we have 8 characters in total...
 string GeneratePassword (string pInput)
 {
     MD5 md5 = MD5.Create();
@@ -35,7 +37,7 @@ string GeneratePassword (string pInput)
             password += result[5];
 
             Console.Clear();
-            Console.WriteLine("Password: "+ password);
+            Console.WriteLine("Generating: " + password + " (" + (8-password.Length) + " chars to go)");
         }
 
         i++;
@@ -44,6 +46,20 @@ string GeneratePassword (string pInput)
     return password;
 }
 
+Console.Clear();
+Console.WriteLine("Part 1 - Password: [" + password + "]");
+Console.WriteLine("Press key to run part 2");
+Console.ReadKey();
+
+// ** Part 2 : same but different ;)
+
+string betterPassword = GenerateBetterPassword(myInput);
+
+// Instead of simply filling in the password from left to right,
+// the hash now also indicates the position within the password to fill.
+// You still look for hashes that begin with five zeroes;
+// however, now, the sixth character represents the position (0-7),
+// and the seventh character is the character to put in that position.
 
 string GenerateBetterPassword(string pInput)
 {
@@ -69,7 +85,7 @@ string GenerateBetterPassword(string pInput)
                 password[passwordIndex] = result[6];
                 itemsSolved++;
                 Console.Clear();
-                Console.WriteLine("Better password: "+ new string (password));
+                Console.WriteLine("Generating: " + new string(password) + " (" + (8 - itemsSolved) + " chars to go)");
             }
         }
 
@@ -78,3 +94,8 @@ string GenerateBetterPassword(string pInput)
 
     return new string (password);
 }
+
+Console.Clear();
+Console.WriteLine("Part 1 - Password: [" + password +"]");
+Console.WriteLine("Part 2 - Password: [" + betterPassword +"]");
+Console.ReadKey();

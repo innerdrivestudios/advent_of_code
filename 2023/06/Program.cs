@@ -24,7 +24,7 @@ for (long i = 1; i < times.Length; i++)
 	raceData.Add((long.Parse(times[i]), long.Parse(distances[i])));
 }
 
-// Part 1: Check how many different options we have for holding down the button and still win the race
+// ** Part 1: Check how many different options we have for holding down the button and still win the race
 
 // Given the example, the question & answer is based on these variables:
 // - race time
@@ -81,7 +81,7 @@ foreach (var race in raceData)
 
 Console.WriteLine("Part 1 - " + total);
 
-// Part 2 - Bad kerning issue ;)
+// ** Part 2 - Bad kerning issue ;)
 
 string time = "";
 string distance = "";

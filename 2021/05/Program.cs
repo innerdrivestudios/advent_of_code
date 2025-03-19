@@ -28,7 +28,8 @@ List<(Vec2i, Vec2i)> lineSegments = myInput
     .Select (x => (new Vec2i(x[0], x[1]), new Vec2i(x[2], x[3])))           //Transform in list of (vec2i, vec2i)
     .ToList ();
 
-// ** Part 1: Considering only the horizontal and vertical lines, at how many points do at least two lines overlap?
+// ** Part 1: Considering only the horizontal and vertical lines,
+// at how many points do at least two lines overlap?
 
 // Two simple ways to do this:
 // - Plot each line into a grid, increasing the count of each grid cell as the line goes through it

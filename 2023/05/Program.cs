@@ -8,7 +8,8 @@
 
 // Each line within a map contains three numbers:
 // the destination range start, the source range start, and the range length.
-// e.g. 50 98 2 indicates source = 98, dest = 50, range = 2 (yes, the swapping of source and dest is confusing)
+// e.g. 50 98 2 indicates source = 98, dest = 50, range = 2
+// (yes, the swapping of source and dest is confusing)
 // source = 98, dest = 50, range = 2 means:
 // 98-99 (2 values) maps to 50-51 (two values)
 
@@ -29,7 +30,8 @@ myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 
 // Then split the blocks into separate entities
 
-string[] myInputBlocks = myInput.Split(Environment.NewLine + Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+string[] myInputBlocks = myInput
+    .Split(Environment.NewLine + Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
 // Then get the seeds....
 
@@ -40,13 +42,17 @@ long[] ParseSeeds(string pSeedInput)
     //Input looks like "seeds: 1636419363 608824189 3409451394 227471750 12950548 91466703 ...."
     //So we'll cut of seeds: and then convert the rest:
 
-    return pSeedInput.Substring(7).Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(long.Parse).ToArray();
+    return pSeedInput
+        .Substring(7)
+        .Split(" ", StringSplitOptions.RemoveEmptyEntries)
+        .Select(long.Parse)
+        .ToArray();
 }
 
 // And the different remap blocks... 
 // Initially I thought/tried to use a dictionary to easily map values from one range to another 
-// also because of the misdirection of the table in the puzzle description;), but the ranges are so big
-// that that is not going to work. 
+// also because of the misdirection of the table in the puzzle description;),
+// but the ranges are so big that that is not going to work. 
 
 // Instead we'll basically parse the input into lists of lists of (long src, long dst, long rng) tuples
 // and we'll evaluate them on the spot for each input number... however to prevent it from becoming 
@@ -81,7 +87,7 @@ Console.WriteLine("Part 1 - Lowest location: " + finalNumbers.Min());
 Stopwatch stopwatch = new Stopwatch();
 long lowest;
 
-/**/
+/**
 
 // Naive initial approach... go through ALL input numbers... find the lowest output...
 // Treating the seeds input as ranges...
@@ -105,9 +111,10 @@ Console.WriteLine("Computed in " + stopwatch.ElapsedMilliseconds + " ms");
 
 // This takes about 1200 seconds -> 20 minutes on my system
 
-/**/
+/**
 
-// So, unfortunately the naive approach takes very very very long :), so we'll have to find a better solution...
+// So, unfortunately the naive approach takes very very very long :),
+// so we'll have to find a better solution...
 // We could try parallelization (is that a word?):
 
 lowest = long.MaxValue;

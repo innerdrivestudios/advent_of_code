@@ -9,8 +9,8 @@
 string myInput = File.ReadAllText(args[0]);
 myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 
-// ** Part 1 & 2: Get the character index where we detect X different characters in a sliding window
-// for the first time...
+// ** Part 1 & 2:
+// Get the character index where we detect X DIFFERENT characters in a sliding window for the first time...
 
 int GetStartOfPacketMarkerIndex (string pInput, int pMarkerLength)
 {

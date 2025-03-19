@@ -10,8 +10,12 @@ string myInput = File.ReadAllText(args[0]);
 myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 
 // ** Part 1: How many steps does it take to reach the exit ?
+// (See the link for a detailed problem description)
 
-int[] jumpOffsets = myInput.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+int[] jumpOffsets = myInput
+    .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+    .Select(int.Parse)
+    .ToArray();
 
 int[] jumpOffsetCopy = (int[]) jumpOffsets.Clone();
 
@@ -29,6 +33,7 @@ while (jumpPointer < jumpOffsetCopy.Length)
 Console.WriteLine("Part 1 (Step count to exit):" + stepCount);
 
 // ** Part 2: How many steps does it now take to reach the exit under the new rules?
+// (See the link for a detailed problem description)
 
 // Don't forget to restore the input !
 jumpOffsetCopy = (int[])jumpOffsets.Clone();
@@ -42,6 +47,7 @@ while (jumpPointer < jumpOffsetCopy.Length)
     // Update the jumppointer while incrementing the jumpoffset afterwards
     int jumpOffset = jumpOffsetCopy[jumpPointer];
 
+    // Additional weird requirements
     if (jumpOffset >= 3) jumpOffsetCopy[jumpPointer] -= 1;
     else jumpOffsetCopy[jumpPointer] += 1;
 

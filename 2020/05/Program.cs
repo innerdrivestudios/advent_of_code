@@ -11,6 +11,8 @@ myInput = myInput.ReplaceLineEndings();
 
 string[] boardingPasses = myInput.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
 
+// ** Part 1: Find the highest possible ID based on the given seating arrangements.
+
 // Define the methods to get the row and column and subsequently the id
 
 int GetRow (string pInput)
@@ -18,6 +20,7 @@ int GetRow (string pInput)
     int rowStart = 0;
     int rowEnd = 127;
 
+    //First seven elements of the string determine the row
     for (int i = 0; i < 7; i++)
     {
         if (pInput[i] == 'F')
@@ -38,6 +41,7 @@ int GetColumn(string pInput)
     int columnStart = 0;
     int columEnd = 7;
 
+    //Last 3 elements define the column
     for (int i = 0; i < 3; i++)
     {
         if (pInput[pInput.Length - 3 + i] == 'L')

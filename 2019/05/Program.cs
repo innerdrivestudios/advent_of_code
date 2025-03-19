@@ -11,19 +11,19 @@ myInput = myInput.ReplaceLineEndings("");
 
 int[] program = myInput.Split(",").Select(int.Parse).ToArray();
 
-// ** Your tasks running the given program on a modified intcode machine presented in day 2.
+// ** Both part 1 & 2 consist of running the given program on a modified intcode machine presented in day 2.
 //    The hardest part for this assignment are the unclear ambiguous instructions, 
 //    but other than that, it is a very simple "just follow the instructions" exercise
 
-Console.WriteLine("Running program 1...");
+Console.WriteLine("Running program 1... Please provide some input (suggestion = 1 :))");
 RunProgramPart1(program);
 Console.WriteLine();
 
-Console.WriteLine("Running program 2...");
+Console.WriteLine("Running program 2... Please provide some input (suggestion = 5 :))");
 RunProgramPart2(program);
 Console.WriteLine();
 
-// Part 1 -
+// ** Part 1 -
 // If you "run" the program
 // provide 1 to the only input instruction and pass all the tests,
 // what diagnostic code does the program produce?
@@ -100,7 +100,7 @@ int GetValue(int[] pProgram, int pIndex, int pParameterMode)
 	throw new InvalidDataException("Invalid parameter mode: " + pParameterMode);
 }
 
-// Part 2 -
+// ** Part 2 -
 // Implemented the additional instructions...
 // for clarity I did this in another method, however this interpreter still works for part 1 as well
 // (Yes Eric Wastl is fucking brilliant :))
@@ -202,3 +202,7 @@ long RunProgramPart2(int[] pProgram)
 
     return pProgram[0];
 }
+
+// As mentioned in a real world setting the code above could definitely be refactored,
+// to avoid all of the code duplication.
+

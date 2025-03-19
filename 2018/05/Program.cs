@@ -1,12 +1,12 @@
 ﻿//Solution for https://adventofcode.com/2018/day/5 (Ctrl+Click in VS to follow link)
 
+using System.Diagnostics;
+
 // In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
 // This value will be processed and passed to the built-in args[0] variable
 
-// ** Input: a polymer string like dabAcCaCBAcCcaDA  
-
-using System.Diagnostics;
+// ** Input: a polymer string like dabAcCaCBAcCcaDA, where all adjacent xX pairs cancel eachother out 
 
 string myInput = File.ReadAllText(args[0]);
 // Very important: replace line endings with nothing explicitly !!
@@ -29,10 +29,10 @@ myInput = myInput.ReplaceLineEndings("");
 // What is the idea?
 
 // Looking at dabAcCaCBAcCcaDA, we simply start scanning the string at the start,
-// keeping track of / counting any matches we might find.
+// keeping track of and counting any matches we might find.
 //
 // Vv                   => V is the index of the left char we are comparing (also called leftIndex)
-// dabAcCaCBAcCcaDA     => v is the index of the right char we are comparing it with (also called rightIndex)
+// dabAcCaCBAcCcaDA        v is the index of the right char we are comparing it with (also called rightIndex)
 
 // If we don't have a match, we simply increase the scan index:
 //
@@ -54,6 +54,7 @@ myInput = myInput.ReplaceLineEndings("");
 // dabAcCaCBAcCcaDA
 //
 // So V moved one to the left, v moved one to the right, where we find another match: Aa
+
 // Expanding again gives us:
 //
 //   V<<>>v
@@ -89,7 +90,7 @@ myInput = myInput.ReplaceLineEndings("");
 // but since we are not actually modifying the string ... it is still there, causing the expansion to compare
 // C with a instead of A with a, so it fails...
 //
-// To remedy this, every time we match, we overwrite the match with ..
+// To remedy this, every time we match, we overwrite the matching chars with a .
 // Any time we expand our left and right indices we skip the .'s
 //
 // Putting this all together:

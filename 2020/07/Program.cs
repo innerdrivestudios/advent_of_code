@@ -4,7 +4,8 @@
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
 // This value will be processed and passed to the built-in args[0] variable
 
-// ** Your input: a list of bag specifications, telling us which bags can contain other bags
+// ** Your input: a list of bag specifications,
+// telling us which bags can contain other bags
 
 using System.Text.RegularExpressions;
 
@@ -37,14 +38,18 @@ Dictionary<string, List<string>> containedBy = BagParserPart1();
 
 Dictionary<string, List<string>> BagParserPart1()
 {
+	//Keep track of which bag type is contained by which bag
 	Dictionary<string, List<string>> containedBy = new();
 	
+	//So we take everything in front of the word bag
 	Regex bagParser = new Regex(@"(\w+\s\w+) bag");
 
 	foreach (string bagSpecification in bagSpecifications)
 	{
+		//Then we get all matches...
 		MatchCollection matches = bagParser.Matches(bagSpecification);
 
+		//Get the containing bags
 		string container = matches[0].Groups[1].Value;
 
 		// Parse the containees

@@ -4,7 +4,8 @@
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
 // This value will be processed and passed to the built-in args[0] variable
 
-// ** Your input: a list of expressions to evaluate that leads to all listed variables having a specific (ushort) value
+// ** Your input: a list of expressions to evaluate that leads to all
+// listed variables having a specific (ushort) value
 
 string myInput = File.ReadAllText(args[0]);
 myInput = myInput.ReplaceLineEndings(Environment.NewLine);

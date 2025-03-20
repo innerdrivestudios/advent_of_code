@@ -54,8 +54,8 @@ Console.WriteLine("Part 1 - Output:"+maxOutput1);
 
 // ** Part 2
 //
-// Part 2 was maybe one of the most difficult descriptions to wrap my head around of all 
-// puzzles I've done so far, even though we are only on day 7 for this year ;).
+// Part 2 was maybe one of the most difficult descriptions to wrap my head around of
+// all puzzles I've done so far, even though we are only on day 7 for this year ;).
 
 // Part of it also stems from the fact that it seems we need to run separate threads
 // with producer / consumer queues feeding back into each other,

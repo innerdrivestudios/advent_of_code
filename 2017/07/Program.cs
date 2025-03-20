@@ -4,7 +4,7 @@
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
 // This value will be processed and passed to the built-in args[0] variable
 
-// ** Your input: a list of up and down instructions, represented by ( and )
+// ** Your input: a list of discs with their weight and a list a discs they are carrying 
 
 using System.Text.RegularExpressions;
 
@@ -58,14 +58,15 @@ foreach (string line in lines)
 }
 
 // Now we know all the parents for all the nodes ...
-// So we just pick A child node, doesn't matter which, all nodes lead up the tree:
+// So we just pick *a* child node, doesn't matter which, all nodes lead up the tree:
 
 string treeRoot = parents.Keys.ToList()[0];
 while (parents.ContainsKey(treeRoot)) treeRoot = parents[treeRoot];
 
 Console.WriteLine("Part 1 - The root:" + treeRoot);
 
-// ** Part 2 - The tree is unbalanced oh noes! Which node has the wrong weight and what should its weight be?
+// ** Part 2 - The tree is unbalanced oh noes!
+// Which node has the wrong weight and what should its weight be?
 
 // SO apparently, our parsing mechanism wasn't sufficient to handle part 2 ;).
 // What information do we need for this part?
@@ -80,6 +81,7 @@ foreach (string line in lines)
 {
 	var parentChildData = ParseLine(line);
 
+	//Create a map from each node to its children
 	if (parentChildData.children != null)
 	{
 		if (!childMap.TryGetValue(parentChildData.root, out var children))
@@ -89,11 +91,13 @@ foreach (string line in lines)
 		children.AddRange(parentChildData.children);
 	}
 
+	//And store its weight...
 	weightMap[parentChildData.root] = parentChildData.weight;
 }
 
 // So now we can easily find all children and we know all weights...
-// But how do we find the requested info? (Which node is wrong and what its weight should be?)
+// But how do we find the requested info?
+// (Which node is wrong and what its weight should be?)
 
 // What we need to do is:
 // - check all children of a given node to see if they are all the same weight or not
@@ -110,11 +114,11 @@ void FindBrokenNodeWeight (string pNode, int pSiblingWeight = 0, int pDepth = 0)
 	// If we don't have any children, there is nothing to investigate, so we are done ...
 	if (childMap.TryGetValue(pNode, out var children)) {
 
-		// Use a map from total weight to node names so we can find out whether we are dealing
-		// with any deviations...
+		// Use a map from total weight to node names so we can find out whether we are
+		// dealing with any deviations...
 		Dictionary<int, List<string>> weightToNodesMap = new();
 
-		// Map the total weight of each child to the child name
+		// Map the total weight of esach child to the child name
 		for (int i = 0; i < children.Count; i++)
 		{
 			int weight = GetRecursiveTotalChildWeight(children[i]);
@@ -136,7 +140,7 @@ void FindBrokenNodeWeight (string pNode, int pSiblingWeight = 0, int pDepth = 0)
             Console.WriteLine("I am the problem child:" + pNode);
 
 			// But what weight should it have? 
-			// Well whatever our siblings all way, without the weight of our own children...
+			// Well whatever our siblings all weigh, without the weight of our own children...
 			KeyValuePair<int, List<string>> singleWeightEntry = weightToNodesMap.First();
 			// In this situation, each child has the same weight, so all children together weigh...
 			int childrenWeight = singleWeightEntry.Key * singleWeightEntry.Value.Count;

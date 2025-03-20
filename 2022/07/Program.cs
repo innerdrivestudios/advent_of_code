@@ -6,8 +6,6 @@
 
 // ** Your input: a list of semi linux instructions
 
-using System.IO;
-
 string myInput = File.ReadAllText(args[0]);
 
 string[] consoleLog = myInput

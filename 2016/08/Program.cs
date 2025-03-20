@@ -1,12 +1,20 @@
 ﻿//Solution for https://adventofcode.com/2016/day/8 (Ctrl+Click in VS to follow link)
 
 using Vec2i = Vec2<int>;
+
 //instructions will be rect, row or column (see below)
 //values will be width, height | row, amount | column, amount
 using Instruction = (string instruction, int value1, int value2);
 using System.Text.RegularExpressions;
 
-string myInput = "rect 1x1\r\nrotate row y=0 by 6\r\nrect 1x1\r\nrotate row y=0 by 3\r\nrect 1x1\r\nrotate row y=0 by 5\r\nrect 1x1\r\nrotate row y=0 by 4\r\nrect 2x1\r\nrotate row y=0 by 5\r\nrect 2x1\r\nrotate row y=0 by 2\r\nrect 1x1\r\nrotate row y=0 by 5\r\nrect 4x1\r\nrotate row y=0 by 2\r\nrect 1x1\r\nrotate row y=0 by 3\r\nrect 1x1\r\nrotate row y=0 by 3\r\nrect 1x1\r\nrotate row y=0 by 2\r\nrect 1x1\r\nrotate row y=0 by 6\r\nrect 4x1\r\nrotate row y=0 by 4\r\nrotate column x=0 by 1\r\nrect 3x1\r\nrotate row y=0 by 6\r\nrotate column x=0 by 1\r\nrect 4x1\r\nrotate column x=10 by 1\r\nrotate row y=2 by 16\r\nrotate row y=0 by 8\r\nrotate column x=5 by 1\r\nrotate column x=0 by 1\r\nrect 7x1\r\nrotate column x=37 by 1\r\nrotate column x=21 by 2\r\nrotate column x=15 by 1\r\nrotate column x=11 by 2\r\nrotate row y=2 by 39\r\nrotate row y=0 by 36\r\nrotate column x=33 by 2\r\nrotate column x=32 by 1\r\nrotate column x=28 by 2\r\nrotate column x=27 by 1\r\nrotate column x=25 by 1\r\nrotate column x=22 by 1\r\nrotate column x=21 by 2\r\nrotate column x=20 by 3\r\nrotate column x=18 by 1\r\nrotate column x=15 by 2\r\nrotate column x=12 by 1\r\nrotate column x=10 by 1\r\nrotate column x=6 by 2\r\nrotate column x=5 by 1\r\nrotate column x=2 by 1\r\nrotate column x=0 by 1\r\nrect 35x1\r\nrotate column x=45 by 1\r\nrotate row y=1 by 28\r\nrotate column x=38 by 2\r\nrotate column x=33 by 1\r\nrotate column x=28 by 1\r\nrotate column x=23 by 1\r\nrotate column x=18 by 1\r\nrotate column x=13 by 2\r\nrotate column x=8 by 1\r\nrotate column x=3 by 1\r\nrotate row y=3 by 2\r\nrotate row y=2 by 2\r\nrotate row y=1 by 5\r\nrotate row y=0 by 1\r\nrect 1x5\r\nrotate column x=43 by 1\r\nrotate column x=31 by 1\r\nrotate row y=4 by 35\r\nrotate row y=3 by 20\r\nrotate row y=1 by 27\r\nrotate row y=0 by 20\r\nrotate column x=17 by 1\r\nrotate column x=15 by 1\r\nrotate column x=12 by 1\r\nrotate column x=11 by 2\r\nrotate column x=10 by 1\r\nrotate column x=8 by 1\r\nrotate column x=7 by 1\r\nrotate column x=5 by 1\r\nrotate column x=3 by 2\r\nrotate column x=2 by 1\r\nrotate column x=0 by 1\r\nrect 19x1\r\nrotate column x=20 by 3\r\nrotate column x=14 by 1\r\nrotate column x=9 by 1\r\nrotate row y=4 by 15\r\nrotate row y=3 by 13\r\nrotate row y=2 by 15\r\nrotate row y=1 by 18\r\nrotate row y=0 by 15\r\nrotate column x=13 by 1\r\nrotate column x=12 by 1\r\nrotate column x=11 by 3\r\nrotate column x=10 by 1\r\nrotate column x=8 by 1\r\nrotate column x=7 by 1\r\nrotate column x=6 by 1\r\nrotate column x=5 by 1\r\nrotate column x=3 by 2\r\nrotate column x=2 by 1\r\nrotate column x=1 by 1\r\nrotate column x=0 by 1\r\nrect 14x1\r\nrotate row y=3 by 47\r\nrotate column x=19 by 3\r\nrotate column x=9 by 3\r\nrotate column x=4 by 3\r\nrotate row y=5 by 5\r\nrotate row y=4 by 5\r\nrotate row y=3 by 8\r\nrotate row y=1 by 5\r\nrotate column x=3 by 2\r\nrotate column x=2 by 3\r\nrotate column x=1 by 2\r\nrotate column x=0 by 2\r\nrect 4x2\r\nrotate column x=35 by 5\r\nrotate column x=20 by 3\r\nrotate column x=10 by 5\r\nrotate column x=3 by 2\r\nrotate row y=5 by 20\r\nrotate row y=3 by 30\r\nrotate row y=2 by 45\r\nrotate row y=1 by 30\r\nrotate column x=48 by 5\r\nrotate column x=47 by 5\r\nrotate column x=46 by 3\r\nrotate column x=45 by 4\r\nrotate column x=43 by 5\r\nrotate column x=42 by 5\r\nrotate column x=41 by 5\r\nrotate column x=38 by 1\r\nrotate column x=37 by 5\r\nrotate column x=36 by 5\r\nrotate column x=35 by 1\r\nrotate column x=33 by 1\r\nrotate column x=32 by 5\r\nrotate column x=31 by 5\r\nrotate column x=28 by 5\r\nrotate column x=27 by 5\r\nrotate column x=26 by 5\r\nrotate column x=17 by 5\r\nrotate column x=16 by 5\r\nrotate column x=15 by 4\r\nrotate column x=13 by 1\r\nrotate column x=12 by 5\r\nrotate column x=11 by 5\r\nrotate column x=10 by 1\r\nrotate column x=8 by 1\r\nrotate column x=2 by 5\r\nrotate column x=1 by 5\r\n";
+// In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
+// and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
+// This value will be processed and passed to the built-in args[0] variable
+
+// ** Your input: a bunch of instructions to enable cells in a grid and rotate them
+
+string myInput = File.ReadAllText(args[0]);
+myInput = myInput.ReplaceLineEndings(Environment.NewLine);
 
 Grid<bool> screen = new Grid<bool>(50, 6);
 //explicitly set the screen to off
@@ -23,7 +31,7 @@ List<Instruction> ParseInstructions (string pInstructions)
 {
     List<Instruction> instructions = new List<Instruction>();
 
-    string[] instructionsAsString = pInstructions.Split("\r\n",StringSplitOptions.RemoveEmptyEntries);
+    string[] instructionsAsString = pInstructions.Split(Environment.NewLine,StringSplitOptions.RemoveEmptyEntries);
 
     //rect 1x1
     //rotate row y=0 by 6

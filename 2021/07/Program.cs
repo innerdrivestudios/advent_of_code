@@ -6,7 +6,7 @@
 
 // ** Your input: a list of numbers representing X positions for crabs
 
-int[] numbers = ParseUtils.CSVFileToNumbers<int>(args[0]);
+int[] numbers = ParseUtils.FileToNumbers<int>(args[0]);
 
 // ** Part 1 : What is the position we should move all crabs to so that
 // - All X positions are equal

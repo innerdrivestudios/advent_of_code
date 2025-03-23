@@ -43,7 +43,7 @@ for (int i = 0; i< twosetsOfStrings.Length; i++)
     }
 }
 
-
+/*
 //Note the sort order
 Dictionary<string, int> charToDigitMap = new Dictionary<string, int>()
 {
@@ -58,6 +58,7 @@ Dictionary<string, int> charToDigitMap = new Dictionary<string, int>()
     { "abcdefg", 8 },           // 7 *
     { "abcdfg", 9 }             // 6
 };
+*/
 
 //HashSet<string> easyValues = new HashSet<string>() { "cf", "bcdf", "acf", "abcdefg" };
 HashSet<int> easyValues = new HashSet<int>() { 2,3,4,7 };
@@ -76,3 +77,48 @@ Console.WriteLine("Part 1:" + countEasyValues);
 Console.WriteLine();
 
 // ** Part 2: Now figure out which parts are mixed up and what the real numbers should be...
+
+// So given a (string[], string[]) set, what we need is a mapping of all the elements on the left side to
+// an actual number... e.g. if var a = (string[], string[]), then we need to map all elements in a.Item1
+// The result will be a dictionary of strings to numbers.
+// Having achieved that we can decipher the strings on the right, e.g. in a.Item2
+// AND having all deciphered numbers, we can add them all together and we can solve the puzzle...
+// 
+// Do we even need to know how the actual wires have been crossed ?
+// Or is knowing which pattern maps to which number enough?
+
+// Consider the following table and the description below it:
+//
+//     *  **
+//    8687497
+//  0-abc efg   => 6
+//  1-  c  f    => 2*
+//  2-a cde g   => 5
+//  3-a cd fg   => 5
+//  4- bcd f    => 4*
+//  5-ab d fg   => 5
+//  6-ab defg   => 6
+//  7-a c  f    => 3*
+//  8-abcdefg   => 7*
+//  9-abcd fg   => 6
+
+// On the left are all digits, followed by the string that represents them seperated by a -
+// On the right are the amount of chars in that string, followed by an * if that amount is unique
+// At the top is that occurance count of a specific char over all strings, again with an * on top if 
+// it is unique.
+
+// The question is: given this information can we figure out which string maps to which number?
+// I wrote a solver class to offload the complexity of this class, 
+
+// If you run this with the test data you can see how it works
+
+long totalValue = 0;
+foreach (var value in twosetsOfStrings)
+{
+    Solver solver = new Solver(value);
+    //solver.PrintSolvedTable();
+    totalValue += solver.GetValue();
+    //Console.WriteLine(solver.GetValue());
+}
+
+Console.WriteLine("Part 2: " + totalValue);

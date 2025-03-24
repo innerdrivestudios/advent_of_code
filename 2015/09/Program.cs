@@ -1,17 +1,19 @@
 ﻿//Solution for https://adventofcode.com/2015/day/9 (Ctrl+Click in VS to follow link)
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using DistanceMap = System.Collections.Generic.Dictionary<(string locationA, string locationB), int>;
 
-//Your input: a list of distances from place A to B
-string myInput = "Tristram to AlphaCentauri = 34\r\nTristram to Snowdin = 100\r\nTristram to Tambi = 63\r\nTristram to Faerun = 108\r\nTristram to Norrath = 111\r\nTristram to Straylight = 89\r\nTristram to Arbre = 132\r\nAlphaCentauri to Snowdin = 4\r\nAlphaCentauri to Tambi = 79\r\nAlphaCentauri to Faerun = 44\r\nAlphaCentauri to Norrath = 147\r\nAlphaCentauri to Straylight = 133\r\nAlphaCentauri to Arbre = 74\r\nSnowdin to Tambi = 105\r\nSnowdin to Faerun = 95\r\nSnowdin to Norrath = 48\r\nSnowdin to Straylight = 88\r\nSnowdin to Arbre = 7\r\nTambi to Faerun = 68\r\nTambi to Norrath = 134\r\nTambi to Straylight = 107\r\nTambi to Arbre = 40\r\nFaerun to Norrath = 11\r\nFaerun to Straylight = 66\r\nFaerun to Arbre = 144\r\nNorrath to Straylight = 115\r\nNorrath to Arbre = 135\r\nStraylight to Arbre = 127";
+// In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
+// and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
+// This value will be processed and passed to the built-in args[0] variable
 
-//Your task: to calculate the shortest/longest routes that visit each given place once (aka the Travelling Salesman Problem)
+// ** Your input: a list of distances from place A to B e.g. Tristram to AlphaCentauri = 34
 
-//Main approach:
+string myInput = File.ReadAllText(args[0]);
+myInput = myInput.ReplaceLineEndings(Environment.NewLine);
+
+// ** Your task: to calculate the shortest/longest routes that visit each given place once (aka the Travelling Salesman Problem)
+
+// Main approach:
 //	- Setup a bidirectional distance map from (locationA, locationB) / (locationB, locationA) to a distance between them
 //	- Setup a list containing all the individual unique locations mapped in the distance map
 //  - Calculate all different permutations (aka orderings aka routes) of this uniqueLocations map
@@ -60,39 +62,6 @@ List<string> GetUniqueLocations(DistanceMap pDistanceMap)
 
 	//Return something that has order in it so we can use it to generate permutations
 	return locations.ToList();
-}
-
-List<List<string>> GetPermutations (List<string> pList)
-{
-	//If there is only 1 element in the given list, we are done
-	if (pList.Count == 1)
-	{
-		return new List<List<string>>() { pList };
-	}
-	else 
-	{
-        //For each element i in the list, get every permutations of the given list MINUS i
-		//And add i back into each result... e.g. 1,2,3 -> add 1 to {2,3} & {3,2}, add 2 to {1,3} & {3,1}, etc
-
-        List<List<string>> permutations = new List<List<string>>();
-
-		for (int i = 0; i < pList.Count; i++)
-		{
-			List<string> subListToPermutate = new List<string>(pList);
-			subListToPermutate.RemoveAt(i);
-
-            List<List<string>> permutatedSubLists = GetPermutations(subListToPermutate);
-
-			foreach (var subList in permutatedSubLists)
-			{
-				subList.Add(pList[i]);
-				permutations.Add(subList);			
-			}
-
-		}
-
-		return permutations;
-	}
 }
 
 void FindShortestAndLongestRoutes(DistanceMap pDistanceMap, List<List<string>> pPossibleRoutes, out int pShortestRoute, out int pLongestRoute)

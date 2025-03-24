@@ -39,4 +39,15 @@ static class ParseUtils
             .ToArray();
     }
 
+    public static (string, string) FileToStringTuple(string pFilename)
+    {
+        string input = File.ReadAllText(pFilename);
+        input = input.ReplaceLineEndings (Environment.NewLine);
+
+        return input
+            .Split(Environment.NewLine + Environment.NewLine, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Chunk(2)
+            .Select(x => (x[0], x[1]))
+            .First();
+    }
 }

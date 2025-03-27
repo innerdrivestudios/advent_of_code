@@ -291,4 +291,31 @@ public class Grid<T>
 
         return clone;
 	}
+
+    public HashSet<Vec2i> FloodFill(Vec2i pStart, Predicate<Vec2i> pIncludeWhen)
+    {
+        HashSet<Vec2i> visited = new HashSet<Vec2i>();
+        Vec2i[] directions = [new(1, 0), new(-1, 0), new(0, 1), new(0, -1)];
+
+        Queue<Vec2i> todoList = new Queue<Vec2i>();
+        todoList.Enqueue(pStart);
+
+        while (todoList.Count > 0)
+        {
+            Vec2i current = todoList.Dequeue();
+            visited.Add(current);
+
+            foreach (Vec2i direction in directions)
+            {
+                Vec2i nextPosition = current + direction;
+
+                if (IsInside(nextPosition) && !visited.Contains(nextPosition) && pIncludeWhen(nextPosition))
+                {
+                    todoList.Enqueue(nextPosition);
+                }
+            }
+        }
+
+        return visited;
+    }
 }

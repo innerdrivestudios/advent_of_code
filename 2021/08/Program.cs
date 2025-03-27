@@ -4,7 +4,11 @@
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
 // This value will be processed and passed to the built-in args[0] variable
 
-// ** Your input: not sure yet...
+// ** Your input:
+// a list of lines that describes:
+//  10 different signal configurations for the digits 0 to 9 followed by |
+//  followed by 4 digits indicating the actual numbers to use
+//  All configurations have been scrambled and need to be decoded first.
 
 string myInput = File.ReadAllText(args[0]);
 myInput = myInput.ReplaceLineEndings(Environment.NewLine);
@@ -43,24 +47,6 @@ for (int i = 0; i< twosetsOfStrings.Length; i++)
     }
 }
 
-/*
-//Note the sort order
-Dictionary<string, int> charToDigitMap = new Dictionary<string, int>()
-{
-    { "abcefg", 0 },            // 6
-    { "cf", 1 },                // 2 *
-    { "acdeg", 2 },             // 5
-    { "acdfg", 3 },             // 5
-    { "bcdf", 4 },              // 4 *
-    { "abdfg", 5 },             // 5
-    { "abdefg", 6 },            // 6
-    { "acf", 7 },               // 3 *
-    { "abcdefg", 8 },           // 7 *
-    { "abcdfg", 9 }             // 6
-};
-*/
-
-//HashSet<string> easyValues = new HashSet<string>() { "cf", "bcdf", "acf", "abcdefg" };
 HashSet<int> easyValues = new HashSet<int>() { 2,3,4,7 };
 
 int countEasyValues = 0;

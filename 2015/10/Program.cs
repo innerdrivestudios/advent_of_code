@@ -1,18 +1,28 @@
 ﻿//Solution for https://adventofcode.com/2015/day/10 (Ctrl+Click in VS to follow link)
 
+using System.Diagnostics;
 using System.Text;
 
-//Your input: a string of digits 0-9
-string myInput = "1113122113";
+// In visual studio you can modify the char sequence used by going to
+// Debug/Debug Properties and changing the command line arguments.
+// This value given will be passed to the built-in args[0] variable.
 
-//Your task: implement the look-and-say algoriths, e.g. 1113122113 -> 111 3 1 22 11 3 -> 31 13 11 22 21 13 -> 311311222113
+// ** Your input: a string of digits 0-9
+
+string myInput = args[0];
+
+//** Part 1 & 2: Implement the look-and-say algoriths,
+// e.g. 1113122113 is 111 3 1 22 11 3 which becomes 31 13 11 22 21 13 which is 311311222113
 
 //Approach: we're just gonna build the strings, but we'll use a stringbuilder to do so
 //since it dramatically improves performance over concatenating regular strings
 StringBuilder temp = new StringBuilder();
 
+Stopwatch stopwatch = new Stopwatch();
+stopwatch.Start();
 Console.WriteLine("Part 1:" + ApplyLookAndSay(myInput, 40).Length);
 Console.WriteLine("Part 2:" + ApplyLookAndSay(myInput, 50).Length);
+Console.WriteLine("Computed in " + stopwatch.ElapsedMilliseconds + " ms");
 Console.ReadKey();
 
 string ApplyLookAndSay (string pInput, int pTimes)

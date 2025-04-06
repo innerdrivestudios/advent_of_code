@@ -65,5 +65,52 @@ public struct Vec2<T> where T: INumber<T>
 	{
 		return T.Abs(X) + T.Abs(Y);
 	}
+
+	
+	public double Magnitude()
+	{
+		double dx = double.CreateChecked(X);
+		double dy = double.CreateChecked(Y);
+		return Math.Sqrt(dx * dx + dy * dy);
+	}
+
+	/*
+	public Vec2<double> Normalize()
+	{
+		double dx = double.CreateChecked(X);
+		double dy = double.CreateChecked(Y);
+		double magnitude = Math.Sqrt(dx * dx + dy * dy);
+
+		if (magnitude == 0)	return new Vec2<double>(0, 0); 
+		return new Vec2<double>(dx / magnitude, dy / magnitude);
+	}
+
+	public bool ContainsWholeValues()
+	{
+		double deltaX = Math.Abs(int.CreateChecked(X) - double.CreateChecked(X));
+		double deltaY = Math.Abs(int.CreateChecked(Y) - double.CreateChecked(Y));
+		return deltaX < 0.3f && deltaY < 0.3f;
+	}
+
+	public Vec2<int> GetIntVector()
+	{
+		return new Vec2<int>((int)Math.Round(double.CreateChecked(X)), (int)Math.Round(double.CreateChecked(Y)));
+	}
+	*/
+	
+	public override bool Equals(object? obj)
+	{
+		if (obj is Vec2<T> other)
+		{
+			return this == other;
+		}
+		return false;
+	}
+
+	public override int GetHashCode()
+	{
+		return HashCode.Combine(X, Y);
+	}
+	
 }
 

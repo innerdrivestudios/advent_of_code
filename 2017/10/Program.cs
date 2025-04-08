@@ -7,7 +7,7 @@
 // ** Your input: a sequence of lengths
 
 string myInput = File.ReadAllText(args[0]).ReplaceLineEndings("");
-int[] stringLengths = myInput.ReplaceLineEndings("").Split(",").Select(int.Parse).ToArray();
+int[] stringLengths = myInput.Split(",").Select(int.Parse).ToArray();
 
 // ** Part 1: Perform the knot hash method described in the puzzle
 

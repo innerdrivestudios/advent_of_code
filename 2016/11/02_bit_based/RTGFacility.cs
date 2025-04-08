@@ -121,7 +121,7 @@
 
         if (elevatorFloor > 0)
         {
-            Move downMove = pMove;      //Clone the input (Move is a struct)
+            Move downMove = pMove;                          //Clone the input (Move is a struct)
             downMove.floorDelta = -1;
 
             if (
@@ -137,7 +137,7 @@
 
         if (elevatorFloor < floorsWithItems.Count - 1)
         {
-            Move upMove = pMove;       //Clone the input (Move is a struct)
+            Move upMove = pMove;                            //Clone the input (Move is a struct)
             upMove.floorDelta = 1;
 
             if (IsValid(upMove))
@@ -169,30 +169,16 @@
 
         clone.floorsWithItems[elevatorFloor] ^= pMove.itemsDelta;
         clone.floorsWithItems[elevatorFloor + pMove.floorDelta] ^= pMove.itemsDelta;
-        clone.elevatorFloor += elevatorFloor + pMove.floorDelta;
+        clone.elevatorFloor = elevatorFloor + pMove.floorDelta;
         clone.movesMade = movesMade + 1;
 
         return clone;
     }
 
-    /*
-    public string GetUniqueIDAsString()
-    {
-        //This works for all floor and unlimited floors
-        if (cachedRep != null) return cachedRep;
-        stringBuilder.Clear();
-        stringBuilder.Append(elevatorFloor);
-        stringBuilder.Append("-");
-        stringBuilder.AppendJoin("-", floorsWithItems);
-        cachedRep = stringBuilder.ToString();
-        return cachedRep;
-    }
-    */
-
     public long GetUniqueIDAsLong()
     {
         //This is optimized for this specific puzzle!
-        return elevatorFloor << 62 |   //only need two bits for this
+        return elevatorFloor << 62 |            //only need two bits for this
                floorsWithItems[0] |
                floorsWithItems[1] << 14 |
                floorsWithItems[2] << 28 |

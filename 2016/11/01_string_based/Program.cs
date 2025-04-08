@@ -5,15 +5,17 @@ using System.Diagnostics;
 ////////////////////////////////////////// YOUR INPUT ///////////////////////////////////
 
 // A list of floors and items they contain (different radio active generators and matching chips):
-// - The first floor contains a thulium generator, a thulium-compatible microchip, a plutonium generator, and a strontium generator.
+// - The first floor contains a thulium generator, a thulium-compatible microchip,
+//   a plutonium generator and a strontium generator.
 // - The second floor contains a plutonium-compatible microchip and a strontium-compatible microchip.
-// - The third floor contains a promethium generator, a promethium-compatible microchip, a ruthenium generator, and a ruthenium-compatible microchip.
+// - The third floor contains a promethium generator, a promethium-compatible microchip,
+//   a ruthenium generator, and a ruthenium-compatible microchip.
 // - The fourth floor contains nothing relevant.
 
 ////////////////////////////////////////// YOUR TASKS ////////////////////////////////////
 
 //  I - Calculate the minimum number of steps required to bring all of the objects to the fourth floor,
-//      whle obeying the item "rules" set out before you.
+//      while obeying the item "rules" set out before you.
 //  II - Do the same for some additional objects :)
 
 ///////////////////////////////////////// APPROACH //////////////////////////////////////
@@ -21,8 +23,8 @@ using System.Diagnostics;
 // Read the puzzle description on the website first and then continue with everything below.
 
 // The puzzle in question is kind of like a "Goat, Cabbage and the Wolf" puzzle:
-//  - A farmer is on the left side of the river with a Goat, Cabbage and Wolf and needs to bring all of them across.
-//    However you can't leave the Goat with the Cabbage, nor the Wolf with the Goat, etc, etc.
+//  - A farmer is on the left side of the river with a Goat, Cabbage and Wolf and needs to bring all of
+//    them across. However you can't leave the Goat with the Cabbage, nor the Wolf with the Goat, etc, etc.
 //
 // Instead of Goats etc we're dealing with an elevator, generators and chips that do or don't combine :))
 
@@ -48,11 +50,11 @@ using System.Diagnostics;
 // - for every "single" item move you go through all the possible items to the right of that
 
 // So for example, if the elevator is on F1  and F1 contains: HG  HM LG  LM 
-// we could in theory move:
+// we could in theory move the following combinations of items to the floor above or below the current floor:
 
-// HG
-// 	HG, HM
-// 	HG, LG
+// HG       (just HG)
+// 	HG, HM  (HG & HM)
+// 	HG, LG  (etc... all "permutations")
 // 	HG, LM
 // HM
 // 	HM, LG
@@ -61,14 +63,12 @@ using System.Diagnostics;
 // 	LG, LM
 // LM
 
-// to the floor above or below the current floor.
-
 // Each of those moves must leave you with a valid Fstart and Fend, otherwise you skip the move.
 // (States can be tested on the fly or cached for optimization).
 
 // Note that the order of elements don't matter, so we can just represent them with a HashSet<string>
 
-// So what is a invalid state?
+// So what is an invalid state?
 // Any state that has AT LEAST 1 generator, where there is AT LEAST 1 chip without its own generator.
 // (Rationale: is that generator A will fry chip B if chip B is not powered by generator B)
 
@@ -102,6 +102,7 @@ testFacility.AddFloor([]);
 
 Console.WriteLine("Test input - Moves required:" + RunDijkstra(testFacility));
 
+// Now the actual puzzle data for part 1
 // The first floor contains a thulium generator, a thulium-compatible microchip, a plutonium generator, and a strontium generator.
 // The second floor contains a plutonium-compatible microchip and a strontium-compatible microchip.
 // The third floor contains a promethium generator, a promethium-compatible microchip, a ruthenium generator, and a ruthenium-compatible microchip.
@@ -114,6 +115,8 @@ part1Facility.AddFloor(["pG", "pM", "RG", "RM"]);   //p is promethium, P is plut
 part1Facility.AddFloor([]);
 
 Console.WriteLine("Part 1 - Moves required:" + RunDijkstra(part1Facility));
+
+// And the puzzle data for part 2
 
 RTGFacility part2Facility = new RTGFacility();
 part2Facility.AddFloor(["TG", "TM", "PG", "SG", "EG", "EM", "DG", "DM"]);

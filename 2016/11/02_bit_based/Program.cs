@@ -88,7 +88,6 @@ int RunDijkstra (RTGFacility pInputFacility)
     todoList.Enqueue(pInputFacility, 0);
 
     HashSet<long> visited = new HashSet<long>();
-    //HashSet<string> visited = new HashSet<string>();
 
     while (todoList.Count > 0)
     {

@@ -1,11 +1,17 @@
 ﻿//Solution for https://adventofcode.com/2016/day/12 (Ctrl+Click in VS to follow link)
 
-// Your input: a sequence of instructions
+// In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
+// and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
+// This value will be processed and passed to the built-in args[0] variable
 
-string myInput = "cpy 1 a\r\ncpy 1 b\r\ncpy 26 d\r\njnz c 2\r\njnz 1 5\r\ncpy 7 c\r\ninc d\r\ndec c\r\njnz c -2\r\ncpy a c\r\ninc a\r\ndec b\r\njnz b -2\r\ncpy c b\r\ndec d\r\njnz d -6\r\ncpy 16 c\r\ncpy 12 d\r\ninc a\r\ndec d\r\njnz d -2\r\ndec c\r\njnz c -5\r\n";
-string[] instructions = myInput.Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+// ** Your input: a sequence of instructions
 
-// Part 1 - Execute the code with four registers starting at zero
+string myInput = File.ReadAllText(args[0]);
+myInput = myInput.ReplaceLineEndings(Environment.NewLine);
+
+string[] instructions = myInput.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+
+// ** Part 1 - Execute the code according to specs with four registers starting at zero
 
 int[] registersPart1 = [0,0,0,0];
 RunProgram(registersPart1, instructions);
@@ -56,7 +62,7 @@ int ExecuteCpyInstruction(string[] pInstruction, int[] pRegisters)
 {
 	int xValue = GetOperandValue(pInstruction[1], pRegisters);
 
-	//Assign it to register y
+	//Assign it to register y -> cpy 1 a, pInstruction[2] takes 3rd item, subtracts 'a'
 	pRegisters[pInstruction[2][0] - 'a'] = xValue;
     return 1;
 }

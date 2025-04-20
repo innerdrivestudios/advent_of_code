@@ -1,0 +1,50 @@
+// Some background info on GCD and LCM.
+// Let's say for simplicities sake we only have 2 animations a and b,
+// with length 12 and 18:
+
+a = 12
+b = 18
+
+// And we want to calculate after how many frames they both repeat.
+// This is called calculating the LCM -> LOWEST COMMON MULTIPLE
+// Which is 36 in this case 
+// (which is not that hard to see if you draw it out as centimeters for example,
+//  after 36 units, both a repeats and b repeats at the same point/distance in time)
+
+// But what if the numbers are more complex? Or if we have multiple numbers?
+// For this we need to understand two terms:
+// - the GCD = GREATEST COMMON DIVISOR
+//   (the biggest number that can divide both)
+// - the LCM = LOWEST COMMON MULTIPLE
+//   (the smallest number divisible by both)
+
+// Conceptually I find the GCD easiest to understand: 
+// - write both numbers as a multiplication of primes:
+// a = 2 * 2 * 3
+// b = 2 * 3 * 3
+
+// Then look at the biggest matching part -> 2 * 3
+// So the GCD = 6
+
+// Now the LOWEST COMMON MULTIPLE ...
+// One common multiple is a * b = 12 * 18 (= 216)
+// but that is not the lowest...
+
+// Because 12 can be divided by 6 and 18 can be divided by 6
+// (2 * 2 * 3) * (2 * 3 * 3) = 2 * (2 * 3) * 3 * (2 * 3)
+// The 2 * (2 * 3) and (2 * 3) * 3 are already in there so to speak,
+// so we can undo the last (2 * 3) which is the GCD:
+
+// In other words the LCM(a,b) = (a * b) / GCD (a, b)
+// (For an official proof see some unreadable wiki pages)
+
+// For multiple numbers, we need to take it in steps, e.g. for:
+// a = 4  
+// b = 6
+// c = 8
+
+// We need to do LCM(a,b,c) = LCM (LCM(a,b), c)
+// which comes down to:
+// LCM(a,b) = 4 * 6 / GDC(4,6) = 24 / 2 = 12
+// LCM(12, c) = 12 * c / GDC(12,c) = 12 * 8 / 4 = 96 / 4 = 24
+

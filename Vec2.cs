@@ -66,7 +66,11 @@ public struct Vec2<T> where T: INumber<T>
 		return T.Abs(X) + T.Abs(Y);
 	}
 
-	
+	public Vec2<T> Abs()
+	{
+		return new Vec2<T>(T.Abs(X), T.Abs(Y));
+	}
+
 	public double Magnitude()
 	{
 		double dx = double.CreateChecked(X);

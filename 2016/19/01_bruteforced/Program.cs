@@ -14,7 +14,8 @@ int myInput = int.Parse(args[0]);
 //
 // Note:
 // - the amount of presents are actually a decoy...
-// - nobody cares about the amount of presents you end up with, since it is equal to the amount of elves
+// - nobody cares about the amount of presents you end up with,
+// since it is equal to the amount of elves
 
 // Helper method to skip elves (ended up only using the pSkip = 1 version ...)
 

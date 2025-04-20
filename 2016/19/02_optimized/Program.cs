@@ -1,7 +1,5 @@
 ﻿//Solution for https://adventofcode.com/2016/day/19 (Ctrl+Click in VS to follow link)
 
-using Elf = int;
-
 // In visual studio you can modify the input used by going to
 // Debug/Debug Properties and changing the command line arguments.
 // This value given will be passed to the built-in args[0] variable.

@@ -8,7 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Directions.cs" Link="Directions.cs" />
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\..\Vec2.cs" Link="Vec2.cs" />
   </ItemGroup>
 

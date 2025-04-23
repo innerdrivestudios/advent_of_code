@@ -2,37 +2,45 @@
 
 using System.Text.RegularExpressions;
 
-//Your input: a list of personal +- happiness gains/losses based
-//on who a person is seated next to at a round dinner table
-string myInput = "Alice would lose 2 happiness units by sitting next to Bob.\r\nAlice would lose 62 happiness units by sitting next to Carol.\r\nAlice would gain 65 happiness units by sitting next to David.\r\nAlice would gain 21 happiness units by sitting next to Eric.\r\nAlice would lose 81 happiness units by sitting next to Frank.\r\nAlice would lose 4 happiness units by sitting next to George.\r\nAlice would lose 80 happiness units by sitting next to Mallory.\r\nBob would gain 93 happiness units by sitting next to Alice.\r\nBob would gain 19 happiness units by sitting next to Carol.\r\nBob would gain 5 happiness units by sitting next to David.\r\nBob would gain 49 happiness units by sitting next to Eric.\r\nBob would gain 68 happiness units by sitting next to Frank.\r\nBob would gain 23 happiness units by sitting next to George.\r\nBob would gain 29 happiness units by sitting next to Mallory.\r\nCarol would lose 54 happiness units by sitting next to Alice.\r\nCarol would lose 70 happiness units by sitting next to Bob.\r\nCarol would lose 37 happiness units by sitting next to David.\r\nCarol would lose 46 happiness units by sitting next to Eric.\r\nCarol would gain 33 happiness units by sitting next to Frank.\r\nCarol would lose 35 happiness units by sitting next to George.\r\nCarol would gain 10 happiness units by sitting next to Mallory.\r\nDavid would gain 43 happiness units by sitting next to Alice.\r\nDavid would lose 96 happiness units by sitting next to Bob.\r\nDavid would lose 53 happiness units by sitting next to Carol.\r\nDavid would lose 30 happiness units by sitting next to Eric.\r\nDavid would lose 12 happiness units by sitting next to Frank.\r\nDavid would gain 75 happiness units by sitting next to George.\r\nDavid would lose 20 happiness units by sitting next to Mallory.\r\nEric would gain 8 happiness units by sitting next to Alice.\r\nEric would lose 89 happiness units by sitting next to Bob.\r\nEric would lose 69 happiness units by sitting next to Carol.\r\nEric would lose 34 happiness units by sitting next to David.\r\nEric would gain 95 happiness units by sitting next to Frank.\r\nEric would gain 34 happiness units by sitting next to George.\r\nEric would lose 99 happiness units by sitting next to Mallory.\r\nFrank would lose 97 happiness units by sitting next to Alice.\r\nFrank would gain 6 happiness units by sitting next to Bob.\r\nFrank would lose 9 happiness units by sitting next to Carol.\r\nFrank would gain 56 happiness units by sitting next to David.\r\nFrank would lose 17 happiness units by sitting next to Eric.\r\nFrank would gain 18 happiness units by sitting next to George.\r\nFrank would lose 56 happiness units by sitting next to Mallory.\r\nGeorge would gain 45 happiness units by sitting next to Alice.\r\nGeorge would gain 76 happiness units by sitting next to Bob.\r\nGeorge would gain 63 happiness units by sitting next to Carol.\r\nGeorge would gain 54 happiness units by sitting next to David.\r\nGeorge would gain 54 happiness units by sitting next to Eric.\r\nGeorge would gain 30 happiness units by sitting next to Frank.\r\nGeorge would gain 7 happiness units by sitting next to Mallory.\r\nMallory would gain 31 happiness units by sitting next to Alice.\r\nMallory would lose 32 happiness units by sitting next to Bob.\r\nMallory would gain 95 happiness units by sitting next to Carol.\r\nMallory would gain 91 happiness units by sitting next to David.\r\nMallory would lose 66 happiness units by sitting next to Eric.\r\nMallory would lose 75 happiness units by sitting next to Frank.\r\nMallory would lose 99 happiness units by sitting next to George.\r\n";
+// In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
+// and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
+// This value will be processed and passed to the built-in args[0] variable
 
-//Your task: find the optimal seating arrangement to ensure the highest overall dinner table happiness
+// ** Your input: a list of personal +- happiness gains/losses based
+// on who a person is seated next to at a round dinner table
+
+string myInput = File.ReadAllText(args[0]);
+
+// ** Your tasks: find the optimal seating arrangement to ensure the highest overall dinner table happiness
 
 //Step 1. Process the input into a neighbour vs neighbour to "cost" map, while building a list of unique persons
+
 Dictionary<(string, string), int> neighbours2CostMap = new Dictionary<(string personA, string personB), int>();
 HashSet<string> partyAttendants = new HashSet<string>();
-ConvertInput (neighbours2CostMap, partyAttendants);
+ConvertInput (myInput, neighbours2CostMap, partyAttendants);
 
 //Step 2. Run both challenges
 
-//As is:
+// ** Part 1: Use the provided seating configuration as is:
+
 List<List<string>> possibleSeatingArrangements = partyAttendants.ToList().GetPermutations();
 Console.WriteLine("Part 1:" + GetBestConfigurationScore(possibleSeatingArrangements, neighbours2CostMap));
 
-//With me added:
+// ** Part 2: Add "Me", but no relationships so all my scores will equal to zero
+
 partyAttendants.Add("Me");
 possibleSeatingArrangements = partyAttendants.ToList().GetPermutations();
 
 Console.WriteLine("Part 2:" + GetBestConfigurationScore(possibleSeatingArrangements, neighbours2CostMap));
 
-Console.ReadKey();
-
 //////////////////////////////////// HELPER METHODS ///////////////////////////////////////
 
-void ConvertInput (Dictionary<(string, string), int> pCostmap, HashSet<string> pAttendants)
+// Convert input to a costmap and attendents set
+
+void ConvertInput (string pInput, Dictionary<(string, string), int> pCostmap, HashSet<string> pAttendants)
 {
     string pattern = @"(\w+) would (lose|gain) (\d+) happiness units by sitting next to (\w+)\.\r\n";
-    MatchCollection matches = Regex.Matches(myInput, pattern);
+    MatchCollection matches = Regex.Matches(pInput, pattern);
 
     foreach (Match match in matches)
     {
@@ -49,6 +57,8 @@ void ConvertInput (Dictionary<(string, string), int> pCostmap, HashSet<string> p
     }
 }
 
+// Go through all possible seating arrangements and check which arrangements has the best score
+
 int GetBestConfigurationScore(List<List<string>> pPossibleSeatingArrangements, Dictionary<(string, string), int> pCostmap)
 {
     int bestConfiguration = int.MinValue;
@@ -61,6 +71,8 @@ int GetBestConfigurationScore(List<List<string>> pPossibleSeatingArrangements, D
 	
 	return bestConfiguration;
 }
+
+// Checks a seating arrangements around the table (loops around) and adds all the "costs" based on the provided costmap
 
 int GetResult (List<string> pSeatingArrangement, Dictionary<(string, string), int> pCostmap)
 {

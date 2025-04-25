@@ -1,0 +1,1 @@
+﻿record Pattern (string pattern, List<int> checksum);

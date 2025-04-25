@@ -1,7 +1,5 @@
 ﻿// Solution for https://adventofcode.com/2023/day/12 (Ctrl+Click in VS to follow link)
 
-using Pattern = (string pattern, System.Collections.Generic.List<int> checksum);
-
 // In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
 // This value will be processed and passed to the built-in args[0] variable
@@ -25,7 +23,7 @@ Pattern ConvertStringToPattern (string pPattern)
 {
 	string[] parts = pPattern.Split(' ');
 
-	return (
+	return new(
 		parts[0],
 		parts[1].Split(',').Select(int.Parse).ToList()
 	);
@@ -117,7 +115,7 @@ Pattern ConvertStringToPattern (string pPattern)
 // Then a method to actually take the free indices and the placesToFill and
 // generate all possible variations in which we can do that...
 
-List<HashSet<int>> GenerateSequences(List<int> pInput, int pStart, int pSequenceLength)
+List<HashSet<int>> GenerateSequences(List<int> pInput, int pStart, int pSequenceLength, Pattern pPattern)
 {
 	if (pSequenceLength < 1) throw new Exception("Sequence length has to be at least 1");
 
@@ -141,7 +139,7 @@ List<HashSet<int>> GenerateSequences(List<int> pInput, int pStart, int pSequence
 		else
 		{
 			//Get all child sequences and insert ourselves...
-			List<HashSet<int>> childResults = GenerateSequences(pInput, i + 1, pSequenceLength - 1);
+			List<HashSet<int>> childResults = GenerateSequences(pInput, i + 1, pSequenceLength - 1, pPattern);
 			foreach (HashSet<int> childResult in childResults)
 			{
 				//Note that the order doesn't matter
@@ -184,7 +182,7 @@ bool IsValidSequence (Pattern pPattern, HashSet<int> pReplacementSequence)
 		}
 	}
 
-	return currentSequence == pPattern.checksum.Count;
+	return true;
 }
 
 // And last but least a method to tie everything together
@@ -198,7 +196,7 @@ long GetPossibleArrangementsCount (Pattern pPattern)
 	if (patternInfo.placesToFill == 0) return 1;
 
 	List<HashSet<int>> possibleConfigurations = 
-		GenerateSequences(patternInfo.freeIndices, 0, patternInfo.placesToFill);
+		GenerateSequences(patternInfo.freeIndices, 0, patternInfo.placesToFill, pPattern);
 
 	int validConfigurations = 0;
 	foreach (var configuration in possibleConfigurations)
@@ -211,73 +209,4 @@ long GetPossibleArrangementsCount (Pattern pPattern)
 
 Console.WriteLine("Part 1:" + patternList.Sum(x => GetPossibleArrangementsCount(x)));
 
-// 
-//	???.### 1,1,3				- 1 arrangement
-//  .??..??...?##. 1,1,3		- 4 arrangements
-//  ?#?#?#?#?#?#?#? 1,3,1,6		- 1 arrangement
-//  ????.#...#... 4,1,1			- 1 arrangement
-//  ????.######..#####. 1,6,5	- 4 arrangements
-//  ?###???????? 3,2,1			- 10 arrangements
-
-/*
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern("???.### 1,1,3")));
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern(".??..??...?##. 1,1,3")));
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern("?#?#?#?#?#?#?#? 1,3,1,6")));
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern("????.#...#... 4,1,1")));
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern("????.######..#####. 1,6,5")));
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern("?###???????? 3,2,1")));
-*/
-
-//return;
-
-// ** Part 2: Exactly the same but now for unfolded records:
-
-Pattern Unfold (Pattern pPattern)
-{
-    Console.Write(".");
-    string unfoldedPattern = pPattern.pattern;
-	List<int> unfoldedChecksum = new(pPattern.checksum);
-
-	for (int i = 0; i < 1; i++)
-	{
-		unfoldedPattern += "?" + pPattern.pattern;
-		unfoldedChecksum.AddRange(pPattern.checksum);
-	}
-   // Console.WriteLine("P:"+ unfoldedPattern);
-   // Console.WriteLine("C:"+ string.Join(",", unfoldedChecksum));
-
-    return (unfoldedPattern, unfoldedChecksum);	
-}
-
-/**
-Console.WriteLine("----");
-
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern("???.### 1,1,3")));
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern(".??..??...?##. 1,1,3")));
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern("?#?#?#?#?#?#?#? 1,3,1,6")));
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern("????.#...#... 4,1,1")));
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern("????.######..#####. 1,6,5")));
-Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern("?###???????? 3,2,1")));
-
-Console.WriteLine("----");
-
-Console.WriteLine(GetPossibleArrangementsCount(Unfold(ConvertStringToPattern("???.### 1,1,3"))));
-Console.WriteLine(GetPossibleArrangementsCount(Unfold(ConvertStringToPattern(".??..??...?##. 1,1,3"))));
-Console.WriteLine(GetPossibleArrangementsCount(Unfold(ConvertStringToPattern("?#?#?#?#?#?#?#? 1,3,1,6"))));
-Console.WriteLine(GetPossibleArrangementsCount(Unfold(ConvertStringToPattern("????.#...#... 4,1,1"))));
-Console.WriteLine(GetPossibleArrangementsCount(Unfold(ConvertStringToPattern("????.######..#####. 1,6,5"))));
-Console.WriteLine(GetPossibleArrangementsCount(Unfold(ConvertStringToPattern("?###???????? 3,2,1"))));
-
-Console.WriteLine("----");
-/**/
-
-/**/
-long total =
-	patternList.Sum(
-		x => GetPossibleArrangementsCount(x) *
-		(long)Math.Pow(GetPossibleArrangementsCount(Unfold(x)) / GetPossibleArrangementsCount(x), 4)
-	);
-
-Console.WriteLine();
-Console.WriteLine("Part 2:" + total);
-/**/
+// I wasn't able to solve part 2 yet!

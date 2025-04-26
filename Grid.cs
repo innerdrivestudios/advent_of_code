@@ -299,11 +299,11 @@ public class Grid<T>
 
         Queue<Vec2i> todoList = new Queue<Vec2i>();
         todoList.Enqueue(pStart);
+        visited.Add(pStart);
 
         while (todoList.Count > 0)
         {
             Vec2i current = todoList.Dequeue();
-            visited.Add(current);
 
             foreach (Vec2i direction in directions)
             {
@@ -312,6 +312,7 @@ public class Grid<T>
                 if (IsInside(nextPosition) && !visited.Contains(nextPosition) && pIncludeWhen(nextPosition))
                 {
                     todoList.Enqueue(nextPosition);
+                    visited.Add(nextPosition);
                 }
             }
         }

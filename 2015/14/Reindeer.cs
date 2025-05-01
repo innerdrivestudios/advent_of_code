@@ -5,22 +5,20 @@
 	public int flySpeed;
 	public int restDuration;
 	
-	//public int distanceCovered;
-	//public int pointsAccumulated = 0;
-
 	public Reindeer(string pName, int pFlyDuration, int pFlySpeed, int pRestDuration)
 	{
 		name = pName;
 		flyDuration = pFlyDuration;
 		flySpeed = pFlySpeed;
 		restDuration = pRestDuration;
-		//distanceCovered = GetDistanceTravelled(pFlyTime);
 	}
 
 	public int GetDistanceTravelled (int pTime)
 	{
-		int blockTime = (flyDuration + restDuration);						//first get duration of a whole fly 'cycle'
-		int wholeBlocks = pTime / blockTime;                                //use int division to get a floored amount of 'whole' blocks
+        //first get duration of a whole fly 'cycle'
+        int blockTime = (flyDuration + restDuration);
+        //use int division to get a floored amount of 'whole' blocks
+        int wholeBlocks = pTime / blockTime;                        
 
 		int wholeBlockTime = wholeBlocks * blockTime;
 		int leftOverTime = pTime - wholeBlockTime;

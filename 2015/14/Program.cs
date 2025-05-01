@@ -1,29 +1,23 @@
-﻿//Solution for https://adventofcode.com/2015/day/14 (Ctrl+Click in VS to follow link)
+﻿// Solution for https://adventofcode.com/2015/day/14 (Ctrl+Click in VS to follow link)
 
 using System.Text.RegularExpressions;
 
-//Your input: a list of reindeer "specs"
+// In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
+// and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
+// This value will be processed and passed to the built-in args[0] variable
 
-string myInput = "Vixen can fly 8 km/s for 8 seconds, but then must rest for 53 seconds.\r\nBlitzen can fly 13 km/s for 4 seconds, but then must rest for 49 seconds.\r\nRudolph can fly 20 km/s for 7 seconds, but then must rest for 132 seconds.\r\nCupid can fly 12 km/s for 4 seconds, but then must rest for 43 seconds.\r\nDonner can fly 9 km/s for 5 seconds, but then must rest for 38 seconds.\r\nDasher can fly 10 km/s for 4 seconds, but then must rest for 37 seconds.\r\nComet can fly 3 km/s for 37 seconds, but then must rest for 76 seconds.\r\nPrancer can fly 9 km/s for 12 seconds, but then must rest for 97 seconds.\r\nDancer can fly 37 km/s for 1 seconds, but then must rest for 36 seconds.\r\n";
+// ** Your input: a list of reindeer "specs", e.g.:
+// Vixen can fly 8 km/s for 8 seconds, but then must rest for 53 seconds.
 
-//Your task: calculating some stats for the different reindeer
+string myInput = File.ReadAllText(args[0]).ReplaceLineEndings(Environment.NewLine);
 
-//Step 1. Convert all input into a list of reindeer
-
-List<Reindeer> allReindeer = ConvertInput();
-
-//Step2. Run the different challenges
-
-Console.WriteLine("Part 1: Winning distance = " + GetWinningDistance(allReindeer, 2503));
-Console.WriteLine("Part 2: Winning points = " + GetWinningPoints(allReindeer, 2503));
-
-Console.ReadKey();
+// Step 1. Let's convert all the input to actual Reindeer
 
 List<Reindeer> ConvertInput()
 {
     List<Reindeer> reindeers = new List<Reindeer>();
 
-	string pattern = @"(\w+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds\.\r\n";
+    string pattern = @"(\w+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds.";
     MatchCollection matches = Regex.Matches(myInput, pattern);
 
     foreach (Match match in matches)
@@ -42,6 +36,10 @@ List<Reindeer> ConvertInput()
     return reindeers;
 }
 
+List<Reindeer> allReindeer = ConvertInput();
+
+// ** Part 1: Calculate what distance has the winning reindeer traveled after 2503 seconds:
+
 int GetWinningDistance(List<Reindeer> pDeer, int pSeconds)
 {
     int winningDistance = int.MinValue;
@@ -49,7 +47,7 @@ int GetWinningDistance(List<Reindeer> pDeer, int pSeconds)
     foreach (Reindeer reindeer in pDeer)
     {
         int travelDistance = reindeer.GetDistanceTravelled(pSeconds);
-        
+
         if (travelDistance > winningDistance)
         {
             winningDistance = travelDistance;
@@ -59,11 +57,17 @@ int GetWinningDistance(List<Reindeer> pDeer, int pSeconds)
     return winningDistance;
 }
 
+Console.WriteLine("Part 1: Winning distance = " + GetWinningDistance(allReindeer, 2503));
+
+// ** Part 2: Calculate how many points the winning reindeer has after 2503 seconds 
+
+// Brute force check, every step of the way...
+
 int GetWinningPoints(List<Reindeer> pDeer, int pSeconds)
 {
     int[] reindeerScores = new int[pDeer.Count];  
 
-    for (int i = 1; i < pSeconds; i++)
+    for (int i = 1; i <= pSeconds; i++)
     {
         int winningDistance = GetWinningDistance(pDeer, i);
 
@@ -75,3 +79,5 @@ int GetWinningPoints(List<Reindeer> pDeer, int pSeconds)
 
     return reindeerScores.Max();
 }
+
+Console.WriteLine("Part 2: Winning points = " + GetWinningPoints(allReindeer, 2503));

@@ -319,4 +319,24 @@ public class Grid<T>
 
         return visited;
     }
+
+    public List<HashSet<Vec2i>> GetRegions (HashSet<T> pValuesToInclude) 
+    {
+        HashSet<Vec2i> visited = new();
+        List<HashSet<Vec2i>> regions = new ();
+
+        Foreach(
+            (position, value) =>
+            {
+                if (pValuesToInclude.Contains(value) && !visited.Contains(position))
+                {
+                    HashSet<Vec2i> filledPositions = FloodFill(position, x => this[x].Equals(value));
+                    visited.UnionWith(filledPositions);
+                    regions.Add(filledPositions);
+                }
+            }
+        );
+
+        return regions;
+    }
 }

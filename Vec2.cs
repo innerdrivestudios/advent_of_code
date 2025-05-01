@@ -71,7 +71,18 @@ public struct Vec2<T> where T: INumber<T>
 		return new Vec2<T>(T.Abs(X), T.Abs(Y));
 	}
 
-	public double Magnitude()
+    public Vec2<int> Sign()
+    {
+        return new Vec2<int>(T.Sign(X), T.Sign(Y));
+    }
+
+    public Vec2<T> Scale(Vec2<T> pOther)
+    {
+        return new Vec2<T>(X * pOther.X, Y * pOther.Y);
+    }
+
+
+    public double Magnitude()
 	{
 		double dx = double.CreateChecked(X);
 		double dy = double.CreateChecked(Y);
@@ -114,6 +125,16 @@ public struct Vec2<T> where T: INumber<T>
 	public override int GetHashCode()
 	{
 		return HashCode.Combine(X, Y);
+	}
+
+	public Vec2<T> Mirror (Vec2<T> pMirror)
+	{
+		Vec2<T> delta = pMirror - this;
+		Vec2<int> signedMirror = pMirror.Sign();
+		//cancel out either the X or the Y and duplicated the distance
+		delta.X *= T.CreateChecked(2 * signedMirror.X);
+		delta.Y *= T.CreateChecked(2 * signedMirror.Y);
+		return this + delta;
 	}
 	
 }

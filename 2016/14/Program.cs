@@ -5,11 +5,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-// ** Your input: Some kind of weird char sequence
-
 // In visual studio you can modify the char sequence used by going to
 // Debug/Debug Properties and changing the command line arguments.
 // This value given will be passed to the built-in args[0] variable.
+
+// ** Your input: Some kind of weird char sequence
 
 string myInput = args[0];
 
@@ -36,8 +36,8 @@ string myInput = args[0];
 // Tried different approach actually, but the only valid way seems to actually generate a 1000 hashes
 // per keyindex and then increasing the key index per valid hash. I tried optimizing this by storing
 // all indices of triple chars so we only have to generate hashes for each keyIndex once, but since
-// later lookaheads might make earlier entries valid, I couldn't find the actual lowest keyIndex using this approach.
-// (This probably makes no sense whatsoever unless you tried it yourself).
+// later lookaheads might make earlier entries valid, I couldn't find the actual lowest keyIndex
+// using this approach. (This probably makes no sense whatsoever unless you tried it yourself).
 
 // Anyway current approach:
 
@@ -112,14 +112,14 @@ string GetHash(int pIndex, List<string> pHashCache)
 int requiredCorrectKeyCount = 64;
 int maxDistance = 1000;
 
-//Stopwatch stopwatch = Stopwatch.StartNew();
+Stopwatch stopwatch = Stopwatch.StartNew();
 
 Console.WriteLine(
-    $"Part 1 - {requiredCorrectKeyCount} keys found at key index:" +
+    $"\nPart 1 - {requiredCorrectKeyCount} keys found at key index:" +
     GetOneTimePadKeyIndex(requiredCorrectKeyCount, maxDistance, GetHash)
 );
 
-//Console.WriteLine("In " + stopwatch.ElapsedMilliseconds + " milliseconds.");
+Console.WriteLine("Calculated in " + stopwatch.ElapsedMilliseconds + " milliseconds.");
 
 // ** Part 2: Exact same process, but using a different "stretched" hash function
 
@@ -143,12 +143,12 @@ string GetStretchedHash(int pIndex, List<string> pHashCache)
     return result;
 }
 
-//stopwatch.Restart();
+stopwatch.Restart();
 
 Console.WriteLine(
-    $"Part 2 - {requiredCorrectKeyCount} keys found at key index:" +
+    $"\nPart 2 - {requiredCorrectKeyCount} keys found at key index:" +
     GetOneTimePadKeyIndex(requiredCorrectKeyCount, maxDistance, GetStretchedHash)
 );
 
-//Console.WriteLine("In " + stopwatch.ElapsedMilliseconds + " milliseconds.");
+Console.WriteLine("Calculated in " + stopwatch.ElapsedMilliseconds + " milliseconds.");
 

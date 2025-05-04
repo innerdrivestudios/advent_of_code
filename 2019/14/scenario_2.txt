@@ -1,0 +1,83 @@
+=====================================================
+Let's consider a specific scenario from the puzzle description:
+
+157 ORE => 5 NZVS
+165 ORE => 6 DCFZ
+44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ => 1 FUEL
+12 HKGWZ, 1 GPVTF, 8 PSHF => 9 QDVJ
+179 ORE => 7 PSHF
+177 ORE => 5 HKGWZ
+7 DCFZ, 7 PSHF => 2 XJWVT
+165 ORE => 2 GPVTF
+3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF => 8 KHKGT
+
+Step 1, not required in code, but here to keep our sanity, reorder the rules:
+
+157 ORE => 5 NZVS
+165 ORE => 6 DCFZ
+165 ORE => 2 GPVTF
+179 ORE => 7 PSHF
+177 ORE => 5 HKGWZ
+12 HKGWZ, 1 GPVTF, 8 PSHF => 9 QDVJ
+7 DCFZ, 7 PSHF => 2 XJWVT
+3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF => 8 KHKGT
+44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ => 1 FUEL
+
+Start with 1 FUEL:
+
+(0, [1 FUEL], []) =>
+
+To produce 1 FUEL, we need to apply (44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ => 1 FUEL) * 1:
+
+(0, [1 FUEL, 44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ], [1 FUEL]) =>
+(0, [44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ], []) =>
+
+To create 44 XJWVT we need to apply (7 DCFZ, 7 PSHF => 2 XJWVT) * 22:
+
+(0, [44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ, 154 DCFZ, 154 PSHF], [44 XJWVT]) =>
+(0, [5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ, 154 DCFZ, 154 PSHF], []) =>
+
+To create 5 KHKGT, we need to apply (3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF => 8 KHKGT) * 1 (adding to existing requirements):
+
+(0, [5 KHKGT, 1 QDVJ, 36 NZVS, 9 GPVTF, 53 HKGWZ, 157 DCFZ, 164 PSHF], [8 KHKGT]) =>
+(0, [1 QDVJ, 36 NZVS, 9 GPVTF, 53 HKGWZ, 157 DCFZ, 164 PSHF], [3 KHKGT]) =>
+
+(Note how there are 3 KHKGT left in the tank!
+
+To create 1 QDVJ, we need to apply (12 HKGWZ, 1 GPVTF, 8 PSHF => 9 QDVJ) * 1
+
+(0, [1 QDVJ, 36 NZVS, 10 GPVTF, 65 HKGWZ, 157 DCFZ, 172 PSHF], [3 KHKGT, 9 QDVJ]) =>
+(0, [36 NZVS, 10 GPVTF, 65 HKGWZ, 157 DCFZ, 172 PSHF], [3 KHKGT, 8 QDVJ]) =>
+
+To create 36 NZVS, we need to apply (157 ORE => 5 NZVS) * 8:
+
+(0, [36 NZVS, 10 GPVTF, 65 HKGWZ, 157 DCFZ, 172 PSHF, 1256 ORE], [3 KHKGT, 8 QDVJ, 40 NZVS]) =>
+(0, [10 GPVTF, 65 HKGWZ, 157 DCFZ, 172 PSHF, 1256 ORE], [3 KHKGT, 8 QDVJ, 4 NZVS]) =>
+(1256, [10 GPVTF, 65 HKGWZ, 157 DCFZ, 172 PSHF], [3 KHKGT, 8 QDVJ, 4 NZVS]) =>
+
+To create 10 GPVTF, we need to apply: (165 ORE => 2 GPVTF) * 5:
+
+(1256, [10 GPVTF, 65 HKGWZ, 157 DCFZ, 172 PSHF, 825 ORE], [3 KHKGT, 8 QDVJ, 4 NZVS, 10 GPVTF]) =>
+(1256+825, [65 HKGWZ, 157 DCFZ, 172 PSHF], [3 KHKGT, 8 QDVJ, 4 NZVS])
+
+To create 65 HKGWZ, we need to apply (177 ORE => 5 HKGWZ) * 13
+(1256+825+2301, [157 DCFZ, 172 PSHF], [3 KHKGT, 8 QDVJ, 4 NZVS])
+
+To create 157 DCFZ, we need to apply (165 ORE => 6 DCFZ)*27
+(1256+825+2301+4455, [157 DCFZ, 172 PSHF], [3 KHKGT, 8 QDVJ, 4 NZVS, 162 DCFZ])
+(1256+825+2301+4455, [172 PSHF], [3 KHKGT, 8 QDVJ, 4 NZVS, 5 DCFZ])
+
+To create 172 PSHF we need to apply (179 ORE => 7 PSHF) * 25
+(1256+825+2301+4455+4475, [172 PSHF], [3 KHKGT, 8 QDVJ, 4 NZVS, 5 DCFZ, 175 PSHF])
+(1256+825+2301+4455+4475, [], [3 KHKGT, 8 QDVJ, 4 NZVS, 5 DCFZ, 3 PSHF])
+
+No more requirements left, adding up the subs: 13.312 CHECK!
+
+
+
+
+
+
+
+
+

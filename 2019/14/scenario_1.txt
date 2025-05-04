@@ -1,0 +1,86 @@
+=====================================================
+Let's consider a simple but specific scenario not already provided in the puzzle description:
+
+1 ORE, 3A 	=> 1 C
+1 ORE 		=> 4 A
+1 C, 1 E 	=> 1 G
+5 A 		=> 2 E
+1 E, 1 G 	=> 1 FUEL
+
+What are the main things to keep in mind?
+
+- rules might require > 1 of a thing on the left to produce > 1 on the right:
+	e.g. 5 A => 2 E 
+- rules run completely or not at all:
+	e.g. you want 1 E, but you get 2 at minimum: 5 A => 2 E
+- whatever you produce in surplus can and MUST be used by other rules, e.g. :
+	1 E, 1 G => 1 FUEL  requires 1 E (and other stuff)
+	1 C, 1 E => 1 G		requires 1 E (and other stuff)
+	5 A => 2 E			produces 2 E, so this rule only needs to run ONCE, not TWICE
+- order matters, e.g.:
+	if you run the rules in order A, you might end up with a 1 time request of 2 E
+	if you run the rules in order B, you might end up with 2 requests separate in "time" for 1 E each
+	
+How do we work through this scenario?
+
+We'll work our way through the scenario:
+* backwards
+* processing each element on the right one by one, by:
+	- either replacing it with the resources on the left required to create the resource on the right
+	- or cancelling it against any resources we hold it reserve that were put there due to previous times the rule ran
+* keeping track of the amount of ORE we need in the end as a "firestarter"
+* stopping only when there are no more elements left to replace
+
+As a datastructure we'll use a triplet:
+
+0 ore vs [What we need] vs [What we got in reserve] =>
+
+Where [] can be either HashSet or List, but HashSet should be more optimal.
+
+Let's work through the full example, repeating the scenario from above:
+
+1 ORE, 3A 	=> 1 C
+1 ORE 		=> 4 A
+1 C, 1 E 	=> 1 G
+5 A 		=> 2 E
+1 E, 1 G 	=> 1 FUEL
+
+So our start is:
+
+(0, [1 FUEL], [])
+
+We need 1 FUEL, but there is nothing in reserve, so we'll add 1 E, 1 G 	to the requirements until there is enough (1) FUEL in reserve and then cancel out the required FUEL vs the FUEL in reserve (note that we could do this in one step).
+
+(0, [1 E, 1 G, 1 FUEL], [1 FUEL]) =>
+(0, [1 E, 1 G], []) =>
+
+We need 1 E, but there is nothing in reserve, so we'll apply 5 A => 2 E until we have enough E (which is once) and then cancel out the required E vs the 2E in reserve (note that we could do this in one step), leaving us with 1 E
+
+(0, [1 E, 1 G, 5A], [2 E]) =>
+(0, [1 G, 5A], [E])
+
+We need 1 G, but there is no G in reserve, so we'll apply 1 C, 1 E 	=> 1 G until we have enough G and then cancel out the required G:
+
+(0, [1 G, 5A, 1C, 1E], [E, 1G]) =>
+(0, [5A, 1C, 1E], [E, ]) =>
+
+We need 5A but have nothing in reserve, so we'll run 1 ORE => 4 A until we have enough A, which is twice:
+
+(0, [5A, 1C, 1E, 2 ORE], [E, 8A]) =>
+(0, [1C, 1E, 2 ORE], [E, 3A]) =>
+
+We need 1C but have nothing in reserve, so we'll run 1 ORE, 3A 	=> 1 C until we have 1 C, which is once:
+
+Note, that when adding 1 ORE, we'll need to update the 2 ORE that is already there or use a List of resources instead of a HashSet
+
+(0, [1C, 1E, 2 ORE, 1 ORE, 3A], [E, 3A, 1C]) =>
+(0, [1E, 2 ORE, 1 ORE, 3A], [E, 3A]) =>
+
+Now we get to the 1E, but we see there is one in reserve so just cancel them:
+(0, [2 ORE, 1 ORE, 3A], [3A]) =>
+
+We encounted 2 ORE and 1 ORE in a row, just move them to the front:
+
+(3, [3A], [3A]) =>
+
+Now we are left with 3A * 2 which cancel each other out.

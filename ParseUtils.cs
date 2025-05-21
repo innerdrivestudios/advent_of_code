@@ -50,4 +50,21 @@ static class ParseUtils
             .Select(x => (x[0], x[1]))
             .First();
     }
+
+    public static List<(T, U)> StringToTuples<T, U>(string pContent, string pSplitToken)
+    {
+        pContent = pContent.ReplaceLineEndings(Environment.NewLine);
+
+        return pContent
+            .Split([pSplitToken, Environment.NewLine], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Chunk(2)
+            .Select(x => ((T)Convert.ChangeType(x[0],typeof(T)), (U)Convert.ChangeType(x[1], typeof(U))))
+            .ToList();
+    }
+
+    public static string[] SplitBlocks(string pInput)
+    {
+        return pInput.ReplaceLineEndings(Environment.NewLine).Split(Environment.NewLine + Environment.NewLine, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    }
+
 }

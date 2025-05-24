@@ -1,0 +1,1 @@
+﻿enum ParticleState { Moved, Static, Removed };

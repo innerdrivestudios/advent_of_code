@@ -1,4 +1,4 @@
-﻿//Solution for https://adventofcode.com/2017/day/13 (Ctrl+Click in VS to follow link)
+﻿//Solution for https://adventofcode.com/2017/day/14 (Ctrl+Click in VS to follow link)
 
 // In visual studio you can modify what input value will be used by going to Debug/Debug Properties
 // and specifying the value as a command line argument, e.g. amgozmfv 

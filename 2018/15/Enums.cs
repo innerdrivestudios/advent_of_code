@@ -1,0 +1,1 @@
+﻿enum TurnResult { NO_TARGETS_LEFT, MOVED, FOUGHT, IDLE};

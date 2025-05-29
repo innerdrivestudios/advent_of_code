@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-public struct Vec2<T> where T: INumber<T>
+public struct Vec2<T> where T : INumber<T>
 {
     public T X;
     public T Y;

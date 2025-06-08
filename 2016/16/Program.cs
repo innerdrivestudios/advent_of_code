@@ -1,4 +1,4 @@
-﻿//Solution for https://adventofcode.com/2016/day/16 (Ctrl+Click in VS to follow link)
+﻿// Solution for https://adventofcode.com/2016/day/16 (Ctrl+Click in VS to follow link)
 
 // ** Your input: a binary sequence...
 
@@ -26,6 +26,7 @@ string ApplyDragonCurve (string pInput)
 }
 
 // Method to calculate the checksum, make sure you use a string builder for performance !
+
 string CalculateChecksum (string pInput)
 {
     Console.WriteLine("Calculating checksum for "+pInput.Length + " bytes...");

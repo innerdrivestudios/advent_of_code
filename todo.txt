@@ -1,0 +1,4 @@
+* Clean up/unify different search algorithm classes
+* Check if graph edges should be converted to a HashSet
+(quicker for adding/removing, but unwieldier to iterate index based)
+* Optimize the graph class (remove redundant checks etc)

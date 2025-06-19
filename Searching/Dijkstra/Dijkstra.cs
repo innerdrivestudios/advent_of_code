@@ -31,9 +31,13 @@ public static class Dijkstra
         while (queue.Count > 0)
         {
             T currentNode = queue.Dequeue();
-            if (currentNode.Equals(pEnd)) break;        // End node reached — terminate early
-
             long currentCost = costs[currentNode];
+            
+            if (currentNode.Equals(pEnd))
+            {
+                var path = ReconstructPath(parents, pEnd);
+                return new DijkstraResult<T> { path = path, costs = costs, totalCost = currentCost };
+            }
 
             foreach (var neighborAndCost in pDijkstraGraphAdapter.GetNeighborsWithCosts(currentNode, currentCost))
             {
@@ -50,8 +54,7 @@ public static class Dijkstra
             }
         }
 
-        var path = ReconstructPath(parents, pEnd);
-        return new DijkstraResult<T> { path = path, costs = costs };
+        return null;
     }
 
     /// <summary>
@@ -96,4 +99,6 @@ public class DijkstraResult<T>
     /// A dictionary mapping each visited node to its cumulative cost from the start node.
     /// </summary>
     public Dictionary<T, long> costs;
+
+    public long totalCost;
 }

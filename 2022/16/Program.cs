@@ -12,6 +12,7 @@
 //   Valve .. has flow rate=..; ...
 
 using System.Diagnostics;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
 
 string[] tunnelReport = File.ReadAllLines(args[0]);
@@ -286,11 +287,11 @@ Console.WriteLine("Calculated in " + stopwatch.ElapsedMilliseconds + " milliseco
 //   these are basically the same sets of divisions we are testing, in other words,
 //   we only need to test half of the possible divisions.
 
-// To actually implement this, we'll rewrite the method above to also take a list of valves, a bitmask and an inverter mask:
+// To actually implement this, we'll rewrite the method above to also take a dictionary of valves->valveindex, a bitmask and an inverter mask:
 
 long GetBiggestFlowRatePart2 (
         EdgedGraph<Valve> pCostToOpenTable, Dictionary<Valve, int> pValveOpenTimes, Valve pLastValveOpened, int pEndTime,
-        List<Valve> pAllowedValves, int pBitMask, int pNegationMask
+        Dictionary<Valve, int> pAllowedValves, int pBitMask, int pNegationMask
     )
 {
     long highestFlowRate = GetFlowRateForValveSetAtTime(pValveOpenTimes, pEndTime);
@@ -310,7 +311,7 @@ long GetBiggestFlowRatePart2 (
         if (pValveOpenTimes.ContainsKey(nextValve)) continue;
 
         //Check the index of the valve against the allowed bitmask
-        if ((1 << pAllowedValves.IndexOf(nextValve) & bitMask) == 0) continue;
+        if ((1 << pAllowedValves[nextValve] & bitMask) == 0) continue;
 
         pValveOpenTimes.Add(nextValve, nextValveOpenTime);
 
@@ -336,20 +337,23 @@ long GetBiggestFlowRatePart2 (
 List<Valve> valveList = costToOpenTable.GetNodes();
 valveList.Remove(valveNameToValveMap["AA"]);
 
+//Cache indices to avoid O(n) lookup
+Dictionary<Valve, int> valveToIndexMap = valveList.ToDictionary(x => x, x => valveList.IndexOf(x));
+
 int maxDivisionFlag = 1 << valveList.Count;
 int negationBitMask = maxDivisionFlag - 1;
 
 // As a sanity check we test whether our method actually works...
 biggestFlowRatePart1 = GetBiggestFlowRatePart2(
                 costToOpenTable, new() { { valveNameToValveMap["AA"], 0 } }, valveNameToValveMap["AA"], 30,
-                valveList, negationBitMask, 0
+                valveToIndexMap, negationBitMask, 0
             );
 
 Console.WriteLine("Testing new setup, should print same as part 1:" + biggestFlowRatePart1);
 
 biggestFlowRatePart1 = GetBiggestFlowRatePart2(
                 costToOpenTable, new() { { valveNameToValveMap["AA"], 0 } }, valveNameToValveMap["AA"], 30,
-                valveList, 0, 0
+                valveToIndexMap, 0, 0
             );
 
 Console.WriteLine("Testing new setup, should print 0:" + biggestFlowRatePart1);
@@ -363,7 +367,9 @@ Console.WriteLine("Variations to test:" + maxDivisionFlag/2);
 int variationsTested = 0;
 int granularity = 1000;
 int lastResult = 0;
+object locker = new object();
 
+/*
 for (int i = 0; i < maxDivisionFlag/2; i++)
 {
     biggestFlowRatePart2 = long.Max(
@@ -385,5 +391,36 @@ for (int i = 0; i < maxDivisionFlag/2; i++)
         Console.WriteLine((lastResult * granularity) + " variations tested...");
     }
 }
+*/
+
+stopwatch.Restart();
+Parallel.For (0, maxDivisionFlag / 2, i =>
+{
+    long yourScore = GetBiggestFlowRatePart2(
+        costToOpenTable, new() { { valveNameToValveMap["AA"], 0 } }, valveNameToValveMap["AA"], 26,
+        valveToIndexMap, i, 0
+    );
+
+    long elephantScore = GetBiggestFlowRatePart2(
+        costToOpenTable, new() { { valveNameToValveMap["AA"], 0 } }, valveNameToValveMap["AA"], 26,
+        valveToIndexMap, i, negationBitMask
+    );
+
+    long combined = yourScore + elephantScore;
+
+    lock (locker)
+    {
+        if (combined > biggestFlowRatePart2)
+            biggestFlowRatePart2 = combined;
+
+        variationsTested++;
+        if (variationsTested / granularity > lastResult)
+        {
+            lastResult = variationsTested / granularity;
+            Console.WriteLine($"{lastResult * granularity} variations tested...");
+        }
+    }
+});
 
 Console.WriteLine("Part 2:" + biggestFlowRatePart2);
+Console.WriteLine("Calculated in " + stopwatch.ElapsedMilliseconds + " milliseconds");

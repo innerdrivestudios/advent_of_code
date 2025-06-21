@@ -1,16 +1,20 @@
-﻿//Solution for https://adventofcode.com/2015/day/16 (Ctrl+Click in VS to follow link)
+﻿// Solution for https://adventofcode.com/2015/day/17 (Ctrl+Click in VS to follow link)
 
-//Your input: a list of container capacities
-List<int> input = new List<int>()	{ 33, 14, 18, 20, 45, 35, 16, 35, 1, 13, 18, 13, 50, 44, 48, 6, 24, 41, 30, 42 };
+// In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
+// and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
+// This value will be processed and passed to the built-in args[0] variable
 
-//Your task:
+// ** Your input: a list of container capacities
+List<int> input = File.ReadAllLines(args[0]).Select (int.Parse).ToList ();	
+
+// ** Your task:
 // Part 1 - Find how many different combinations of containers can exactly fit 150 liters of eggnog.
 // Part 2 - Find the minimum number of containers that can exactly fit all 150 liters of eggnog.
 //			How many different ways can you fill that number of containers and still hold exactly 150 litres?
 
-//Approach: iterate all possible combinations of containers to find:
-// 1. the AMOUNT of combinations of containers that store the requested amount
-// 2. a mapping from the amount of containers that store the requested amount to how many of those combinations there are
+// Approach: iterate all possible combinations of containers to find:
+//  1. the AMOUNT of combinations of containers that store the requested amount
+//  2. a mapping from the amount of containers that store the requested amount to how many of those combinations there are
 
 int possibleCombinationsCount = 0;
 Dictionary<int, int> containerCount2Uses = new Dictionary<int, int>();
@@ -21,7 +25,7 @@ Console.WriteLine("Part 1: " + possibleCombinationsCount);
 int minimumAmountOfContainersUsed = containerCount2Uses.Keys.Min();
 Console.WriteLine("Part 2: " + containerCount2Uses[minimumAmountOfContainersUsed]);
 
-///////////////////////////// HELPER METHOD /////////////////////////////
+///////////////////////////// HELPER METHODS /////////////////////////////
 
 void IterateCombinations(
 	List<int> pInput, 
@@ -40,7 +44,7 @@ void IterateCombinations(
 		possibleCombinationsCount++;
 
 		containerCount2Uses.TryGetValue(pContainersUsed.Count, out int uses);
-		containerCount2Uses[pContainersUsed.Count] = uses+1;
+		containerCount2Uses[pContainersUsed.Count] = uses + 1;
 
 		return;
 	}

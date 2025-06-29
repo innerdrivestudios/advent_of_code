@@ -4,7 +4,7 @@
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
 // This value will be processed and passed to the built-in args[0] variable
 
-// ** Your input: a grid of cave exploration risk levels
+// ** Your input: a hexadecimal hiding as ascii packet stream (or something like that ;))
 
 string myInput = File.ReadAllText(args[0]).ReplaceLineEndings("").ToLower();
 

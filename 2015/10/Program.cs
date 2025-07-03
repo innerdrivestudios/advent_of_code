@@ -16,7 +16,6 @@ string myInput = args[0];
 
 //Approach: we're just gonna build the strings, but we'll use a stringbuilder to do so
 //since it dramatically improves performance over concatenating regular strings
-StringBuilder temp = new StringBuilder();
 
 Stopwatch stopwatch = new Stopwatch();
 stopwatch.Start();
@@ -33,7 +32,7 @@ string ApplyLookAndSay (string pInput, int pTimes)
 
 string LookAndSay (string pInput)
 {
-    temp.Clear();
+    StringBuilder temp = new StringBuilder();
     
     char currentChar = pInput[0];
     int occurencesFound = 1;

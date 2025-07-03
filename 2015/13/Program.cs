@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 // ** Your input: a list of personal +- happiness gains/losses based
 // on who a person is seated next to at a round dinner table
 
-string myInput = File.ReadAllText(args[0]);
+string myInput = File.ReadAllText(args[0]).ReplaceLineEndings();
 
 // ** Your tasks: find the optimal seating arrangement to ensure the highest overall dinner table happiness
 
@@ -39,7 +39,7 @@ Console.WriteLine("Part 2:" + GetBestConfigurationScore(possibleSeatingArrangeme
 
 void ConvertInput (string pInput, Dictionary<(string, string), int> pCostmap, HashSet<string> pAttendants)
 {
-    string pattern = @"(\w+) would (lose|gain) (\d+) happiness units by sitting next to (\w+)\.\r\n";
+    string pattern = @"(\w+) would (lose|gain) (\d+) happiness units by sitting next to (\w+)\.";
     MatchCollection matches = Regex.Matches(pInput, pattern);
 
     foreach (Match match in matches)

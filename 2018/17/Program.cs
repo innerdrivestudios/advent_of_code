@@ -223,7 +223,7 @@ bool BoundariesFound (Vec2i pStart)
 Vec2i faucetLocation = new Vec2i(500, 0);
 faucetLocation += offset;
 
-debug = true;
+debug = false;
 RunDFS(faucetLocation);
 
 HashSet<Vec2i> wet = visited.Where(x => x.Key.Y >= yMin && x.Key.Y <= yMax).Select(x => x.Key).ToHashSet();

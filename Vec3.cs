@@ -110,7 +110,7 @@ public struct Vec3<T> where T: INumber<T>
 	}
 	*/
 	
-	public override bool Equals(object? obj)
+	public override bool Equals(object obj)
 	{
 		if (obj is Vec3<T> other)
 		{

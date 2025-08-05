@@ -24,7 +24,7 @@ Console.WriteLine(
 
 // Now for part 2 ... we also need to check if we can find some kind of pattern just like in the video for part 1
 // Set the following value to true to print the list and see if you can find the pattern yourself ...
-
+/*
 if (false)
 {
     for (int i = 1; i <= 100; i++)
@@ -32,6 +32,7 @@ if (false)
         Console.WriteLine("Amount of elves => " + i + " ==> survivor is : " + BruteForcedPart2.GetSurvivingElf(i));
     }
 }
+*/
 
 // After inspecting this table we see a couple of things...
 // The sequence starts with 1, then 1 with next odd number 3

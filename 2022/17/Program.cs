@@ -43,9 +43,9 @@ Rock GetNextRock ()
 // Start with some artificial boundaries for drawing,
 // and modify them as needed when we add or move a piece...
 
-int minX = 0;
+//int minX = 0;
 int maxX = 6;
-int minY = 0;
+//int minY = 0;
 int maxY = 20;
 
 HashSet<Vec2i> rockPieces = new();		//Keep track of all the rock pieces that are locked down
@@ -72,7 +72,8 @@ Rock SpawnRock ()
     return rock;
 }
 
-// For debug drwaing ...
+/*
+// For debug drawing ...
 void DrawCave ()
 {
 	Console.Clear();
@@ -98,6 +99,7 @@ void DrawCave ()
 		Console.WriteLine();
 	}
 }
+*/
 
 // Moving a piece...
 

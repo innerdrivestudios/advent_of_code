@@ -24,7 +24,6 @@ long[] ConvertStringToBusLineArray (string pInput) {
 (long time, long busLine) FindBusAndDepartureTime (long pEarliestTime, long[] pBusLines)
 {
 	long[] busLines = pBusLines.Where(x => x!= 0).ToArray();
-	long bus = 0;
 
 	while (true)
 	{
@@ -40,12 +39,14 @@ long[] ConvertStringToBusLineArray (string pInput) {
 }
 
 Stopwatch stopwatch = Stopwatch.StartNew();
-var buslongel = FindBusAndDepartureTime(earliestTimestamp, busLines);
-Console.WriteLine("Part 1:"+(buslongel.time - earliestTimestamp) * buslongel.busLine);
+var busLineAndDepartureTime = FindBusAndDepartureTime(earliestTimestamp, busLines);
+Console.WriteLine("Part 1:"+(busLineAndDepartureTime.time - earliestTimestamp) * busLineAndDepartureTime.busLine);
 Console.WriteLine("Calculated in " + stopwatch.ElapsedMilliseconds + " ms.");
 
 // ** Part 2: What is the earliest timestamp such that all of the listed bus IDs
 // depart at offsets matching their positions in the list?
+
+/** 
 
 // First a brute force approach, so we can experiment...
 
@@ -115,7 +116,6 @@ void RunTestData(long[] pBuslines, long pEarliestTime, long pExpectedValue, long
     Console.WriteLine("Running cycle detection:" + (timeStamp2-timeStamp1) + " vs expected " + aggregate);
 }
 
-/** 
 
 Console.WriteLine();
 Console.WriteLine();
@@ -131,7 +131,6 @@ RunTestData(ConvertStringToBusLineArray("7,13,x,x,59,x,31,19"), 0, 1068781,1);
 Console.WriteLine();
 Console.WriteLine();
 
-/**
 // Commented out all this experimentation data, see conclusions below
 
 RunTestData([1], 0, 0, 0);
@@ -216,8 +215,6 @@ RunTestData([3,0,0,0,0,0,0,0,0,7], 1, 54, 1);
 
 RunTestData([3,5], 1, 54, 1);
 RunTestData([0,5,7], 1, 54, 1);
-
-/**
 
 // Some more interesting tests and conclusions:
 
@@ -332,8 +329,6 @@ Console.WriteLine(FirstRepeat((1789*47*37, 1288080), (37*47*1889, 3147071)));
 	//First we'll create two optimized lists where we condense the buslines and their offsets
 	List<long> factors = new();
 	List<long> initialTimes = new();
-
-	int biggestIndex = -1;
 
 	for (long i = 0; i < pFactors.Length; i++)
 	{

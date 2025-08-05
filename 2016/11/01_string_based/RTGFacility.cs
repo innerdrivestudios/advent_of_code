@@ -52,7 +52,6 @@ class RTGFacility {
 
         // If there are generators, but no chips without there generator, we are still safe...
         // Basically the next line says, find chips (x[1] == 'M') where their generator is not in the items set
-        int unpoweredChipsCount = 0;
 
         foreach (string item in pItems)
         {

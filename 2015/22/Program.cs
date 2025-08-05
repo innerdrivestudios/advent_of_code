@@ -57,6 +57,7 @@ RunDijkstraPuzzleSolver(1);
 Console.WriteLine("Solved in: " + stopwatch.ElapsedMilliseconds + " milliseconds");
 stopwatch.Restart();
 
+/*
 void RunInteractiveBattle()
 {
     //Make sure different battles don't interfere with each other
@@ -75,6 +76,7 @@ void RunInteractiveBattle()
 
     Console.WriteLine("\nWinner of the fight: " + battle.GetBattleStatus());
 }
+*/
 
 void RunBruteForcePuzzleSolver (int pBattleCount, int pDamagePerTurn)
 {

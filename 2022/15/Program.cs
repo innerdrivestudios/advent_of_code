@@ -114,7 +114,8 @@ List<Vec2i> GetSensorRanges(int pY)
     // Optimized version added later...
     return MergeRanges(ranges);
 
-    // Not the fastest algorithm, but fast enough, should try and optimize this to make it faster
+    /**
+    // Unoptimized version:
 
     bool condensed = true;
     while (condensed)
@@ -145,6 +146,7 @@ List<Vec2i> GetSensorRanges(int pY)
     }
 
     return ranges;
+    **/
 }
 
 List<Vec2i> MergeRanges(List<Vec2i> ranges)

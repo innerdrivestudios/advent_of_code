@@ -85,7 +85,6 @@ Console.WriteLine("Part 1 - Lowest location: " + finalNumbers.Min());
 // ** Part 2 - The soil numbers are actually ranges ... (of course they are ;))
 
 Stopwatch stopwatch = new Stopwatch();
-long lowest;
 
 /**
 
@@ -93,7 +92,7 @@ long lowest;
 // Treating the seeds input as ranges...
 
 stopwatch.Restart();
-lowest = long.MaxValue;
+long lowest = long.MaxValue;
 
 for (int i = 0; i < seeds.Length - 1; i += 2)
 {

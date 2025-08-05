@@ -147,6 +147,7 @@ void SwapChars (List<char> pInput, int pIndexA, int pIndexB)
     pInput[pIndexB] = tmp;
 }
 
+/*
 void TestMethod (Action<string, List<char>, bool> pFunc, string pInstruction, List <char> pInput, bool pReverse = true)
 {
     List<char> inputClone = new (pInput);
@@ -182,7 +183,7 @@ if (false)
 
     TestMethod(RotateCharBased, "rotate based on position of letter f", passwordToScramble);
 }
-
+*/
 
 // Now actually execute all the instructions
 string Encode (string pPassword)

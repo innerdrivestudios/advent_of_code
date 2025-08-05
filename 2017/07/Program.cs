@@ -118,7 +118,7 @@ void FindBrokenNodeWeight (string pNode, int pSiblingWeight = 0, int pDepth = 0)
 		// dealing with any deviations...
 		Dictionary<int, List<string>> weightToNodesMap = new();
 
-		// Map the total weight of esach child to the child name
+		// Map the total weight of each child to the child name
 		for (int i = 0; i < children.Count; i++)
 		{
 			int weight = GetRecursiveTotalChildWeight(children[i]);

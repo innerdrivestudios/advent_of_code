@@ -151,9 +151,8 @@ class RepairDroid : IIntCodeIO
 
     public void Plot (Vec2i pLocation, char pChar)
     {
-        return;
-        Console.SetCursorPosition(pLocation.X, pLocation.Y);
-        Console.Write(pChar);
+        //Console.SetCursorPosition(pLocation.X, pLocation.Y);
+        //Console.Write(pChar);
     }
 
     public HashSet<Vec2i> GetVisited() { return visited; }

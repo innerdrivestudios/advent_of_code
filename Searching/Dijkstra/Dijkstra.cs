@@ -5,37 +5,37 @@
 public static class Dijkstra
 {
     /// <summary>
-    /// Executes Dijkstra's algorithm to find the lowest-cost path from a starting node to an end node.
-    /// Also returns the cost to reach all visited nodes from the start.
+    /// Executes Dijkstra's algorithm to find the lowest-cost path from a starting node to an
+    /// end node. Also returns the cost to reach all visited nodes from the start.
     /// </summary>
     /// 
     /// <typeparam name="T">The type of the node identifiers (e.g., coordinates, strings, etc.).</typeparam>
     /// 
-    /// <param name="pDijkstraGraphAdapter">Graph adapter that supplies neighbors and their associated costs.</param>
-    /// <param name="pStart">The starting node.</param>
-    /// <param name="pEnd">The destination node.</param>
+    /// <param name="pDijkstraGraphAdapter">
+    ///     Graph adapter that supplies neighbors and their associated costs,
+    ///     checks if the end has been reached 
+    ///     and provides the initial setup of the starting queue, costs and parents.
+    ///  </param>
     /// 
     /// <returns>
     /// A <see cref="DijkstraResult{T}"/> containing the shortest path (if found) and the cost to reach each node.
     /// </returns>
-    public static DijkstraResult<T> Search<T>(IDijkstraGraphAdapter<T> pDijkstraGraphAdapter, T pStart, T pEnd)
+    public static DijkstraResult<T> Search<T>(IDijkstraGraphAdapter<T> pDijkstraGraphAdapter) where T:notnull
     {
         var queue = new PriorityQueue<T, long>();       // Maps nodes to cost priorities
         var costs = new Dictionary<T, long>();          // Tracks the lowest known cost to each node
         var parents = new Dictionary<T, T>();           // Tracks the parent of each node for path reconstruction
 
-        queue.Enqueue(pStart, 0);
-        costs[pStart] = 0;
-        parents[pStart] = pStart;                       // Root node points to itself
+        pDijkstraGraphAdapter.Initialize(queue, costs, parents);
 
         while (queue.Count > 0)
         {
             T currentNode = queue.Dequeue();
             long currentCost = costs[currentNode];
             
-            if (currentNode.Equals(pEnd))
+            if (pDijkstraGraphAdapter.IsDone(currentNode))
             {
-                var path = ReconstructPath(parents, pEnd);
+                var path = ReconstructPath(parents, currentNode);
                 return new DijkstraResult<T> { path = path, costs = costs, totalCost = currentCost };
             }
 
@@ -64,7 +64,7 @@ public static class Dijkstra
     /// <param name="pParentMap">A dictionary mapping each node to its parent node in the search tree.</param>
     /// <param name="pEndNode">The node at the end of the desired path.</param>
     /// <returns>The ordered list of nodes representing the shortest path.</returns>
-    private static List<T> ReconstructPath<T>(Dictionary<T, T> pParentMap, T pEndNode)
+    private static List<T> ReconstructPath<T>(Dictionary<T, T> pParentMap, T pEndNode) where T : notnull
     {
         var path = new List<T>();
         T current = pEndNode;
@@ -88,7 +88,7 @@ public static class Dijkstra
 /// Includes the computed shortest path and cost mapping for all reachable nodes.
 /// </summary>
 /// <typeparam name="T">The type of the nodes in the graph.</typeparam>
-public class DijkstraResult<T>
+public class DijkstraResult<T> where T : notnull
 {
     /// <summary>
     /// The list of nodes in the shortest path from start to end.

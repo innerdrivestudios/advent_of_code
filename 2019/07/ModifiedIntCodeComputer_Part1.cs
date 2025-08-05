@@ -41,7 +41,7 @@
 				// Immediately return the output...
 				return IntCodeUtil.GetValue(pProgram, i + 1, param1Mode);
 
-				i += 2;
+				//i += 2;
 			}
 			else if (opCode == 5)
 			{

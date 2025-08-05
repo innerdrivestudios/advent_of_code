@@ -1,12 +1,12 @@
 //A helper class to easily cycle through different objects...
 
 class Directions<T> {
-	public readonly T[] directions;
+	public readonly List<T> directions;
 
 	private int _index = 0;
 
 	public Directions(T[] pDirections) { 
-		directions = pDirections;
+		directions = new (pDirections);
 	}
 
 	public int index
@@ -42,7 +42,7 @@ class Directions<T> {
 
 	private int WrapValue (int value)
 	{
-		return ((value % directions.Length) + directions.Length) % directions.Length;
+		return ((value % directions.Count) + directions.Count) % directions.Count;
 	}
 	
 }

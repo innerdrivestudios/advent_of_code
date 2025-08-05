@@ -113,7 +113,7 @@ public struct Vec2<T> where T : INumber<T>
 	}
 	*/
 	
-	public override bool Equals(object? obj)
+	public override bool Equals(object obj)
 	{
 		if (obj is Vec2<T> other)
 		{

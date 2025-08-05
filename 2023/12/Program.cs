@@ -29,8 +29,7 @@ Pattern ConvertStringToPattern (string pPattern)
 	);
 }
 
-// ** Part 1: Figure out in how many ways we can complete a pattern
-// so that the pattern matches the checksum.
+// ** Part 1: Figure out in how many ways we can complete a pattern so that the pattern matches the checksum.
 
 // Let's work through an example case:
 //
@@ -210,3 +209,14 @@ long GetPossibleArrangementsCount (Pattern pPattern)
 Console.WriteLine("Part 1:" + patternList.Sum(x => GetPossibleArrangementsCount(x)));
 
 // I wasn't able to solve part 2 yet!
+
+Console.WriteLine(GetPossibleArrangementsCount(ConvertStringToPattern("?###???????? 3,2,1")));
+
+int len = 0;
+foreach (var pattern in  myInput)
+{
+    Console.WriteLine(pattern + "\t\t\t" + GetPossibleArrangementsCount(ConvertStringToPattern(pattern)));
+	len = int.Max(len, pattern.IndexOf(' '));
+}
+
+Console.WriteLine(len);

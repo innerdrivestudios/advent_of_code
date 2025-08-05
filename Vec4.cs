@@ -118,7 +118,7 @@ public struct Vec4<T> where T: INumber<T>
 	}
 	*/
 	
-	public override bool Equals(object? obj)
+	public override bool Equals(object obj)
 	{
 		if (obj is Vec4<T> other)
 		{

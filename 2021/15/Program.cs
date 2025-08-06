@@ -18,7 +18,7 @@ Vec2i end = new Vec2i(cave.width-1, cave.height-1);
 
 // ** Part 1:
 
-var searchResults = Dijkstra.Search(new DijkstraGridAdapterPart1(cave), start, end);
+var searchResults = Dijkstra.Search(new DijkstraGridAdapterPart1(cave, start, end));
 Console.WriteLine("Part 1:" + searchResults.costs[searchResults.path.Last()]);
 
 // ** Part 2:
@@ -52,11 +52,11 @@ biggerCave.Foreach(
 );
 
 end = new Vec2i(biggerCave.width - 1, biggerCave.height - 1);
-searchResults = Dijkstra.Search(new DijkstraGridAdapterPart2(cave), start, end);
+searchResults = Dijkstra.Search(new DijkstraGridAdapterPart2(cave, start, end));
 Console.WriteLine("Part 2:" + searchResults.costs[end]);
 
 // Alternatively we don't generate a bigger map, but encode this in our grid adapter:
 
 end = new Vec2i(cave.width * 5 - 1, cave.height * 5 - 1);
-searchResults = Dijkstra.Search(new DijkstraGridAdapterPart2(cave), start, end);
+searchResults = Dijkstra.Search(new DijkstraGridAdapterPart2(cave, start, end));
 Console.WriteLine("Part 2:" + searchResults.costs[end]);

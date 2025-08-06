@@ -1,18 +1,13 @@
 using Vec2i = Vec2<int>;
 
-public class DijkstraGridAdapterPart2 : IDijkstraGraphAdapter<Vec2i>
+public class DijkstraGridAdapterPart2 : DijkstraGridAdapterPart1
 {
-    private Grid<int> grid;
 
-    // Cardinal directions: right, left, down, up
-    Vec2i [] directions = [new(1, 0), new(-1, 0), new(0, 1), new(0, -1)];
+	public DijkstraGridAdapterPart2(Grid<int> pGrid, Vec2i pStart, Vec2i pEnd) : base(pGrid, pStart, pEnd)
+	{
+	}
 
-    public DijkstraGridAdapterPart2(Grid<int> pGrid)
-    {
-        grid = pGrid;
-    }
-
-    public IDictionary<Vec2i, long> GetNeighborsWithCosts(Vec2i pNode, long pCost)
+	public override IDictionary<Vec2i, long> GetNeighborsWithCosts(Vec2i pNode, long pCost)
     {
         Dictionary<Vec2i, long> neighbors = new();
 
@@ -39,4 +34,5 @@ public class DijkstraGridAdapterPart2 : IDijkstraGraphAdapter<Vec2i>
 
         return neighbors;
     }
+
 }

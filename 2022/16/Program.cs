@@ -12,7 +12,6 @@
 //   Valve .. has flow rate=..; ...
 
 using System.Diagnostics;
-using System.Net.Sockets;
 using System.Text.RegularExpressions;
 
 string[] tunnelReport = File.ReadAllLines(args[0]);
@@ -114,11 +113,11 @@ EdgedGraph<Valve> edgedGraph = new ();
 
 foreach (Valve node in graph.GetNodes())
 {
-    foreach (Valve neighbour in graph.GetNeighbors(node))
+    foreach (Valve neighbor in graph.GetNeighbors(node))
     {
-        Console.WriteLine("Adding " + node.id + " to " + neighbour.id + " with initial cost of 1");
+        Console.WriteLine("Adding " + node.id + " to " + neighbor.id + " with initial cost of 1");
         //Note this is just traversal cost, no flow rate involved here 
-        edgedGraph.AddEdge(node, neighbour, 1, false);
+        edgedGraph.AddEdge(node, neighbor, 1, false);
     }
 }
 
@@ -144,19 +143,19 @@ Console.WriteLine("Optimizing graph...");
 
 foreach (var node in removableNodes)
 {
-    List<Valve> neighbours = edgedGraph.GetNeighbors(node);
-    long totalCost = edgedGraph.GetEdgeCost(node, neighbours[0]) + edgedGraph.GetEdgeCost(node, neighbours[1]);
+    List<Valve> neighbors = edgedGraph.GetNeighbors(node);
+    long totalCost = edgedGraph.GetEdgeCost(node, neighbors[0]) + edgedGraph.GetEdgeCost(node, neighbors[1]);
     edgedGraph.RemoveNode(node);
-    edgedGraph.AddEdge(neighbours[0], neighbours[1], totalCost, true);
+    edgedGraph.AddEdge(neighbors[0], neighbors[1], totalCost, true);
 }
 
 // Let's see if this went ok:
 Console.WriteLine("Optimized graph...");
 foreach (var node in edgedGraph.GetNodes())
 {
-    foreach (var neighbour in edgedGraph.GetNeighbors(node))
+    foreach (var neighbor in edgedGraph.GetNeighbors(node))
     {
-        Console.WriteLine("Edge between:" + node.id + " and " + neighbour.id + " with cost " + edgedGraph.GetEdgeCost(node, neighbour));
+        Console.WriteLine("Edge between:" + node.id + " and " + neighbor.id + " with cost " + edgedGraph.GetEdgeCost(node, neighbor));
     }
 }
 
@@ -169,14 +168,13 @@ Console.WriteLine();
 Console.WriteLine("Calculating all individual path to open costs...");
 EdgedGraph<Valve> costToOpenTable = new();
 List<Valve> allValves = edgedGraph.GetNodes();
-ClassicDijkstraEdgedGraphAdapter<Valve> dijkstraAdapter = new (edgedGraph);
 
 // We don't include paths from X to X and we only need to calculate the cost once
 for (int i = 0; i < allValves.Count-1; i++)
 {
     for (int j = i + 1;  j < allValves.Count; j++)
     {
-        DijkstraResult<Valve> path = Dijkstra.Search(dijkstraAdapter, allValves[i], allValves[j]);
+        DijkstraResult<Valve> path = Dijkstra.Search(new ClassicDijkstraEdgedGraphAdapter<Valve>(edgedGraph, allValves[i], allValves[j]));
         if (path == null) throw new Exception("Not supposed to happen");
 
         Console.WriteLine(allValves[i].id + " to " + allValves[j].id + " path found with cost " + path.totalCost);

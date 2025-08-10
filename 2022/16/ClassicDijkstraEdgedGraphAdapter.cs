@@ -1,14 +1,25 @@
 ﻿class ClassicDijkstraEdgedGraphAdapter<T> : IDijkstraGraphAdapter<T> 
 {
-
     private EdgedGraph<T> edgedGraph;
 
-    public ClassicDijkstraEdgedGraphAdapter(EdgedGraph<T> pEdgedGraph)
+    private T start;
+    private T end;
+
+    public ClassicDijkstraEdgedGraphAdapter(EdgedGraph<T> pEdgedGraph, T pStart, T pEnd)
     {
         edgedGraph = pEdgedGraph;
-    }   
+        start = pStart;
+        end = pEnd;
+    }
 
-    public IDictionary<T, long> GetNeighborsWithCosts(T pNode, long pCost)
+	public void Initialize(PriorityQueue<T, long> pQueue, Dictionary<T, long> pCosts, Dictionary<T, T> pParents)
+	{
+		pQueue.Enqueue(start, 0);
+		pCosts[start] = 0;
+		pParents[start] = start;
+	}
+
+	public IDictionary<T, long> GetNeighborsWithCosts(T pNode, long pCost)
     {
         List<T> neighbors = edgedGraph.GetNeighbors(pNode);
 
@@ -21,4 +32,9 @@
 
         return costs;
     }
+
+	public bool IsDone(T pCurrentNode)
+	{
+		return end.Equals(pCurrentNode);
+	}
 }

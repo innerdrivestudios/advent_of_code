@@ -105,7 +105,8 @@ Console.WriteLine();
 // followed by a 0.5 * N * N search from all nodes to all nodes to figure out the shortest path costs for the paths between them.
 // 2) Don't optimize the input graph, just do the 0.5 * N * N search directly on the input graph
 
-// On the one hand we shouldn't early optimize, but on the other hand, I haven't written an algorithm like 1) yet, so let's do that anyway...
+// On the one hand we shouldn't early optimize, but on the other hand,
+// I haven't written an algorithm like 1) yet, so let's do that anyway...
 
 // First we'll convert our basic graph into an EdgedGraph
 Console.WriteLine("Setting up EdgedGraph");
@@ -193,7 +194,7 @@ foreach (var node in costToOpenTable.GetNodes())
     }
 }
 
-// Next step... starting at A (this luckily already severly limits the starting conditions)...
+// Next step... starting at A (this luckily already severely limits the starting conditions)...
 // Find which combination / order of opening the valves gives the highest end result,
 // while never returning to a graph already opened.
 // Now we don't need to know the order for the final answer, but to calculate the flow rate we do...
@@ -252,8 +253,8 @@ Console.WriteLine("Calculated in " + stopwatch.ElapsedMilliseconds + " milliseco
 
 // ** Part 2: Do the same but now together with an elephant :)
 
-// In other words, we need to divide the valves we can visit between us and the elephant and test the division to see whether 
-// it is the highest ranking. How can we do this? 
+// In other words, we need to divide the valves we can visit between us and the elephant
+// and test the division to see whether it is the highest ranking. How can we do this? 
 //
 // For every node except AA we can make a choice: will we visit this node, or will the elephant visit this node.
 // In other words, lets say we have 4 nodes BB, CC, DD, EE, we can make the following divisions:

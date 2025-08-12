@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\EdgedGraph.cs" Link="EdgedGraph.cs" />
     <Compile Include="..\..\Graph.cs" Link="Graph.cs" />
+    <Compile Include="..\..\Searching\Dijkstra\ClassicDijkstraEdgedGraphAdapter.cs" Link="ClassicDijkstraEdgedGraphAdapter.cs" />
     <Compile Include="..\..\Searching\Dijkstra\Dijkstra.cs" Link="Dijkstra.cs" />
     <Compile Include="..\..\Searching\Dijkstra\IDijkstraGraphAdapter.cs" Link="IDijkstraGraphAdapter.cs" />
   </ItemGroup>

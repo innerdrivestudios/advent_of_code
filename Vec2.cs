@@ -149,6 +149,19 @@ public struct Vec2<T> where T : INumber<T>
 		Y = T.Max(Y, pOther.Y);
 	}
 
+	public static Vec2<T> Min (IEnumerable<Vec2<T>> pSource)
+	{
+        Vec2<T> min = pSource.First();
+		foreach (var p in pSource) min.Min(p);
+		return min;
+    }
+
+    public static Vec2<T> Max(IEnumerable<Vec2<T>> pSource)
+    {
+        Vec2<T> max = pSource.First();
+        foreach (var p in pSource) max.Max(p);
+        return max;
+    }
 
 }
 

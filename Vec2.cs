@@ -136,6 +136,19 @@ public struct Vec2<T> where T : INumber<T>
 		delta.Y *= T.CreateChecked(2 * signedMirror.Y);
 		return this + delta;
 	}
-	
+
+	public void Min (Vec2<T> pOther)
+	{
+		X = T.Min(X, pOther.X);
+		Y = T.Min(Y, pOther.Y);
+	}
+
+	public void Max(Vec2<T> pOther)
+	{
+		X = T.Max(X, pOther.X);
+		Y = T.Max(Y, pOther.Y);
+	}
+
+
 }
 

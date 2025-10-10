@@ -1,25 +1,29 @@
-﻿//Solution for https://adventofcode.com/2015/day/19 (Ctrl+Click in VS to follow link)
+﻿// Solution for https://adventofcode.com/2015/day/19 (Ctrl+Click in VS to follow link)
 
 using System.Data;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-//Your input: a bunch of grammar rules and a sentence to create with this grammar (all the way at the end)
-string myInput = "Al => ThF\r\nAl => ThRnFAr\r\nB => BCa\r\nB => TiB\r\nB => TiRnFAr\r\nCa => CaCa\r\nCa => PB\r\nCa => PRnFAr\r\nCa => SiRnFYFAr\r\nCa => SiRnMgAr\r\nCa => SiTh\r\nF => CaF\r\nF => PMg\r\nF => SiAl\r\nH => CRnAlAr\r\nH => CRnFYFYFAr\r\nH => CRnFYMgAr\r\nH => CRnMgYFAr\r\nH => HCa\r\nH => NRnFYFAr\r\nH => NRnMgAr\r\nH => NTh\r\nH => OB\r\nH => ORnFAr\r\nMg => BF\r\nMg => TiMg\r\nN => CRnFAr\r\nN => HSi\r\nO => CRnFYFAr\r\nO => CRnMgAr\r\nO => HP\r\nO => NRnFAr\r\nO => OTi\r\nP => CaP\r\nP => PTi\r\nP => SiRnFAr\r\nSi => CaSi\r\nTh => ThCa\r\nTi => BP\r\nTi => TiTi\r\ne => HF\r\ne => NAl\r\ne => OMg\r\n\r\nCRnCaSiRnBSiRnFArTiBPTiTiBFArPBCaSiThSiRnTiBPBPMgArCaSiRnTiMgArCaSiThCaSiRnFArRnSiRnFArTiTiBFArCaCaSiRnSiThCaCaSiRnMgArFYSiRnFYCaFArSiThCaSiThPBPTiMgArCaPRnSiAlArPBCaCaSiRnFYSiThCaRnFArArCaCaSiRnPBSiRnFArMgYCaCaCaCaSiThCaCaSiAlArCaCaSiRnPBSiAlArBCaCaCaCaSiThCaPBSiThPBPBCaSiRnFYFArSiThCaSiRnFArBCaCaSiRnFYFArSiThCaPBSiThCaSiRnPMgArRnFArPTiBCaPRnFArCaCaCaCaSiRnCaCaSiRnFYFArFArBCaSiThFArThSiThSiRnTiRnPMgArFArCaSiThCaPBCaSiRnBFArCaCaPRnCaCaPMgArSiRnFYFArCaSiThRnPBPMgAr\r\n";
+// In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
+// and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
+// This value will be processed and passed to the built-in args[0] variable
 
-//Your task: derive some subrules and check if the sentence can be created from the grammar
+// ** Your input: a bunch of grammar rules and a sentence to create with this grammar (all the way at the end)
+string myInput = File.ReadAllText(args[0]).ReplaceLineEndings();
 
-//Step 1.Process the input into the sentence and the grammar rules:
+// ** Part 1: Your task: derive some subrules and check if the sentence can be created from the grammar
 
-//- Split the rules from the sentence
-string[] myInputParts = myInput.Split("\r\n\r\n", StringSplitOptions.RemoveEmptyEntries);
+// Step 1.Process the input into the sentence and the grammar rules:
 
-//- Extract all the rules, since we have a bunch of duplicate keys mapping to values,
-//  not using a dictionary here since it would only complicate things.
-//  So this is a list of shorter keys to longer values, just like the provided input list.
+// - Split the rules from the sentence
+string[] myInputParts = myInput.Split(Environment.NewLine + Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+
+// - Extract all the rules, since we have a bunch of duplicate keys mapping to values,
+//   not using a dictionary here since it would only complicate things.
+//   So this is a list of shorter keys to longer values, just like the provided input list.
 List<(string key, string value)> rules =
 	myInputParts[0].
-	Split("\r\n", StringSplitOptions.RemoveEmptyEntries).
+	Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).
 	Select(x => x.Split(" => ", StringSplitOptions.RemoveEmptyEntries)).
 	Select(x => (x[0], x[1])).
 	ToList(); 
@@ -37,7 +41,7 @@ Console.WriteLine(
 );
 
 
-//Applies all the given rules to see how many different variants (next steps) of the input string can be constructed
+// Applies all the given rules to see how many different variants (next steps) of the input string can be constructed
 int DistinctMoleculeCountAfterOneReplacement(string pInput, List<(string, string)> pRules)
 {
 	HashSet<string> uniqueResults = new HashSet<string>();
@@ -50,7 +54,7 @@ int DistinctMoleculeCountAfterOneReplacement(string pInput, List<(string, string
 	return uniqueResults.Count;
 }
 
-//Apply a single rule to the input (which can match countless times and result in many different strings)
+// Apply a single rule to the input (which can match countless times and result in many different strings)
 void ApplyRule((string key, string value) pRule, string pInput, HashSet<string> pResults)
 {
 	Regex replacer = new Regex(pRule.key);

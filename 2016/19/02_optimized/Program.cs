@@ -24,6 +24,7 @@ Console.WriteLine(
 
 // Now for part 2 ... we also need to check if we can find some kind of pattern just like in the video for part 1
 // Set the following value to true to print the list and see if you can find the pattern yourself ...
+
 /*
 if (false)
 {

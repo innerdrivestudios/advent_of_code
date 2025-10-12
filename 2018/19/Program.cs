@@ -1,6 +1,7 @@
 ﻿//Solution for https://adventofcode.com/2018/day/19 (Ctrl+Click in VS to follow link)
 
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using Instruction = (string op, long[] operands);
 
 // In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
@@ -204,6 +205,12 @@ Console.WriteLine("Part 1: " + register[0]);
 
 // ** Part 2: Run it again, without resetting any values, except the register 0 needs to start with value 1
 
+
+/*
+// Used for debugging...
+
+long value = 0;
+
 using (FileStream fs = new FileStream("d:\\test.txt", FileMode.Create))
 {
     using (StreamWriter sw = new StreamWriter(fs))
@@ -213,7 +220,7 @@ using (FileStream fs = new FileStream("d:\\test.txt", FileMode.Create))
 
         register = new long[6];
         register[registerInstructionPointerIndex] = 0;
-        register[0] = 0;
+        register[0] = 1;
 
         HashSet<string> visited = new HashSet<string>();
 
@@ -223,22 +230,57 @@ using (FileStream fs = new FileStream("d:\\test.txt", FileMode.Create))
             if (instructionPointer < 0 || instructionPointer >= instructions.Count) break;
 
             Instruction instruction = instructions[instructionPointer];
-
-            Console.Write(
-               $"ip {instructionPointer}\t\t[{string.Join(",", register)}]\t\t{instruction.op}\t\t{string.Join(",", instruction.operands)}\t\t");
+           
+            //Console.Write(
+            //   $"ip {instructionPointer}"                   .PadRight(8)       +
+            //   $"[{string.Join("\t", register)}]\t"                            +
+            //   $"{instruction.op} "+
+            //   $"{string.Join(",", instruction.operands)}\t" 
+            //);
 
             mappedOperations[instruction.op](register, instruction.operands);
-            Console.WriteLine($"[{string.Join("\t", register)}]");
+            //Console.WriteLine($"[{string.Join("\t", register)}]");
             register[registerInstructionPointerIndex]++;
 
-            //Console.ReadKey();
+            if (register[0] != value)
+            {
+                Console.WriteLine(register[0]);
+                value = register[0];
+            }
 
-            //string key = instructionPointer + " " + instruction.op + string.Join(",", instruction.operands) + " " + string.Join(",", register);
-            //if (visited.Contains(key)) break;
-            //visited.Add(key);
+            if (value > 1) break;
         }
 
         Console.WriteLine("Part 2: " + register[0]);
-
     }
 }
+*/
+
+// Ok so after inspecting the program and its output for a long looong (looooong) time, this is what I discovered.
+// The program is basically first generating a number:
+// With the register set to 0 that was 892 in my case, 
+// With the register set to 1 that was 10551292 in my case
+
+// After that it runs, tries to find all factors of that numbers and sums them:
+
+long GenerateFactorSumFor (long pNumber)
+{
+    long total = 0;
+
+    for (long i = 1; i <= pNumber; i++)
+    {
+        if (pNumber % i == 0) total += i;
+    }
+
+    return total;
+}
+
+Console.WriteLine("Part 1 revisited:" + GenerateFactorSumFor(892));
+Console.WriteLine("Part 2:" + GenerateFactorSumFor(10551292));
+
+
+
+
+
+
+

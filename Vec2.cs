@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Runtime.CompilerServices;
 
 public struct Vec2<T> where T : INumber<T>
 {
@@ -162,6 +163,19 @@ public struct Vec2<T> where T : INumber<T>
         foreach (var p in pSource) max.Max(p);
         return max;
     }
+
+	public T this[int index]
+	{
+		get
+		{
+			switch (index)
+			{
+				case 0: return X;
+				case 1: return Y;
+				default: throw new InvalidOperationException();
+			}
+		}
+	}
 
 }
 

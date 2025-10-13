@@ -1,4 +1,4 @@
-﻿//Solution for https://adventofcode.com/2016/day/20 (Ctrl+Click in VS to follow link)
+﻿// Solution for https://adventofcode.com/2016/day/20 (Ctrl+Click in VS to follow link)
 
 // In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
@@ -6,13 +6,7 @@
 
 // ** Your input: a list of ranges of invalid ip addresses
 
-using System.Formats.Asn1;
-
-string myInput = File.ReadAllText(args[0]);
-
-//myInput = "5-8\r\n0-2\r\n4-7";
-
-myInput = myInput.ReplaceLineEndings(Environment.NewLine);
+string myInput = File.ReadAllText(args[0]).ReplaceLineEndings();
 
 // ** Part 1: Find the first valid IP address
 
@@ -56,13 +50,14 @@ Console.WriteLine("Part 1 - First valid IP:" + (ranges[0].end + 1));
 // ** Part 2 - How many IPs are allowed by the blacklist?
 
 // This one is easy, now that we have all the ranges, just subtract them from uint.MaxValue ...
-// BUT one tricky thing :), the ranges are INCLUSIVE, so 0-uint.MaxValue is actually equal to uint.MaxValue PLUS 1 different ip addresses!
+// EXCEPT FOR one tricky thing :), the ranges are INCLUSIVE, so 0-uint.MaxValue is actually equal to
+// uint.MaxValue PLUS 1 different ip addresses!
 
 uint allowed = uint.MaxValue;
 
 foreach (var range in ranges)
 {
-    //In addition, these ranges are also inclusive, e.g 1 - 4 includes 4 elements, so we need to do:
+    // In addition, these ranges are also inclusive, e.g 1 - 4 includes 4 elements, so we need to do:
     allowed -= (range.end - range.start + 1);
 }
 

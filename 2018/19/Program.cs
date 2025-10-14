@@ -1,7 +1,5 @@
 ﻿//Solution for https://adventofcode.com/2018/day/19 (Ctrl+Click in VS to follow link)
 
-using System.Runtime.CompilerServices;
-using System.Runtime.ExceptionServices;
 using Instruction = (string op, long[] operands);
 
 // In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties

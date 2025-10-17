@@ -1,12 +1,23 @@
-﻿//Solution for https://adventofcode.com/2015/day/22 (Ctrl+Click in VS to follow link)
-
-//Contrary to most other challenges, I decided to first try and go full blown OO on this.
-//Even though it might be possible to finish this challenge with dynamic tuples etc, can't imagine it will be very readable.
-//Little bit verbose, but pretty fast in the end.
-
-//Setup the basic given data:
+﻿// Solution for https://adventofcode.com/2015/day/22 (Ctrl+Click in VS to follow link)
 
 using System.Diagnostics;
+
+// In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
+// and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
+// This value will be processed and passed to the built-in args[0] variable
+
+// ** Your input: some stats (hitpoints and damage)
+
+string[] myInput = File.ReadAllLines(args[0]);
+Dictionary<string, int> stats = myInput
+    .Select(x => x.Split([": "], StringSplitOptions.RemoveEmptyEntries))
+    .ToDictionary(x => x[0], x => int.Parse(x[1]));
+
+// Contrary to most other challenges, I decided to first try and go full blown OO on this.
+// Even though it might be possible to finish this challenge with dynamic tuples etc, can't imagine it will be very readable.
+// Little bit verbose, but pretty fast in the end.
+
+// Setup the basic given data:
 
 Player player = new Player(50, 0, 500);
 player.AddSpell(new MagicMissile());
@@ -15,44 +26,46 @@ player.AddSpell(new Shield());
 player.AddSpell(new Poison());
 player.AddSpell(new Recharge());
 
-Boss boss = new Boss (51, 0, 9);
+Boss boss = new Boss(stats["Hit Points"], 0, stats["Damage"]);
 
 Battle battle = new Battle(player, boss);
 
-//First thing I did was build an interactive version to play around for testing...
-//RunInteractiveBattle();
+// First thing I did was build an interactive version to play around for testing...
+// RunInteractiveBattle();
 
 Console.WriteLine("");
 
 Stopwatch stopwatch = Stopwatch.StartNew();
 
-//Second step, try a brute force approach, which works ok-ish, but still fails occasionally (numbers are too high)...
+// Second step, try a brute force approach, which works ok-ish, but still fails occasionally (numbers are too high)...
 
 Console.WriteLine("Brute force through a 10000 random battles");
 Console.WriteLine("============================================");
 
-Console.WriteLine("Mana needed with 0 additional player dmg per turn:");
+Console.WriteLine("Part 1: Mana needed with 0 additional player dmg per turn:");
 RunBruteForcePuzzleSolver(10000, 0);
 Console.WriteLine("Solved in: "+stopwatch.ElapsedMilliseconds + " milliseconds");
 stopwatch.Restart();
 
-Console.WriteLine("Mana needed with 1 additional player dmg per turn:");
+Console.WriteLine();
+Console.WriteLine("Part 2: Mana needed with 1 additional player dmg per turn:");
 RunBruteForcePuzzleSolver(10000, 1);
 Console.WriteLine("Solved in: " + stopwatch.ElapsedMilliseconds + " milliseconds");
 stopwatch.Restart();
 
 Console.WriteLine("");
 
-//3rd try is a charm: Dijkstra approach, which is way faster and more accurate...
+// 3rd try is a charm: Dijkstra approach, which is way faster and more accurate...
 
 Console.WriteLine("Dijkstra:");
 Console.WriteLine("============================================");
-Console.WriteLine("Mana needed with 0 additional player dmg per turn:");
+Console.WriteLine("Part 1: Mana needed with 0 additional player dmg per turn:");
 RunDijkstraPuzzleSolver(0);
 Console.WriteLine("Solved in: " + stopwatch.ElapsedMilliseconds + " milliseconds");
 stopwatch.Restart();
 
-Console.WriteLine("Mana needed with 1 additional player dmg per turn:");
+Console.WriteLine();
+Console.WriteLine("Part 2: Mana needed with 1 additional player dmg per turn:");
 RunDijkstraPuzzleSolver(1);
 Console.WriteLine("Solved in: " + stopwatch.ElapsedMilliseconds + " milliseconds");
 stopwatch.Restart();

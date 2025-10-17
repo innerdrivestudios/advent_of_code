@@ -1,6 +1,6 @@
 Input: 11 10 9 8 7 5 4 3 2 1
 
-Task: find the shortest combination of numbers that sum up to X where X is the sum of the list / 3
+Task: find the shortest combination of numbers that sum up 3 sets of X where X is the sum of the list / 3
 
 Approach:
 	Iterate over each number in the list in the original list

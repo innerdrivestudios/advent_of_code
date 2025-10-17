@@ -1,15 +1,14 @@
-﻿//Solution for https://adventofcode.com/2015/day/23 (Ctrl+Click in VS to follow link)
+﻿// Solution for https://adventofcode.com/2015/day/23 (Ctrl+Click in VS to follow link)
 
-string myInput = "jio a, +22\r\ninc a\r\ntpl a\r\ntpl a\r\ntpl a\r\ninc a\r\ntpl a\r\ninc a\r\ntpl a\r\ninc a\r\ninc a\r\ntpl a\r\ninc a\r\ninc a\r\ntpl a\r\ninc a\r\ninc a\r\ntpl a\r\ninc a\r\ninc a\r\ntpl a\r\njmp +19\r\ntpl a\r\ntpl a\r\ntpl a\r\ntpl a\r\ninc a\r\ninc a\r\ntpl a\r\ninc a\r\ntpl a\r\ninc a\r\ninc a\r\ntpl a\r\ninc a\r\ninc a\r\ntpl a\r\ninc a\r\ntpl a\r\ntpl a\r\njio a, +8\r\ninc b\r\njie a, +4\r\ntpl a\r\ninc a\r\njmp +2\r\nhlf a\r\njmp -7\r\n";
-string[] instructions = myInput.Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+// In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
+// and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
+// This value will be processed and passed to the built-in args[0] variable
 
-ulong[] registersPart1 = [0,0];
-RunProgram(registersPart1, instructions);
-Console.WriteLine("Part 1: Value of register B after executing the program:" + registersPart1[1]);
+// ** Your input: a kind of assembly program 
 
-ulong[] registersPart2 = [1, 0];
-RunProgram(registersPart2, instructions);
-Console.WriteLine("Part 2: Value of register B after executing the program:" + registersPart2[1]);
+string[] myInput = File.ReadAllLines(args[0]);
+
+// Defining some helper methods to execute these instructions...
 
 void RunProgram(ulong[] pRegisters, string[] pInstructions)
 {
@@ -20,7 +19,6 @@ void RunProgram(ulong[] pRegisters, string[] pInstructions)
         string instruction = pInstructions[instructionPointer];
         int offset = ExecuteInstruction(instruction, pRegisters);
         instructionPointer += offset;
-        //Console.WriteLine(instruction + " executed -> " + instructionPointer + " | "+string.Join(",", pRegisters));
     }
 }
 
@@ -46,3 +44,15 @@ int ExecuteInstruction(string pInstruction, ulong[] pRegisters)
     //default increase of the instructions pointer
     return 1;
 }
+
+// ** Part 1:
+
+ulong[] registersPart1 = [0, 0];
+RunProgram(registersPart1, myInput);
+Console.WriteLine("Part 1: Value of register B after executing the program:" + registersPart1[1]);
+
+// ** Part 2:
+
+ulong[] registersPart2 = [1, 0];
+RunProgram(registersPart2, myInput);
+Console.WriteLine("Part 2: Value of register B after executing the program:" + registersPart2[1]);

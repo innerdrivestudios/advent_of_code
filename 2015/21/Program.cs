@@ -1,24 +1,27 @@
-﻿//Solution for https://adventofcode.com/2015/day/21 (Ctrl+Click in VS to follow link)
+﻿// Solution for https://adventofcode.com/2015/day/21 (Ctrl+Click in VS to follow link)
 
 using Gear = (int cost, int damage, int armor);
 using Stats = (int health, int damage, int armor);
+// Would love to define using Loadout = (Gear, Gear, Gear, Gear) here as well, but we can't in top level C# :)
 
-//Would love to define using Loadout = (Gear, Gear, Gear, Gear) here, but we can't in top level C# :)
+// In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
+// and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
+// This value will be processed and passed to the built-in args[0] variable
 
-//Your input: a whole list of gear available from the gear shop
+// ** Your input: some stats (hitpoints, damage and armor)
 
-/*
-Weapons: Cost Damage  Armor
-Dagger        8     4       0
-Shortsword   10     5       0
-Warhammer    25     6       0
-Longsword    40     7       0
-Greataxe     74     8       0
-*/
+string[] myInput = File.ReadAllLines(args[0]);
+Dictionary<string, int> stats = myInput
+	.Select (x => x.Split([": "], StringSplitOptions.RemoveEmptyEntries))
+	.ToDictionary(x => x[0], x => int.Parse(x[1]));
 
-//You must use one weapon
+// Apart from the input, we need to define some tables:
+
+// You must use one weapon
+// (Note that the actual names of the weapons don't matter)
 List<Gear> weapons = new List<Gear> ()
 {
+	//Cost   //Dmg    //Armor
 	( 8,     4,       0),
 	(10,     5,       0),
 	(25,     6,       0),
@@ -26,19 +29,11 @@ List<Gear> weapons = new List<Gear> ()
 	(74,     8,       0),
 };
 
-/*
-Armor:      Cost Damage  Armor
-NoArmor      0      0       0
-Leather      13     0       1
-Chainmail    31     0       2
-Splintmail   53     0       3
-Bandedmail   75     0       4
-Platemail   102     0       5
-*/
-
-//Armor is optional
+// Armor is optional
+// (Note that the actual names of the armor don't matter)
 List<Gear> armor = new List<Gear>()
 {
+	//Cost   //Dmg    //Armor
 	(  0 ,     0,       0),
 	(  13,     0,       1),
 	(  31,     0,       2),
@@ -47,18 +42,8 @@ List<Gear> armor = new List<Gear>()
 	( 102,     0,       5)
 };
 
-/*
-Rings:      Cost Damage  Armor
-NoRing		  0     0       0
-Damage +1    25     1       0
-Damage +2    50     2       0
-Damage +3   100     3       0
-Defense +1   20     0       1
-Defense +2   40     0       2
-Defense +3   80     0       3
-*/
-
-//Rings are optional, but each ring is available only once
+// Rings are optional, but each ring is available only once
+// (Note that the actual names of the rings don't matter)
 List<Gear> rings = new List<Gear>()
 {
 	(  0,     0,       0),
@@ -70,9 +55,9 @@ List<Gear> rings = new List<Gear>()
 	( 80,     0,       3)
 };
 
-//Your task: calculate the cheapest gear to win the fight and the most expensive gear to lose the fight :)
+// Your tasks: Calculate the cheapest gear to win the fight (Part 1) and the most expensive gear to lose the fight (Part 2)
 
-//Generate all possible gear configurations
+// To get started, we'll first generate all possible gear configurations:
 List<(Gear weapon, Gear armor, Gear ring1, Gear ring2)> gearConfigurations = GenerateAllPossibleGearConfigurations();
 
 List<(Gear weapon, Gear armor, Gear ring1, Gear ring2)> GenerateAllPossibleGearConfigurations() {
@@ -101,16 +86,46 @@ List<(Gear weapon, Gear armor, Gear ring1, Gear ring2)> GenerateAllPossibleGearC
 	return gearConfigurations;
 }
 
-Part1_CheapestGearToWinTheFight();
-Part2_MostExpensiveGearToLoseTheFight();
+// Then we'll define some helper functions to get the stats for a loadout
+
+Stats GetStats((Gear weapon, Gear armor, Gear ring1, Gear ring2) pLoadout, int pHealth)
+{
+    Stats myStats;
+    myStats.armor = pLoadout.weapon.armor + pLoadout.armor.armor + pLoadout.ring1.armor + pLoadout.ring2.armor;
+    myStats.damage = pLoadout.weapon.damage + pLoadout.armor.damage + pLoadout.ring1.damage + pLoadout.ring2.damage;
+    myStats.health = pHealth;
+    return myStats;
+}
+
+// The cost for a load out
+
+int GetLoadoutCost((Gear weapon, Gear armor, Gear ring1, Gear ring2) pLoadout)
+{
+    return pLoadout.weapon.cost + pLoadout.armor.cost + pLoadout.ring1.cost + pLoadout.ring2.cost;
+}
+
+// And a method to run the battle according to the rules of the game
+bool RunBattle(Stats pPlayer, Stats pBoss)
+{
+    while (true)
+    {
+        int playerDmgDealt = Math.Max(1, pPlayer.damage - pBoss.armor);
+        pBoss.health -= playerDmgDealt;
+        //Console.WriteLine($"- The player deals {pPlayer.damage} - {pBoss.armor} = {playerDmgDealt} damage; the boss goes down to {pBoss.health} hit points.");
+        if (pBoss.health <= 0) return true;
+
+        int bossDmgDealth = Math.Max(1, pBoss.damage - pPlayer.armor);
+        pPlayer.health -= bossDmgDealth;
+        //Console.WriteLine($"- The boss deals {pBoss.damage} - {pPlayer.armor} = {bossDmgDealth} damage; the player goes down to {pPlayer.health} hit points.");
+        if (pPlayer.health <= 0) return false;
+    }
+}
+
+// ** Part 1:
 
 void Part1_CheapestGearToWinTheFight()
 {
-    //Boss stats
-    //Hit Points: 103
-    //Damage: 9
-    //Armor: 2
-    Stats bossStats = (103, 9, 2);
+    Stats bossStats = (stats["Hit Points"], stats["Damage"], stats["Armor"]);
 
     //Sort all configurations based on their cost from cheapest to most expensive
     gearConfigurations.Sort((a, b) => GetLoadoutCost(a).CompareTo(GetLoadoutCost(b)));
@@ -119,16 +134,19 @@ void Part1_CheapestGearToWinTheFight()
     int gearIndex = 0;
     while (!RunBattle(GetStats(gearConfigurations[gearIndex], 100), bossStats)) gearIndex++;
 
-    Console.WriteLine("Won the battle for a cost of " + GetLoadoutCost(gearConfigurations[gearIndex]));
+    Console.WriteLine("Part 1: Won the battle for a cost of " + GetLoadoutCost(gearConfigurations[gearIndex]));
 }
+
+Part1_CheapestGearToWinTheFight();
+
+
+// ** Part 2:
+
+Part2_MostExpensiveGearToLoseTheFight();
 
 void Part2_MostExpensiveGearToLoseTheFight()
 {
-    //Boss stats
-    //Hit Points: 103
-    //Damage: 9
-    //Armor: 2
-    Stats bossStats = (103, 9, 2);
+    Stats bossStats = (stats["Hit Points"], stats["Damage"], stats["Armor"]);
 
     //sort all configurations based on their cost from most expensive to cheapest
     gearConfigurations.Sort((a, b) => GetLoadoutCost(b).CompareTo(GetLoadoutCost(a)));
@@ -137,37 +155,6 @@ void Part2_MostExpensiveGearToLoseTheFight()
     int gearIndex = 0;
     while (RunBattle(GetStats(gearConfigurations[gearIndex], 100), bossStats)) gearIndex++;
 
-    Console.WriteLine("Lost the battle for a cost of " + GetLoadoutCost(gearConfigurations[gearIndex]));
-}
-
-Stats GetStats ((Gear weapon, Gear armor, Gear ring1, Gear ring2) pLoadout, int pHealth)
-{
-	Stats myStats;
-	myStats.armor = pLoadout.weapon.armor+pLoadout.armor.armor+pLoadout.ring1.armor + pLoadout.ring2.armor;
-	myStats.damage = pLoadout.weapon.damage + pLoadout.armor.damage + pLoadout.ring1.damage + pLoadout.ring2.damage;
-	myStats.health = pHealth;
-	return myStats;
-}
-
-int GetLoadoutCost ((Gear weapon, Gear armor, Gear ring1, Gear ring2) pLoadout)
-{
-	return pLoadout.weapon.cost + pLoadout.armor.cost + pLoadout.ring1.cost + pLoadout.ring2.cost;
-}
-
-//Run the battle according to the rules of the game
-bool RunBattle (Stats pPlayer, Stats pBoss)
-{
-	while (true)
-	{
-		int playerDmgDealt = Math.Max(1, pPlayer.damage - pBoss.armor);
-		pBoss.health -= playerDmgDealt;
-		//Console.WriteLine($"- The player deals {pPlayer.damage} - {pBoss.armor} = {playerDmgDealt} damage; the boss goes down to {pBoss.health} hit points.");
-		if (pBoss.health <= 0) return true;
-
-		int bossDmgDealth = Math.Max(1, pBoss.damage - pPlayer.armor);
-		pPlayer.health -= bossDmgDealth;
-		//Console.WriteLine($"- The boss deals {pBoss.damage} - {pPlayer.armor} = {bossDmgDealth} damage; the player goes down to {pPlayer.health} hit points.");
-		if (pPlayer.health <= 0) return false;
-	}
+    Console.WriteLine("Part 2: Lost the battle for a cost of " + GetLoadoutCost(gearConfigurations[gearIndex]));
 }
 

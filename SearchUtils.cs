@@ -96,7 +96,7 @@ static class SearchUtils
     /// <param name="pParentMap">A dictionary mapping each node to its parent in the search path.</param>
     /// <param name="pEndNode">The end node whose path should be reconstructed.</param>
     /// 
-    /// <returns>A list of nodes representing the path from the start node to the end node (EXCLUDING THE START NODE).</returns>
+    /// <returns>A list of nodes representing the path from the start node to the end node (INCLUDING THE START NODE).</returns>
     public static List<T> GetPath<T>(Dictionary<T, T> pParentMap, T pEndNode)
     {
         List<T> result = new();

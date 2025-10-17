@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\GraphGridAdapter.cs" Link="GraphGridAdapter.cs" />
+    <Compile Include="..\..\Grid.cs" Link="Grid.cs" />
+    <Compile Include="..\..\IGraph.cs" Link="IGraph.cs" />
+    <Compile Include="..\..\ListExtensions.cs" Link="ListExtensions.cs" />
+    <Compile Include="..\..\SearchUtils.cs" Link="SearchUtils.cs" />
+    <Compile Include="..\..\Vec2.cs" Link="Vec2.cs" />
+  </ItemGroup>
+
+</Project>

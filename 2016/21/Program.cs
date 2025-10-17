@@ -1,4 +1,4 @@
-﻿//Solution for https://adventofcode.com/2016/day/21 (Ctrl+Click in VS to follow link)
+﻿// Solution for https://adventofcode.com/2016/day/21 (Ctrl+Click in VS to follow link)
 
 // In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 

@@ -131,8 +131,6 @@ while (queue.Count > 0)
 
     if (current.X == target.X && current.Y == target.Y)
     {
-        //if we are not wearing the torch once we are at the target, equip it 
-        //if (current.Z != 2) cost += 7;
         Console.WriteLine("Part 2: " + cost);
         break;
     }
@@ -161,7 +159,7 @@ while (queue.Count > 0)
             int newCost = cost + ((current.Z == next.Z) ? 1 : 8);
 
             // Coming in from different directions might alter the total cost
-            // So only if we find a same or more expensive path, we skip it
+            // So only if we find a same or more expensive path, we skip it otherwise we overwrite/add it
             if (costs.ContainsKey(next) && newCost >= costs[next])
             {
                 continue;

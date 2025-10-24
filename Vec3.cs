@@ -148,6 +148,34 @@ public struct Vec3<T> where T: INumber<T>
 		}
 	}
 
+	public void Min(Vec3<T> pOther)
+	{
+		X = T.Min(X, pOther.X);
+		Y = T.Min(Y, pOther.Y);
+		Z = T.Min(Z, pOther.Z);
+	}
+
+	public void Max(Vec3<T> pOther)
+	{
+		X = T.Max(X, pOther.X);
+		Y = T.Max(Y, pOther.Y);
+		Z = T.Max(Z, pOther.Z);
+	}
+
+	public static Vec3<T> Min(IEnumerable<Vec3<T>> pSource)
+	{
+		Vec3<T> min = pSource.First();
+		foreach (var p in pSource) min.Min(p);
+		return min;
+	}
+
+	public static Vec3<T> Max(IEnumerable<Vec3<T>> pSource)
+	{
+		Vec3<T> max = pSource.First();
+		foreach (var p in pSource) max.Max(p);
+		return max;
+	}
+
 
 }
 

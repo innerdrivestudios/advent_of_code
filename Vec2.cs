@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using System.Runtime.CompilerServices;
 
 public struct Vec2<T> where T : INumber<T>
 {

@@ -2,22 +2,22 @@
 // so we can track edge cost NOT based on distance.
 
 
-public class EdgedGraph<T> 
+public class EdgedGraph<NodeType, EdgeData> 
 {
 	//We need two nodes, to get their cost...
-	private Dictionary<T, Dictionary<T, long>> adjacencyMatrix;
+	private Dictionary<NodeType, Dictionary<NodeType, EdgeData>> adjacencyMatrix;
 
 	public EdgedGraph()
 	{
 		adjacencyMatrix = new ();
 	}
 
-	public void AddNode(T pNode)
+	public void AddNode(NodeType pNode)
 	{
 		if (!adjacencyMatrix.ContainsKey(pNode)) adjacencyMatrix[pNode] = new ();
 	}
 
-    public void RemoveNode(T pNode)
+    public void RemoveNode(NodeType pNode)
     {
         if (adjacencyMatrix.ContainsKey(pNode))
         {
@@ -30,30 +30,30 @@ public class EdgedGraph<T>
         }
     }
 
-    public void AddEdge(T pFromNode, T pToNode, long pCost, bool pBiDirectional = true)
+    public void AddEdge(NodeType pFromNode, NodeType pToNode, EdgeData pEdgeData, bool pBiDirectional = true)
 	{
 		//Ensure the from node is there
 		AddNode(pFromNode);
-		adjacencyMatrix[pFromNode][pToNode] = pCost;
+		adjacencyMatrix[pFromNode][pToNode] = pEdgeData;
 
 		if (pBiDirectional)
 		{
 			AddNode(pToNode);
-			adjacencyMatrix[pToNode][pFromNode] = pCost;
+			adjacencyMatrix[pToNode][pFromNode] = pEdgeData;
 		}
 	}
 
-	public List<T> GetNodes()
+	public List<NodeType> GetNodes()
 	{
-		return new List<T>(adjacencyMatrix.Keys);
+		return new List<NodeType>(adjacencyMatrix.Keys);
 	}
 
-	public List<T> GetNeighbors(T pNode)
+	public List<NodeType> GetNeighbors(NodeType pNode)
 	{
-		return new List<T>(adjacencyMatrix[pNode].Keys);
+		return new List<NodeType>(adjacencyMatrix[pNode].Keys);
 	}
 
-	public long GetEdgeCost(T pNodeA, T pNodeB)
+	public EdgeData GetEdgeCost(NodeType pNodeA, NodeType pNodeB)
 	{
 		// Note we don't do any existence checks!!
 		return adjacencyMatrix[pNodeA][pNodeB];

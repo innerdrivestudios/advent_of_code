@@ -1,11 +1,11 @@
 ﻿class ClassicDijkstraEdgedGraphAdapter<T> : IDijkstraGraphAdapter<T> 
 {
-    private EdgedGraph<T> edgedGraph;
+    private EdgedGraph<T, long> edgedGraph;
 
     private T start;
     private T end;
 
-    public ClassicDijkstraEdgedGraphAdapter(EdgedGraph<T> pEdgedGraph, T pStart, T pEnd)
+    public ClassicDijkstraEdgedGraphAdapter(EdgedGraph<T, long> pEdgedGraph, T pStart, T pEnd)
     {
         edgedGraph = pEdgedGraph;
         start = pStart;

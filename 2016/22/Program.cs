@@ -106,7 +106,6 @@ void PrintGrid ()
 Vec2i currentNodePosition = new Vec2i(maxCoord.x, 0);
 Vec2i targetNodePosition = new Vec2i(0, 0);
 
-bool failed = false;
 long movedExecuted = 0;
 
 while (currentNodePosition != targetNodePosition)
@@ -135,7 +134,7 @@ while (currentNodePosition != targetNodePosition)
         {
             //Console.WriteLine("Failed...");
 
-            failed = true;
+            //failed = true;
             break;
         }
         else
@@ -164,8 +163,8 @@ while (currentNodePosition != targetNodePosition)
 
     currentNodePosition = nextNodePosition;
 
-   // PrintGrid();
-   // Console.ReadKey();
+    //PrintGrid();
+    //Console.ReadKey();
 }
 
 List<Vec2i> FindShortestPathToClear (Vec2i pNodeToClear, Vec2i pBlocked)

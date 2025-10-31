@@ -110,7 +110,7 @@ Console.WriteLine();
 
 // First we'll convert our basic graph into an EdgedGraph
 Console.WriteLine("Setting up EdgedGraph");
-EdgedGraph<Valve> edgedGraph = new ();
+EdgedGraph<Valve, long> edgedGraph = new ();
 
 foreach (Valve node in graph.GetNodes())
 {
@@ -167,7 +167,7 @@ foreach (var node in edgedGraph.GetNodes())
 
 Console.WriteLine();
 Console.WriteLine("Calculating all individual path to open costs...");
-EdgedGraph<Valve> costToOpenTable = new();
+EdgedGraph<Valve, long> costToOpenTable = new();
 List<Valve> allValves = edgedGraph.GetNodes();
 
 // We don't include paths from X to X and we only need to calculate the cost once
@@ -201,7 +201,7 @@ foreach (var node in costToOpenTable.GetNodes())
 // We could keep track of this on the Valve, but since we are searching over a ton of different options,
 // it is better to keep this data out of the Valve instance itself
 
-long GetBiggestFlowRate (EdgedGraph<Valve> pCostToOpenTable, Dictionary<Valve, int> pValveOpenTimes, Valve pLastValveOpened, int pEndTime)
+long GetBiggestFlowRate (EdgedGraph<Valve, long> pCostToOpenTable, Dictionary<Valve, int> pValveOpenTimes, Valve pLastValveOpened, int pEndTime)
 {
     long highestFlowRate = GetFlowRateForValveSetAtTime(pValveOpenTimes, pEndTime);
 
@@ -289,7 +289,7 @@ Console.WriteLine("Calculated in " + stopwatch.ElapsedMilliseconds + " milliseco
 // To actually implement this, we'll rewrite the method above to also take a dictionary of valves->valveindex, a bitmask and an inverter mask:
 
 long GetBiggestFlowRatePart2 (
-        EdgedGraph<Valve> pCostToOpenTable, Dictionary<Valve, int> pValveOpenTimes, Valve pLastValveOpened, int pEndTime,
+        EdgedGraph<Valve, long> pCostToOpenTable, Dictionary<Valve, int> pValveOpenTimes, Valve pLastValveOpened, int pEndTime,
         Dictionary<Valve, int> pAllowedValves, int pBitMask, int pNegationMask
     )
 {

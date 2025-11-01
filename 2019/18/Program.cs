@@ -3,12 +3,12 @@
 using Vec2i = Vec2<int>;
 using System.Diagnostics;
 
-// SearchNode describes:
+// SearchNodePart1 describes:
 // - at which key we are at (a-z),
 // - which keys we have collected (a - z converted to 1 << 0-25 and merged as a bitset),
 // - what it has cost us this far in terms of steps to get to this point
 
-using SearchNode = (char currentLocation, int currentKeys, int currentCost);
+using SearchNodePart1 = (char currentLocation, int currentKeys, int currentCost);
 
 // EdgeData describes:
 // - which doors we encounter along the way from key a to b (the graph nodes)
@@ -17,8 +17,17 @@ using SearchNode = (char currentLocation, int currentKeys, int currentCost);
 
 using EdgeData = (int doorsEncountered, int keysEncountered, int cost);
 
+// More documentation on these aliases below
 
-// More documentation on this aliases below
+// For Part 2 we added this one:
+
+// SearchNodePart2 describes:
+// - at which key each of the 4 robots is (a-z),
+// - which keys we have collected (a - z converted to 1 << 0-25 and merged as a bitset),
+// - what it has cost us this far in terms of steps to get to this point
+
+using SearchNodePart2 = (char[] currentLocations, int currentKeys, int currentCost);
+
 
 // In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties
 // and specifying its path and filename as a command line argument, e.g. "$(SolutionDir)input" 
@@ -150,35 +159,48 @@ EdgeData CalculateEdgeData(Vec2i pFrom, Vec2i pTo)
 // Now we'll build a map from any @/key char to the others...
 // (even though we won't be using ALL of this data...)
 
-// Clone the dictionary with keys and add '@'
-Dictionary<char, Vec2i> allChars = new(keys) { ['@'] = entrance };
-List<char> charList = allChars.Keys.ToList();
-
-// And build a map of all key to key costs...
-EdgedGraph<char, EdgeData> keyGraph = new ();
-
-// We could do this based on positions only,
-// but that makes things even harder to understand later
-
-for (int i = 0; i < charList.Count-1; i++)
+EdgedGraph<char, EdgeData> CreateGraph (Dictionary<char, Vec2i> pCharsToPositionMap)
 {
-	for (int j = i + 1; j < charList.Count; j++)
-	{
-		char charA = charList[i];
-		char charB = charList[j];
-		EdgeData edgeData = CalculateEdgeData(allChars[charA], allChars[charB]);
-		keyGraph.AddEdge(charA, charB, edgeData);
-	}
+    List<char> charList = pCharsToPositionMap.Keys.ToList();
+
+    // And build a map of all key to key costs...
+    EdgedGraph<char, EdgeData> keyGraph = new();
+
+    // We could do this based on positions only,
+    // but that makes things even harder to understand later
+
+    for (int i = 0; i < charList.Count - 1; i++)
+    {
+        for (int j = i + 1; j < charList.Count; j++)
+        {
+            char charA = charList[i];
+            char charB = charList[j];
+            EdgeData edgeData = CalculateEdgeData(pCharsToPositionMap[charA], pCharsToPositionMap[charB]);
+
+            // If there is a path...
+            if (edgeData.keysEncountered != -1)
+            {
+                keyGraph.AddEdge(charA, charB, edgeData);
+            }
+        }
+
+    }
+
+    return keyGraph;
 }
 
-// With our cache tabl filled, we can look for the final piece of the puzzle (part 1 :))
+// Clone the dictionary with keys and add '@'
+Dictionary<char, Vec2i> allChars = new(keys) { ['@'] = entrance };
+EdgedGraph<char, EdgeData> keyGraph = CreateGraph (allChars);
 
-SearchNode GetOptimalPath()
+// With our cache table filled, we can look for the final piece of the puzzle (part 1 :))
+
+int GetOptimalPathPart1()
 {
     //Start out at '@' with zero keys collected (bitflag is 0) and a cost of 0
-    SearchNode start = new SearchNode('@', 0, 0);
+    SearchNodePart1 start = new SearchNodePart1('@', 0, 0);
 
-    PriorityQueue<SearchNode, float> priorityQueue = new();
+    PriorityQueue<SearchNodePart1, float> priorityQueue = new();
     priorityQueue.Enqueue(start, 0);
 
     Dictionary<string, int> visited = new();
@@ -189,8 +211,8 @@ SearchNode GetOptimalPath()
     while (priorityQueue.Count > 0)
     {
         //Did we find all keys?
-        SearchNode current = priorityQueue.Dequeue();
-        if (current.currentKeys == allKeysMask) return current;
+        SearchNodePart1 current = priorityQueue.Dequeue();
+        if (current.currentKeys == allKeysMask) return current.currentCost;
 
         // If not, get the current key...
         int currentKey = (current.currentLocation - 'a');
@@ -202,8 +224,8 @@ SearchNode GetOptimalPath()
             if (i == currentKey) continue;
 
             //... are not already in our possession:
-            int bitFlag = 1 << i;
-            if ((current.currentKeys & bitFlag) == 1) continue;
+            int nextKeyBitFlag = 1 << i;
+            if ((current.currentKeys & nextKeyBitFlag) == 1) continue;
 
             // Are reachable with our current set of collected keys:
             // Where would we go?
@@ -222,16 +244,151 @@ SearchNode GetOptimalPath()
 
             if ((visited.ContainsKey(key) && visited[key] > newCost) || !visited.ContainsKey(key))
             {
-                SearchNode newNode = new SearchNode(targetKeyChar, newKeySet, newCost);
+                SearchNodePart1 newNode = new SearchNodePart1(targetKeyChar, newKeySet, newCost);
                 priorityQueue.Enqueue(newNode, newNode.currentCost);
                 visited[key] = newNode.currentCost;
             }
         }
     }
-    return new SearchNode('@', -1, -1);
+    return -1;
 }
 
-SearchNode shortestPathInfo = GetOptimalPath();
-Console.WriteLine(shortestPathInfo.currentCost);
-Console.WriteLine(sw.ElapsedMilliseconds);
+int shortestPathCost = GetOptimalPathPart1();
+Console.WriteLine("Part 1: " + shortestPathCost);
+Console.WriteLine("Calculated in:" + sw.ElapsedMilliseconds);
 
+// ** Part 2: But what if we put some extra walls in and have four robots moving around?
+
+// Let's first update our dungeon according to specs:
+
+sw.Restart();
+dungeon.ForeachRegion(entrance - new Vec2i(1,1), new Vec2i(3, 3), (pos, value) => dungeon[pos] = '#');
+
+// And define the new entrances:
+Vec2i[] entrances = [entrance - new Vec2i(1, 1), entrance + new Vec2i(1, 1), entrance - new Vec2i(-1, 1), entrance + new Vec2i(-1, 1)];
+
+// Now we need to rebuild all data structures that we built before
+// But we can't use @ four times ;), so we'll just use 1,2,3,4 one for each robot
+
+allChars = new(keys);
+
+for (int i = 0; i < entrances.Length; i++)
+{
+    char entranceChar = (char)('1' + i);
+    dungeon[entrances[i]] = entranceChar;
+    allChars[entranceChar] = entrances[i];
+}
+
+keyGraph = CreateGraph(allChars);
+
+// Other than that we don't need to define a lot of extra info, we just have to rewrite our search algorithm,
+// so that instead of 1 searcher, we have a list of searchers, with a shared collection of keys.
+// Probably also a bit of optimization so that a robot doesn't keep trying to reach keys the robot can never reach:
+
+int GetReachableSet (char pRobot)
+{
+    int reachableSet = 0;
+
+    for (int i = 0; i < keys.Count; i++)
+    {
+        reachableSet |= keyGraph.HasEdgeData(pRobot, (char)('a' + i)) ? 1 << i : 0;
+    }
+
+    return reachableSet;
+}
+
+/**
+// For debugging, show which robot can reach with key:
+Console.WriteLine("zyxwvutsrqponmlkjihgfedcba");
+
+for (int i = 0; i < 4; i++)
+{
+    Console.WriteLine(Convert.ToString (GetReachableSet((char)('1' + i)), 2).PadLeft(26) + "  <== Robot " + (i+1) + " can reach");
+}
+
+/**/
+//dungeon.Print("");
+
+int GetOptimalPathPart2()
+{
+    // What do we need to keep track of for this search?
+    // We need to keep track of where 4 robots are.
+    // Start out at 1,2,3,4 with zero keys collected (bitflag is 0) and a cost of 0
+
+    SearchNodePart2 start = new(new char[] { '1', '2', '3', '4' }, 0, 0);
+
+    // Set up the queue
+    PriorityQueue<SearchNodePart2, float> priorityQueue = new();
+    priorityQueue.Enqueue(start, 0);
+    
+    // And the visited list
+    Dictionary<string, int> visited = new();
+
+    // Also calculate which robot can reach which keys, so we don't do dumb searching...
+    int[] reachableKeySets = new int[entrances.Length];
+    
+    for (int i = 0; i < 4; i++)
+    {
+        reachableKeySets[i] = GetReachableSet((char)('1' + i));
+    }
+
+    // What will our keys collected bitset look like if we collected all keys?
+    int allKeysMask = (int)(Math.Pow(2, keys.Count) - 1);
+
+    while (priorityQueue.Count > 0)
+    {
+        //Did we find all keys?
+        SearchNodePart2 current = priorityQueue.Dequeue();
+        if (current.currentKeys == allKeysMask) return current.currentCost;
+
+        // If not, check all options, for all robots...
+        for (int robot = 0; robot < 4; robot++)
+        {
+            int currentKey = (current.currentLocations[robot] - 'a');
+
+            // And iterate over all keys, that...
+            for (int i = 0; i < keys.Count; i++)
+            {
+                //... are not where the robot is...
+                if (i == currentKey) continue;
+
+                //... are not already in possession of any of the robots:
+                int nextKeyBitFlag = 1 << i;
+                if ((current.currentKeys & nextKeyBitFlag) == 1) continue;
+
+                //... can be reached by this robot
+                if ((reachableKeySets[robot] & nextKeyBitFlag) == 0) continue;
+
+                // Are reachable with our current set of collected keys:
+                // Where would we go?
+                char targetKeyChar = (char)('a' + i);
+                EdgeData edgeData = keyGraph.GetEdgeData(current.currentLocations[robot], targetKeyChar);
+                if ((current.currentKeys & edgeData.doorsEncountered) != edgeData.doorsEncountered) continue;
+
+                // If we get here, we match all requirements to collect this new key, 
+                // so update our keyset we would have after moving here:
+                int newKeySet = current.currentKeys | edgeData.keysEncountered;
+                // the cost...
+                int newCost = current.currentCost + edgeData.cost;
+
+                // Make sure we don't keep redoing things...
+
+                char[] newRobotStates = (char[])current.currentLocations.Clone();
+                newRobotStates[robot] = targetKeyChar;
+
+                string key = "" + string.Join ("",targetKeyChar) + " " + newKeySet;
+
+                if ((visited.ContainsKey(key) && visited[key] > newCost) || !visited.ContainsKey(key))
+                {
+                    SearchNodePart2 newNode = new SearchNodePart2 (newRobotStates, newKeySet, newCost);
+                    priorityQueue.Enqueue(newNode, newNode.currentCost);
+                    visited[key] = newNode.currentCost;
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+Console.WriteLine("Part 2: " + GetOptimalPathPart2());
+Console.WriteLine("Calculated in:" + sw.ElapsedMilliseconds);

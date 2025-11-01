@@ -145,7 +145,7 @@ Console.WriteLine("Optimizing graph...");
 foreach (var node in removableNodes)
 {
     List<Valve> neighbors = edgedGraph.GetNeighbors(node);
-    long totalCost = edgedGraph.GetEdgeCost(node, neighbors[0]) + edgedGraph.GetEdgeCost(node, neighbors[1]);
+    long totalCost = edgedGraph.GetEdgeData(node, neighbors[0]) + edgedGraph.GetEdgeData(node, neighbors[1]);
     edgedGraph.RemoveNode(node);
     edgedGraph.AddEdge(neighbors[0], neighbors[1], totalCost, true);
 }
@@ -156,7 +156,7 @@ foreach (var node in edgedGraph.GetNodes())
 {
     foreach (var neighbor in edgedGraph.GetNeighbors(node))
     {
-        Console.WriteLine("Edge between:" + node.id + " and " + neighbor.id + " with cost " + edgedGraph.GetEdgeCost(node, neighbor));
+        Console.WriteLine("Edge between:" + node.id + " and " + neighbor.id + " with cost " + edgedGraph.GetEdgeData(node, neighbor));
     }
 }
 
@@ -190,7 +190,7 @@ foreach (var node in costToOpenTable.GetNodes())
 {
     foreach (var neighbour in costToOpenTable.GetNeighbors(node))
     {
-        Console.WriteLine("Cost to open " + node.id + " starting at " + neighbour.id + " = " + costToOpenTable.GetEdgeCost(node, neighbour));
+        Console.WriteLine("Cost to open " + node.id + " starting at " + neighbour.id + " = " + costToOpenTable.GetEdgeData(node, neighbour));
     }
 }
 
@@ -211,7 +211,7 @@ long GetBiggestFlowRate (EdgedGraph<Valve, long> pCostToOpenTable, Dictionary<Va
     foreach (var nextValve in pCostToOpenTable.GetNeighbors(pLastValveOpened))
     {
         //If opening this valve would take too long ...
-        int nextValveOpenTime = currentTime + (int) pCostToOpenTable.GetEdgeCost(pLastValveOpened, nextValve);
+        int nextValveOpenTime = currentTime + (int) pCostToOpenTable.GetEdgeData(pLastValveOpened, nextValve);
         if (nextValveOpenTime > pEndTime) continue;
 
         //If we already opened this valve, don't visit it again
@@ -303,7 +303,7 @@ long GetBiggestFlowRatePart2 (
     foreach (var nextValve in pCostToOpenTable.GetNeighbors(pLastValveOpened))
     {
         //If opening this valve would take too long ...
-        int nextValveOpenTime = currentTime + (int)(pCostToOpenTable.GetEdgeCost(pLastValveOpened, nextValve));
+        int nextValveOpenTime = currentTime + (int)(pCostToOpenTable.GetEdgeData(pLastValveOpened, nextValve));
         if (nextValveOpenTime > pEndTime) continue;
 
         //If we already opened this valve, don't visit it again

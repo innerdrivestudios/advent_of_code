@@ -176,5 +176,10 @@ public struct Vec2<T> where T : INumber<T>
 		}
 	}
 
+	public T MaxAbsCoord ()
+	{
+		return T.Max(T.Abs(X), T.Abs(Y));
+	}
+
 }
 

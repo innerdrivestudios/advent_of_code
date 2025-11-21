@@ -9,7 +9,8 @@
 string myInput = File.ReadAllText(args[0]);
 myInput = myInput.ReplaceLineEndings("");
 
-// This puzzle reuses the existing IntCode computer from day 17,
+// This puzzle reuses the existing IntCode computer from day 19,
+// which reuses the IntCode computer from day 17,
 // which reuses the IntCode computer from day 15,
 // which reuses the IntCode computer from day 13,
 // which reuses the IntCode computer from day 11,

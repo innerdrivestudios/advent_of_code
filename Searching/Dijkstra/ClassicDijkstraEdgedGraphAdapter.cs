@@ -27,7 +27,7 @@
 
         foreach (T neighbor in neighbors)
         {
-            costs[neighbor] = pCost + long.CreateChecked(edgedGraph.GetEdgeCost(pNode, neighbor));
+            costs[neighbor] = pCost + long.CreateChecked(edgedGraph.GetEdgeData(pNode, neighbor));
         }
 
         return costs;

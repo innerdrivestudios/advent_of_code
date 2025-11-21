@@ -53,10 +53,16 @@ public class EdgedGraph<NodeType, EdgeData>
 		return new List<NodeType>(adjacencyMatrix[pNode].Keys);
 	}
 
-	public EdgeData GetEdgeCost(NodeType pNodeA, NodeType pNodeB)
+	public EdgeData GetEdgeData(NodeType pNodeA, NodeType pNodeB)
 	{
 		// Note we don't do any existence checks!!
 		return adjacencyMatrix[pNodeA][pNodeB];
 	}
+
+    public bool HasEdgeData(NodeType pNodeA, NodeType pNodeB)
+    {
+        // Note we don't do any existence checks!!
+        return adjacencyMatrix.ContainsKey(pNodeA) && adjacencyMatrix[pNodeA].ContainsKey(pNodeB);
+    }
 
 }

@@ -40,8 +40,8 @@ long CalculateMaxJoltagePart2 (string pInput, int pNumberCount, int pIndex = 0)
     // If we've reached the end return 0; 
     if (pNumberCount == 0) return 0;
 
-    // Instead of blindly iterating over everything, only consider the highest index in our remain run
-    int indexToConsider = new ();
+    // Instead of blindly iterating over everything, only consider the highest index in our remaining run
+    int indexToConsider = -1;
     int highestNumberFound = -1;
 
     for (int i = pIndex; i < pInput.Length - (pNumberCount - 1); i++)
@@ -52,6 +52,7 @@ long CalculateMaxJoltagePart2 (string pInput, int pNumberCount, int pIndex = 0)
         {
             indexToConsider = i;
             highestNumberFound = digit;
+            if (highestNumberFound == 9) break;
         }
     }
 

@@ -72,3 +72,46 @@ foreach (string input in myInput)
 Console.WriteLine("Part 2: " + total); 
 Console.WriteLine("Calculated in " + sw.ElapsedMilliseconds + " ms");
 
+// Supposedly a more optimized version based on a Reddit hint:
+
+long CalculateMaxJoltageOn (string pInput, int pNumberCount)
+{
+    int improvementsLeft = pInput.Length - pNumberCount;
+    Stack<int> numbersChosen = new ();
+
+    for (int i = 0; i < pInput.Length; i++)
+    {
+        int number = pInput[i] - '0';
+
+        while (numbersChosen.Count > 0 && numbersChosen.Peek() < number && improvementsLeft > 0)
+        {
+            numbersChosen.Pop();
+            improvementsLeft--;
+        }
+
+        numbersChosen.Push(number);
+    }
+
+    while (numbersChosen.Count > pNumberCount) { numbersChosen.Pop(); }
+
+    long value = 0;
+    long mult = 1;
+    while (numbersChosen.Count > 0)
+    {
+        value += mult * numbersChosen.Pop();   // shift left + add digit
+        mult *= 10;
+    }
+
+    return value;
+}
+
+sw = Stopwatch.StartNew();
+
+total = 0;
+foreach (string input in myInput)
+{
+    total += CalculateMaxJoltageOn(input, 12);
+}
+
+Console.WriteLine("Part 2 alt:" + total);
+Console.WriteLine("Calculated in " + sw.ElapsedMilliseconds + " ms");

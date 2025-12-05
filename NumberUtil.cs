@@ -2,7 +2,36 @@ using System.Numerics;
 
 public static class NumberUtil
 {
- 
+
+	public static void CollapseRanges<T> (List<(T, T)> pRanges) where T: INumber<T> {
+		// Now we want to collapse / join overlapping ranges ...
+		// Fastest way to do that is to first sort on the start of the range...
+
+		pRanges.Sort((x, y) => x.Item1.CompareTo(y.Item1));
+
+		// And then actually collapse the ranges ...
+
+		for (int i = 0; i < pRanges.Count - 1; i++)
+		{
+			for (int j = i + 1; j < pRanges.Count;)
+			{
+				// if the end of the first range we are checking is equal or
+				// goes past the start of the second, merge them
+
+				if (pRanges[i].Item2 >= pRanges[j].Item1)
+				{
+					pRanges[i] = (pRanges[i].Item1, T.Max(pRanges[i].Item2, pRanges[j].Item2));
+					pRanges.RemoveAt(j);
+				}
+				else
+				{
+					j++;
+				}
+			}
+		}
+	}
+
+
 	// Euclid's GCD algorithm
 	//
 	// Why or how does this work?
@@ -71,43 +100,43 @@ public static class NumberUtil
 	// In code:
 
 	public static T GCD<T>(T pA, T pB) where T : INumber<T>
-	{
-		while (!T.IsZero(pB))
-		{
-			T temp = pB;
-			pB = pA % pB;
-			pA = temp;
-		}
+    {
+        while (!T.IsZero(pB))
+        {
+            T temp = pB;
+            pB = pA % pB;
+            pA = temp;
+        }
 
-		return pA;
-	}
+        return pA;
+    }
 
-	// Along with the GCD we also often require the LEAST COMMON MULTIPLE.
-	// The term itself is already confusing, it is also called LOWEST COMMON MULTIPLE.
-	//
-	// But basically it answers the question, given numbers pA and pB,
-	// what is the lowest number for which there are x and y so that:
-	// pA * x = pB * y
-	// 
-	// Now it is easy to see that there is at least pA common multiple
-	// (but maybe not the lowest) by setting x = pB and y = pA:
-	// pA * pB = pB * pA (tada !)
-	//
-	// But is it the lowest? That depends on whether pA and pB can be divided by something.
-	// Because if pA & pB can both be divided by z then pA * pB can ALSO be divided by z, 
-	// which means pA * pB was not the lowest.
-	//
-	// Well, what is the biggest number that divides both pA and pB? Exactly GCD(pA,pB)!
+    // Along with the GCD we also often require the LEAST COMMON MULTIPLE.
+    // The term itself is already confusing, it is also called LOWEST COMMON MULTIPLE.
+    //
+    // But basically it answers the question, given numbers pA and pB,
+    // what is the lowest number for which there are x and y so that:
+    // pA * x = pB * y
+    // 
+    // Now it is easy to see that there is at least pA common multiple
+    // (but maybe not the lowest) by setting x = pB and y = pA:
+    // pA * pB = pB * pA (tada !)
+    //
+    // But is it the lowest? That depends on whether pA and pB can be divided by something.
+    // Because if pA & pB can both be divided by z then pA * pB can ALSO be divided by z, 
+    // which means pA * pB was not the lowest.
+    //
+    // Well, what is the biggest number that divides both pA and pB? Exactly GCD(pA,pB)!
 
-	public static T LCM<T>(T pA, T pB) where T: INumber<T> 
-	{
-		//changed order of pA*pB/gcd to pA/gcd*pB to prevent overflow
-		//in more cases even though it isn't strictly needed here
-		return pA / GCD(pA, pB) * pB;
-	}
+    public static T LCM<T>(T pA, T pB) where T : INumber<T>
+    {
+        //changed order of pA*pB/gcd to pA/gcd*pB to prevent overflow
+        //in more cases even though it isn't strictly needed here
+        return pA / GCD(pA, pB) * pB;
+    }
 
 
-	public static T GetModularInverse<T>(T pA, T pModulo) where T : INumber<T> 
+    public static T GetModularInverse<T>(T pA, T pModulo) where T : INumber<T>
     {
         // When we are looking for pA modular inverse
         // we are looking for pA number x that satisfies:
@@ -244,21 +273,21 @@ public static class NumberUtil
         }
 
         return a;
-	}
+    }
 
-	public static (BigInteger x, BigInteger y, BigInteger g) EGCD(BigInteger a, BigInteger b)
-	{
-		if (b == 0)
-			return (1, 0, a);       // base case: 1*a + 0*b = a
+    public static (BigInteger x, BigInteger y, BigInteger g) EGCD(BigInteger a, BigInteger b)
+    {
+        if (b == 0)
+            return (1, 0, a);       // base case: 1*a + 0*b = a
 
-		var (x1, y1, g1) = EGCD(b, a % b);
+        var (x1, y1, g1) = EGCD(b, a % b);
 
-		//Console.WriteLine((x1, y1, g1));
-		// Back-substitute:
-		// x = y1
-		// y = x1 - (a / b) * y1
-		return (y1, x1 - (a / b) * y1, g1);
-	}
+        //Console.WriteLine((x1, y1, g1));
+        // Back-substitute:
+        // x = y1
+        // y = x1 - (a / b) * y1
+        return (y1, x1 - (a / b) * y1, g1);
+    }
 
     /*
     Let's say we want to evaluate 432 and 125 to figure out what the GCD is, 
@@ -296,6 +325,5 @@ public static class NumberUtil
     TODO FINISH!
 
     */
-
 
 }

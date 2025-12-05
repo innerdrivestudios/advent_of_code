@@ -28,31 +28,6 @@ Console.WriteLine("Part 1: " + freshIngredients.Count);
 
 // ** Part 2: How many ingredients fall within the given ranges overall?
 
-// Now we want to collapse / join overlapping ranges ...
-// Fastest way to do that is to first sort on the start of the range...
-
-ranges.Sort((x, y) => x.Item1.CompareTo(y.Item1));
-
-// And then actually collapse the ranges ...
-
-for (int i = 0; i < ranges.Count - 1; i++)
-{
-	for (int j = i + 1; j < ranges.Count;)
-	{
-		// if the end of the first range we are checking is equal or
-		// goes past the start of the second, merge them
-
-		if (ranges[i].Item2 >= ranges[j].Item1)
-		{
-			ranges[i] = (ranges[i].Item1, Math.Max(ranges[i].Item2, ranges[j].Item2));
-			ranges.RemoveAt(j);
-		}
-		else
-		{
-			j++;
-		}
-	}
-}
-
-// Sum the ranges (inclusive)
+// Collapse the ranges and sum their start-end deltas (inclusive)
+NumberUtil.CollapseRanges(ranges);
 Console.WriteLine("Part 2: " + ranges.Sum (x => x.Item2 - x.Item1 + 1));

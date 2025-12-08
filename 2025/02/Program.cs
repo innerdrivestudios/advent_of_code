@@ -6,6 +6,8 @@
 
 // ** Your input: a list of ranges
 
+using System.Diagnostics;
+
 string myInput = File.ReadAllText(args[0]).ReplaceLineEndings("");
 
 List<(long, long)> ranges = myInput
@@ -16,6 +18,7 @@ List<(long, long)> ranges = myInput
     .ToList();
 
 // ** Part 1: Find the invalid numbers:
+
 
 bool IsValid (long pLong)
 {
@@ -34,6 +37,8 @@ bool IsValid (long pLong)
     return false;
 }
 
+Stopwatch stopwatch = new Stopwatch();
+stopwatch.Restart ();
 HashSet<long> invalidIds = new();
 
 foreach (var range in ranges)
@@ -45,6 +50,8 @@ foreach (var range in ranges)
 }
 
 Console.WriteLine("Part 1: " + invalidIds.Sum());
+Console.WriteLine("Calculated in " + stopwatch.ElapsedMilliseconds + " ms");
+
 
 // ** Part 2: Now id's are invalid if a pattern repeats any number of times...
 
@@ -74,6 +81,9 @@ bool Repeats(string pNumberAsString, int pAmountOfBlocks)
     return true;
 }
 
+
+stopwatch.Restart();
+
 invalidIds = new();
 
 foreach (var range in ranges)
@@ -94,6 +104,8 @@ foreach (var range in ranges)
 }
 
 Console.WriteLine("Part 2: " + invalidIds.Sum());
+Console.WriteLine("Calculated in " + stopwatch.ElapsedMilliseconds + " ms");
+
 
 
 

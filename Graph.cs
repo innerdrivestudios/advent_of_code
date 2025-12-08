@@ -1,10 +1,10 @@
 public class Graph<T>
 {
-    private Dictionary<T, List<T>> adjacencyList;
+    private Dictionary<T, HashSet<T>> adjacencyList;
 
     public Graph()
     {
-        adjacencyList = new Dictionary<T, List<T>>();
+        adjacencyList = new ();
     }
     
     public void Clear() 
@@ -34,7 +34,7 @@ public class Graph<T>
     {
         if (!adjacencyList.ContainsKey(pNode))
         {
-            adjacencyList[pNode] = new List<T>();
+            adjacencyList[pNode] = new ();
         }
     }
 
@@ -58,14 +58,19 @@ public class Graph<T>
         if (!adjacencyList.ContainsKey(pToNode)) { 
             AddNode(pToNode);
         } 
-        
+
         adjacencyList[pFromNode].Add(pToNode); 
         if (pBiDirectional) adjacencyList[pToNode].Add(pFromNode); 
     } 
     
     public List<T> GetNeighbors(T pNode) 
     { 
-        return new List<T>(adjacencyList[pNode]); 
+        return new(adjacencyList[pNode]); 
+    }
+
+    public IEnumerable<T> GetNeighborsUnsafe(T pNode)
+    {
+        return adjacencyList[pNode];
     }
 
     public int GetNodeCount()

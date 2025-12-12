@@ -44,6 +44,10 @@ Console.WriteLine("Part 1: " + GetPathCountPart1("you", "out", downGraph));
 
 // ** Part 2: 
 
+/*
+
+// Everything commented out works, but one of my colleagues (P. Bonsma) showed me a waayyy better approach.
+
 Stopwatch stopwatch = Stopwatch.StartNew();
 
 // Doing a little test... which nodes are leaf nodes?
@@ -191,3 +195,30 @@ long CountOptions(string pStart, Graph<string> pGraph, Dictionary<string, long> 
 
 Console.WriteLine("Part 2: " + CountOptions("svr", downGraph));
 Console.WriteLine("Calculated in " + stopwatch.ElapsedMilliseconds + " ms.");
+
+*/
+
+// Better and simpler approach from P. Bonsma.
+
+long CountOptions (string pStart, Graph<string> pGraph, Dictionary<string, long> pCache = null, int pLevel = 0)
+{
+    pCache = pCache ?? new ();  
+    string key = pStart + pLevel;
+
+    if (pCache.ContainsKey(key)) return pCache[key];
+
+    if (pLevel == 0 && pStart == "fft") pLevel = 1;
+    else if (pLevel == 1 && pStart == "dac") pLevel = 2;
+    else if (pLevel == 2 && pStart == "out") return 1;
+
+    long count = 0;
+    foreach (string p in pGraph.GetNeighborsUnsafe(pStart))
+    {
+        count += CountOptions(p, pGraph, pCache, pLevel);
+    }
+    
+    pCache[key] = count;
+    return count;
+}
+
+Console.WriteLine("Part 2: " + CountOptions("svr", downGraph));

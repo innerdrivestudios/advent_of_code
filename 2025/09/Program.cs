@@ -1,6 +1,5 @@
 ﻿// Solution for https://adventofcode.com/2025/day/9 (Ctrl+Click in VS to follow link)
 
-using System.Drawing;
 using Vec2i = Vec2<int>;
 
 // In visual studio you can modify what input file will be loaded by going to Debug/Debug Properties

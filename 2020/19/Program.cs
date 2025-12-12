@@ -33,7 +33,7 @@ HashSet<string> GetPossibleDoubleStringExpansions (string pInput, int pMaxLength
 
     foreach (string part in parts)
     {
-        results.UnionWith(GetPossibleSingleStringExpansions(part, pMaxLength, pDepth+1));
+        results.UnionWith(GetPossibleSingleStringExpansions(part, pMaxLength, pDepth + 1));
     }
 
     return results;
@@ -54,6 +54,7 @@ HashSet<string> GetPossibleSingleStringExpansions(string pInput, int pMaxLength 
 
     for (int i = 1; i < parts.Length; i++) 
     {
+
         HashSet<string> subResults = GetPossibleDoubleStringExpansions(productionRules[parts[i]], pMaxLength, pDepth + 1);
 
         //merge these results with what we already had
@@ -64,7 +65,7 @@ HashSet<string> GetPossibleSingleStringExpansions(string pInput, int pMaxLength 
             foreach (string b in subResults)
             {
                 string newString = a + b;
-                if (newString.Length <= pMaxLength) crossResults.Add(newString);
+                crossResults.Add(newString);
             }
         }
 
@@ -74,11 +75,171 @@ HashSet<string> GetPossibleSingleStringExpansions(string pInput, int pMaxLength 
     return results;
 }
 
-//productionRules["8"] = "42";
+HashSet<string> allPossibleExpansions = GetPossibleDoubleStringExpansions("0");
+int possibleExpansionCountPart1 = stringsToMatch.Count(x => allPossibleExpansions.Contains(x));
 
-HashSet<string> allPossibleExpansionsPart1 = GetPossibleDoubleStringExpansions("0");
+Console.WriteLine("Part 1:" + possibleExpansionCountPart1);
 
-Console.WriteLine("Part 1:" + stringsToMatch.Count (x => allPossibleExpansionsPart1.Contains(x)));
+// ** Part 2:
 
-/////
-///
+// Alternative way...
+
+// Real dirty
+
+HashSet<string> GetMatches (HashSet<string> pInput, int pIteration)
+{
+    productionRules["8"] = string.Join(' ', Enumerable.Repeat("42", pIteration));
+    productionRules["11"] = string.Join(' ', Enumerable.Repeat("42", pIteration)) + " " + string.Join(' ', Enumerable.Repeat("31", pIteration));
+
+    HashSet<string> matches = new();
+
+    foreach (string str in pInput)
+    {
+        int index = 0;
+        if (CanMatch(str, ref index, "0")) matches.Add(str);
+    }
+
+    return matches;
+}
+
+bool debug = false;
+bool pause = false;
+
+bool CanMatch(string pInput, ref int pIndex, string pCurrentPattern, int pDepth = 0)
+{
+    string indent = new string(' ', pDepth);
+
+    if (pDepth > 100) return false;
+
+    if (debug) Console.WriteLine(indent + "Trying to match " + Alter(pInput, pIndex) + " at index " + pIndex + " with pattern " + pCurrentPattern);
+    if (pause) Console.ReadKey();
+
+    string[] parts = pCurrentPattern.Split("|", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+    if (parts.Length > 1)
+    {
+        if (debug) Console.WriteLine(indent + "Splitting pattern on | and repeating search for each part...");
+        if (pause) Console.ReadKey();
+
+        for (int i = parts.Length - 1; i >= 0; i--)
+        {
+            int currentIndex = pIndex;
+
+            string part = parts[i];
+            if (debug) Console.WriteLine(indent + "Trying to match " + Alter(pInput, pIndex) + " at index " + pIndex + " with subblock " + part);
+
+            if (CanMatch(pInput, ref pIndex, part, pDepth + 1))
+            {
+                if (debug) Console.WriteLine(indent + "Matched subblock " + part + " of " + pCurrentPattern);
+                if (pause) Console.ReadKey();
+                return true;
+            }
+
+            if (debug) Console.WriteLine(indent + "Could not match subblock " + part + " of " + pCurrentPattern);
+            if (pause) Console.ReadKey();
+
+            pIndex = currentIndex;
+        }
+
+        if (debug) Console.WriteLine(indent + "Could not match any subblocks of " + pCurrentPattern);
+        if (pause) Console.ReadKey();
+
+        return false;
+    }
+    else
+    {
+        parts = pCurrentPattern.Split(" ", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        if (debug) Console.WriteLine(indent + "Pattern does not contain |, matching in order listed...");
+        if (pause) Console.ReadKey();
+
+        int savedIndex = pIndex;
+
+        for (int i = 0; i < parts.Length; i++)
+        {
+            string part = parts[i];
+            if (debug) Console.WriteLine(indent + "Trying to match " + Alter(pInput, pIndex) + " at index " + pIndex + " with part " + (i + 1) + "/" + parts.Length + " = \"" + part + "\"");
+            if (pause) Console.ReadKey();
+
+            if (part == "a" || part == "b")
+            {
+                if (pIndex >= pInput.Length)
+                {
+                    pIndex = savedIndex;
+                    return false;  // can't match a character, no input left
+                }
+
+                if (pInput[pIndex] == part[0])
+                {
+                    if (debug) Console.WriteLine(indent + "Matched.");
+                    if (pause) Console.ReadKey();
+
+                    pIndex++;
+                }
+                else
+                {
+                    if (debug) Console.WriteLine(indent + "a or b not matched.");
+                    if (pause) Console.ReadKey();
+                    pIndex = savedIndex;
+                    return false;
+                }
+            }
+            else
+            {
+                if (debug) Console.WriteLine(indent + "Searching deeper.");
+                if (pause) Console.ReadKey();
+
+                if (CanMatch(pInput, ref pIndex, productionRules[part], pDepth + 1))
+                {
+                    if (i == parts.Length - 2) return true;
+                    //if (debug) Console.WriteLine(i == parts.Length - 1);
+                    if (debug) Console.WriteLine(indent + "Matched " + Alter(pInput, pIndex) + " at index " + pIndex + " with part " + (i + 1) + "/" + parts.Length + " = \"" + part + "\"");
+                    if (pause) Console.ReadKey();
+                }
+                else
+                {
+                    if (debug) Console.WriteLine(indent + "Could not match " + Alter(pInput, pIndex) + " at index " + pIndex + " with part " + (i + 1) + "/" + parts.Length + " = \"" + part + "\"");
+                    if (pause) Console.ReadKey();
+                    pIndex = savedIndex;
+                    return false;
+                }
+            }
+        }
+
+        if (debug) Console.WriteLine(indent + "Matched all consecutive parts of " + pCurrentPattern + " with input.");
+        if (pause) Console.ReadKey();
+
+        return false;
+    }
+}
+
+string Alter(string pInput, int pIndex)
+{
+    if (pIndex >= pInput.Length)
+    {
+        return pInput;
+    }
+    char[] input = pInput.ToCharArray();
+    input[pIndex] = char.ToUpper(pInput[pIndex]);
+    return string.Concat(input);
+
+}
+
+
+
+
+int iteration = 0;
+int total = 0;
+
+while (iteration < 100)
+{
+    HashSet<string> matches = GetMatches(stringsToMatch, 0);
+
+    total += matches.Count;
+    stringsToMatch.ExceptWith (matches);
+    iteration++;
+    Console.Write(".");
+}
+
+Console.WriteLine("Part 2:" + total);
+

@@ -339,4 +339,112 @@ public class Grid<T>
 
         return regions;
     }
+
+    // By default (when printing for example), X is to the right, Y is down, so rotate (1) is a clockwise rotation.
+    // This performs an IN place rotation of all grid elements (and yes that was hard ;)).
+    // Also it didn't end up very readable or pretty.
+    //
+    // In hindsight I should have hardcoded the different cases (90 vs 180) with
+    // loop unrolling to avoid the awkward scaling - center + center etc.
+    //
+    // Anyway it was a good exercise and example of how not to do it, but it works now.
+    
+	public void Rotate (int pXtoYRotations)
+	{
+        if (width != height) throw new Exception("Can only rotate square grids");
+        if (pXtoYRotations % 4 == 0) return;
+
+        // the easiest way to deal with even/odd grid sizes is to scale everything if the center
+        // falls between to integer values... so if even: scale by 2, if odd, ok we can process that:
+        bool evenSize = (width % 2) == 0;
+        int scale = evenSize ? 2 : 1;
+
+        Vec2i center = new Vec2i(width-1, height-1) / (2 / scale);
+        Vec2i zeroOffset = new Vec2i(0, 0);
+
+        Vec2i rotationVector = Vec2i.GetRotationVector(90 * pXtoYRotations);
+
+        //If we are rotating by 90 degrees, we have 4 quadrants to rotate,
+        //if we are rotating by 180 degrees, we have 2 halves to rotate
+        bool oneEighty = pXtoYRotations % 2 == 0;
+        int sectors = oneEighty ? 2 : 4;
+
+        int widthToRotate = (width-1)/2;
+        int heightToRotate = oneEighty ? (height-1) : (height-1)/2;
+
+        //if we are odd sized, we rotate the upper left quadrant, but avoid rotating the center cross twice
+        //this is really hard to understand without drawing a 4x4 and 5x5 on paper twice,
+        //once for 90 degrees, once for 180 degrees and note which indices we need to skip
+        if (!evenSize && sectors == 4) heightToRotate--;
+
+        for (int x = 0; x <= widthToRotate; x++)
+        {			
+            for (int y = 0; y <= heightToRotate; y++)
+            {
+                //for odd sized 180 degree rotations, the restrictions are even more
+                if (!evenSize && sectors == 2 && x == widthToRotate && y >= x) continue;
+
+                //always skip the center
+				Vec2i currentCoordOffset = new Vec2i(x, y) * scale - center;
+                if (currentCoordOffset == zeroOffset) continue;
+
+				T currentValue = this[(center + currentCoordOffset) / scale];
+
+                // In place rotation 2 or 4 times based on 90 or 180 degree angles, 
+                // where we keep the replaced value to use as the next value
+				for (int i = 0; i < sectors; i++)
+                {
+                    Vec2i newCoordOffset = currentCoordOffset.Rotate(rotationVector);
+                    Vec2i newCoord = (center + newCoordOffset) / scale;
+					T newContent = this[newCoord];
+                    this[newCoord] = currentValue;
+                    currentValue = newContent;
+                    currentCoordOffset = newCoordOffset;
+				}
+            }
+        }
+	}
+
+	public void FlipHorizontal()
+	{
+		int w = width;
+		int h = height;
+
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w / 2; x++)
+			{
+				int rx = w - 1 - x;
+
+				var a = new Vec2i(x, y);
+				var b = new Vec2i(rx, y);
+
+				T tmp = this[a];
+				this[a] = this[b];
+				this[b] = tmp;
+			}
+		}
+	}
+
+	public void FlipVertical()
+	{
+		int w = width;
+		int h = height;
+
+		for (int y = 0; y < h / 2; y++)
+		{
+			int ry = h - 1 - y;
+
+			for (int x = 0; x < w; x++)
+			{
+				var a = new Vec2i(x, y);
+				var b = new Vec2i(x, ry);
+
+				T tmp = this[a];
+				this[a] = this[b];
+				this[b] = tmp;
+			}
+		}
+	}
+
 }

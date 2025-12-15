@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "project": {
-      "commandName": "Project",
-      "commandLineArgs": "\"$(SolutionDir)input\""
-    }
-  }
-}

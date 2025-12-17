@@ -1,0 +1,114 @@
+Worked example:
+
+Given:
+mxmxvkd kfcds sqjhc nhms (contains dairy, fish)
+trh fvjkl sbzzf mxmxvkd (contains dairy)
+sqjhc fvjkl (contains soy)
+sqjhc mxmxvkd sbzzf (contains fish)
+
+Possibility list:
+dairy 	-> mxmxvkd kfcds sqjhc nhms
+dairy 	-> trh fvjkl sbzzf mxmxvkd 
+fish 	-> mxmxvkd kfcds sqjhc nhms
+fish 	-> sqjhc mxmxvkd sbzzf 
+soy		-> sqjhc fvjkl
+
+Intersect possibility lists for each ingredient:
+dairy 	-> mxmxvkd  
+fish 	-> mxmxvkd OR sqjhc 
+soy		-> sqjhc or fvjkl
+
+// Remove ingredients that have count 1 from rest:
+dairy 	-> mxmxvkd  
+fish 	-> sqjhc 
+soy		-> fvjkl
+
+// Remove determined from rest, remove duplicates:
+nhms
+sbzzf 
+kfcds
+trh 
+
+// Or for my input:
+
+soy mtnh,vlblq,mptbpz,glf
+fish rsbxb,cxsvdm,txdmlzd,vlblq
+eggs mptbpz,glf,xbnmzr
+wheat txdmlzd,mptbpz
+dairy cxsvdm,mptbpz
+peanuts txdmlzd
+sesame vlblq,mptbpz
+nuts txdmlzd,vlblq,xbnmzr
+
+Move every allergen with 1 ingredient mapped to the top and remove it from the rest:
+
+peanuts txdmlzd
+
+soy mtnh,vlblq,mptbpz,glf
+fish rsbxb,cxsvdm, _,vlblq
+eggs mptbpz,glf,xbnmzr
+wheat _,mptbpz
+dairy cxsvdm,mptbpz
+sesame vlblq,mptbpz
+nuts _,vlblq,xbnmzr
+
+---
+
+peanuts txdmlzd
+wheat _,mptbpz
+
+soy mtnh,vlblq,_,glf
+fish rsbxb,cxsvdm, _,vlblq
+eggs _,glf,xbnmzr
+dairy cxsvdm,_
+sesame vlblq,_
+nuts _,vlblq,xbnmzr
+
+---
+
+peanuts txdmlzd
+wheat _,mptbpz
+dairy cxsvdm,_
+sesame vlblq,_
+
+soy mtnh,_,_,glf
+fish rsbxb,_, _,_
+eggs _,glf,xbnmzr
+nuts _,_,xbnmzr
+
+---
+
+peanuts txdmlzd
+wheat _,mptbpz
+dairy cxsvdm,_
+sesame vlblq,_
+nuts _,_,xbnmzr
+
+soy mtnh,_,_,glf
+fish rsbxb,_, _,_
+eggs _,glf,_
+
+---
+
+peanuts txdmlzd
+wheat _,mptbpz
+dairy cxsvdm,_
+sesame vlblq,_
+nuts _,_,xbnmzr
+eggs _,glf,_
+
+soy mtnh,_,_,_
+fish rsbxb,_, _,_
+
+---
+
+peanuts txdmlzd
+wheat _,mptbpz
+dairy cxsvdm,_
+sesame vlblq,_
+nuts _,_,xbnmzr
+eggs _,glf,_
+soy mtnh,_,_,_
+fish rsbxb,_, _,_
+
+done!

@@ -13,52 +13,52 @@ public struct Vec3<T> where T: INumber<T>
 		Z = pZ;
     }
 
-    public static Vec3<T> operator +(Vec3<T> a, Vec3<T> b)
+    public static Vec3<T> operator + (Vec3<T> a, Vec3<T> b)
     {
         return new Vec3<T>(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
     }
 
-	public static Vec3<T> operator -(Vec3<T> a, Vec3<T> b)
+	public static Vec3<T> operator - (Vec3<T> a, Vec3<T> b)
 	{
 		return new Vec3<T>(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
 	}
 
-	public static Vec3<T> operator /(Vec3<T> a, T b)
+	public static Vec3<T> operator / (Vec3<T> a, T b)
 	{
 		return new Vec3<T>(a.X/b, a.Y/b, a.Z/b);
 	}
 
-	public static Vec3<T> operator *(Vec3<T> a, T b)
+	public static Vec3<T> operator * (Vec3<T> a, T b)
 	{
 		return new Vec3<T>(a.X * b, a.Y * b, a.Z * b);
 	}
 
-	public static Vec3<T> operator *(T b, Vec3<T> a)
+	public static Vec3<T> operator * (T b, Vec3<T> a)
 	{
 		return new Vec3<T>(a.X * b, a.Y * b, a.Z * b);
 	}
 
-	public static T operator *(Vec3<T> a, Vec3<T> b)
+	public static T operator * (Vec3<T> a, Vec3<T> b)
 	{
 		return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
 	}
 
-	public static Vec3<T> operator -(Vec3<T> a)
+	public static Vec3<T> operator - (Vec3<T> a)
 	{
 		return new Vec3<T>(-a.X, -a.Y, -a.Z);
 	}
 
-    public static bool operator ==(Vec3<T> a, Vec3<T> b)
+    public static bool operator == (Vec3<T> a, Vec3<T> b)
     {
         return a.X == b.X && a.Y == b.Y && a.Z == b.Z;
     }
 
-    public static bool operator !=(Vec3<T> a, Vec3<T> b)
+    public static bool operator != (Vec3<T> a, Vec3<T> b)
     {
         return !(a == b);
     }
 
-    public override string ToString()
+    public override string ToString ()
     {
         return $"({X},{Y},{Z})";
     }
@@ -68,17 +68,17 @@ public struct Vec3<T> where T: INumber<T>
 		return T.Abs(X) + T.Abs(Y) + T.Abs(Z);
 	}
 
-	public Vec3<T> Abs()
+	public Vec3<T> Abs ()
 	{
 		return new Vec3<T>(T.Abs(X), T.Abs(Y), T.Abs(Z));
 	}
 
-	public Vec3<T> Sign()
+	public Vec3<T> Sign ()
 	{
 		return new Vec3<T>(T.CreateChecked(T.Sign(X)), T.CreateChecked(T.Sign(Y)), T.CreateChecked(T.Sign(Z)));
 	}
 
-	public double Magnitude()
+	public double Magnitude ()
 	{
 		double dx = double.CreateChecked(X);
 		double dy = double.CreateChecked(Y);
@@ -110,7 +110,7 @@ public struct Vec3<T> where T: INumber<T>
 	}
 	*/
 	
-	public override bool Equals(object obj)
+	public override bool Equals (object obj)
 	{
 		if (obj is Vec3<T> other)
 		{
@@ -119,12 +119,12 @@ public struct Vec3<T> where T: INumber<T>
 		return false;
 	}
 
-	public override int GetHashCode()
+	public override int GetHashCode ()
 	{
 		return HashCode.Combine(X, Y, Z);
 	}
 
-	public T this[int index]
+	public T this [int index]
 	{
 		get
 		{
@@ -148,34 +148,42 @@ public struct Vec3<T> where T: INumber<T>
 		}
 	}
 
-	public void Min(Vec3<T> pOther)
+	public void Min (Vec3<T> pOther)
 	{
 		X = T.Min(X, pOther.X);
 		Y = T.Min(Y, pOther.Y);
 		Z = T.Min(Z, pOther.Z);
 	}
 
-	public void Max(Vec3<T> pOther)
+	public void Max (Vec3<T> pOther)
 	{
 		X = T.Max(X, pOther.X);
 		Y = T.Max(Y, pOther.Y);
 		Z = T.Max(Z, pOther.Z);
 	}
 
-	public static Vec3<T> Min(IEnumerable<Vec3<T>> pSource)
+	public static Vec3<T> Min (IEnumerable<Vec3<T>> pSource)
 	{
 		Vec3<T> min = pSource.First();
 		foreach (var p in pSource) min.Min(p);
 		return min;
 	}
 
-	public static Vec3<T> Max(IEnumerable<Vec3<T>> pSource)
+	public static Vec3<T> Max (IEnumerable<Vec3<T>> pSource)
 	{
 		Vec3<T> max = pSource.First();
 		foreach (var p in pSource) max.Max(p);
 		return max;
 	}
 
+    public static Vec3<T> Cross (Vec3<T> a, Vec3<T> b)
+    {
+        return new Vec3<T>(
+            a.Y * b.Z - a.Z * b.Y,
+            a.Z * b.X - a.X * b.Z,
+            a.X * b.Y - a.Y * b.X
+        );
+    }
 
 }
 

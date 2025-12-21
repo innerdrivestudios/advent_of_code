@@ -1,7 +1,6 @@
 ﻿// This is a lot like a regular graph, but now with explicit edge cost,
 // so we can track edge cost NOT based on distance.
 
-
 public class EdgedGraph<NodeType, EdgeData> 
 {
 	//We need two nodes, to get their cost...

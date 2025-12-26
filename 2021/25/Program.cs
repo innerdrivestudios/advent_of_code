@@ -17,71 +17,49 @@ int wrapAroundY = sea.height;
 Vec2i east = new Vec2i(1, 0);
 Vec2i south = new Vec2i(0, 1);
 
-Dictionary<Vec2i, Vec2i> seaCucumbers = new();
-Dictionary<char, Vec2i> directions = new()
-{
-    {'>', east },
-    {'v', south }
-};
+HashSet<Vec2i> eastHerd = new();
+HashSet<Vec2i> southHerd = new();
 
 // Map each seaCucumber position to it's direction
 sea.Foreach(
     (pos, value) =>
     {
-        if (value != '.') seaCucumbers[pos] = directions[value];
+        if (value != '.') (value == '>' ? eastHerd : southHerd).Add(pos); //seaCucumbers[pos] = directions[value];
     }
 );
 
+// Define the herds and their directions and move them while we can ...
+
 bool moved = false;
 int movedCount = 0;
+(HashSet<Vec2i>, Vec2i)[] herds = [(eastHerd, east), (southHerd, south)];
 
 do
 {
     moved = false;
 
-    List<Vec2i> eastFacingFreeToMove = new();
-    foreach (var kv in seaCucumbers)
+    for (int i = 0; i <  herds.Length; i++)
     {
-        if (kv.Value == south) continue;
+ 		Dictionary<Vec2i, Vec2i> currentToNew = new();
 
-        Vec2i newPosition = kv.Key + east;
-        newPosition.X %= wrapAroundX;
+		foreach (Vec2i currentPosition in herds[i].Item1)
+		{
+			Vec2i newPosition = currentPosition + herds[i].Item2;
+			newPosition.X %= wrapAroundX;
+			newPosition.Y %= wrapAroundY;
 
-        if (!seaCucumbers.ContainsKey(newPosition)) eastFacingFreeToMove.Add(kv.Key);
-    }
-    
-    foreach (Vec2i position in eastFacingFreeToMove)
-    {
-        seaCucumbers.Remove(position);
-        Vec2i newPosition = position + east;
-        newPosition.X %= wrapAroundX;
-        seaCucumbers[newPosition] = east;
-    }
+			bool canMove = !(herds[0].Item1.Contains(newPosition) || herds[1].Item1.Contains(newPosition));
+			moved |= canMove;
+			currentToNew[currentPosition] = canMove ? newPosition : currentPosition;
+		}
 
-    List<Vec2i> southFacingFreeToMove = new();
-
-    foreach (var kv in seaCucumbers)
-    {
-        if (kv.Value == east) continue;
-
-        Vec2i newPosition = kv.Key + south;
-        newPosition.Y %= wrapAroundY;
-
-        if (!seaCucumbers.ContainsKey(newPosition)) southFacingFreeToMove.Add(kv.Key);
-    }
-
-    foreach (Vec2i position in southFacingFreeToMove)
-    {
-        seaCucumbers.Remove(position);
-        Vec2i newPosition = position + south;
-        newPosition.Y %= wrapAroundY;
-        seaCucumbers[newPosition] = south;
-    }
+        herds[i].Item1 = currentToNew.Values.ToHashSet();
+	}
 
     movedCount++;
 
-    moved = eastFacingFreeToMove.Count > 0 || southFacingFreeToMove.Count > 0;
-
 } while (moved);
 
-Console.WriteLine("Part 1: "+movedCount);
+Console.WriteLine("Part 1: " + movedCount);
+
+

@@ -326,4 +326,9 @@ public static class NumberUtil
 
     */
 
+
+    public static T Mod<T>(T pInput, T pModulo) where T : INumber<T> 
+    {
+        return ((pInput % pModulo) + pModulo) % pModulo;
+    }
 }

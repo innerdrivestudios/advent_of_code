@@ -447,4 +447,24 @@ public class Grid<T>
 		}
 	}
 
+    public Grid<T> Duplicate (int pXCopies, int pYCopies)
+    {
+        Grid<T> duplicate = new Grid<T>(width * pXCopies, height * pYCopies);
+
+        for (int x = 0; x < pXCopies;  x++)
+        {
+            for (int y = 0;y < pYCopies; y++)
+            {
+                this.Foreach(
+                    (pos, value) =>
+                    {
+                        duplicate[pos.X + width * x, pos.Y + y * height] = value;
+                    }
+                );
+            }
+        }
+
+        return duplicate;
+    }
+
 }

@@ -42,14 +42,14 @@ public class EdgedGraph<NodeType, EdgeData>
 		}
 	}
 
-	public List<NodeType> GetNodes()
+	public HashSet<NodeType> GetNodes()
 	{
-		return new List<NodeType>(adjacencyMatrix.Keys);
+		return new HashSet<NodeType>(adjacencyMatrix.Keys);
 	}
 
-	public List<NodeType> GetNeighbors(NodeType pNode)
+	public HashSet<NodeType> GetNeighbors(NodeType pNode)
 	{
-		return new List<NodeType>(adjacencyMatrix[pNode].Keys);
+		return new HashSet<NodeType>(adjacencyMatrix[pNode].Keys);
 	}
 
 	public EdgeData GetEdgeData(NodeType pNodeA, NodeType pNodeB)

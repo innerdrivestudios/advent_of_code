@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\NumberUtil.cs" Link="NumberUtil.cs" />
     <Compile Include="..\..\Vec2.cs" Link="Vec2.cs" />
   </ItemGroup>
 

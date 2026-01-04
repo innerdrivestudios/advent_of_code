@@ -330,7 +330,7 @@ public class Grid<T>
             {
                 if (pValuesToInclude.Contains(value) && !visited.Contains(position))
                 {
-                    HashSet<Vec2i> filledPositions = FloodFill(position, x => this[x].Equals(value));
+                    HashSet<Vec2i> filledPositions = FloodFill(position, x => pValuesToInclude.Contains(this[x]));
                     visited.UnionWith(filledPositions);
                     regions.Add(filledPositions);
                 }

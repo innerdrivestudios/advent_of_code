@@ -11,6 +11,20 @@ public class EdgedGraph<NodeType, EdgeData>
 		adjacencyMatrix = new ();
 	}
 
+	// Keep in mind this doesn't clone the nodes or edges themselves!! 
+	// Only the original graph linking them!
+	public EdgedGraph<NodeType, EdgeData> Clone()
+	{
+		EdgedGraph<NodeType, EdgeData> clone = new ();
+
+		foreach (NodeType node in adjacencyMatrix.Keys)
+		{
+			clone.adjacencyMatrix[node] = new(adjacencyMatrix[node]);
+		}
+
+		return clone;
+    }
+
 	public void AddNode(NodeType pNode)
 	{
 		if (!adjacencyMatrix.ContainsKey(pNode)) adjacencyMatrix[pNode] = new ();
@@ -52,7 +66,37 @@ public class EdgedGraph<NodeType, EdgeData>
 		return new HashSet<NodeType>(adjacencyMatrix[pNode].Keys);
 	}
 
-	public EdgeData GetEdgeData(NodeType pNodeA, NodeType pNodeB)
+	public IEnumerable<NodeType> GetNodesUnsafe ()
+	{
+		return adjacencyMatrix.Keys;
+	}
+
+    public IEnumerable<NodeType> GetNodesUnsafe(NodeType pNode)
+    {
+        return adjacencyMatrix[pNode].Keys;
+    }
+	
+	public int GetNodesCount ()
+	{
+		return adjacencyMatrix.Count;
+	}
+
+	public int GetNodesCount (NodeType pNode)
+	{
+		return adjacencyMatrix[pNode].Count;
+	}
+
+	public bool HasNodes ()
+	{
+		return adjacencyMatrix.Count > 0;
+	}
+
+	public bool HasNodes (NodeType pNode)
+	{
+		return adjacencyMatrix.ContainsKey(pNode) && GetNodesCount(pNode) > 0;
+	}
+
+    public EdgeData GetEdgeData(NodeType pNodeA, NodeType pNodeB)
 	{
 		// Note we don't do any existence checks!!
 		return adjacencyMatrix[pNodeA][pNodeB];
